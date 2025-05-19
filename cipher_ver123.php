@@ -1382,16 +1382,17 @@ class SimpleCipher
 //ЕСЛИ ДЛИННАЯ СТРОКА (БОЛЬШЕ ФЕЙКОВОГО КОЛИЧЕСТВА) - ШИФР ЛОМАЕТСЯ
 //ЕСЛИ ПЕРЕДАТЬ КУЧУ ПОВТОРЯЮЩИХСЯ СИМВОЛОВ "МАМАМАМАМ" - ШИФР ЛОМАЕТСЯ
 
-$n = 1;
-while ($n <= 50) {
-	$testCipher = (new SimpleCipher('мама мыла раму'))->encryptText(50);
-	echo '<pre>'; var_dump($testCipher); echo'</pre>';
-	$decryptText = (new SimpleCipher($testCipher))->decryptText();
-	echo '<pre>'; var_dump($decryptText); echo'</pre>';
-	$n++;
-}
+// $n = 1;
+// while ($n <= 50) {
+// 	$testCipher = (new SimpleCipher('мама мыла раму'))->encryptText(50);
+// 	echo '<pre>'; var_dump($testCipher); echo'</pre>';
+// 	$decryptText = (new SimpleCipher($testCipher))->decryptText();
+// 	echo '<pre>'; var_dump($decryptText); echo'</pre>';
+// 	$n++;
+// }
 
 
+//ПЕРЕПИСАТЬ BASE64 на base32 (где нет заглавных букв, но нужно, чтобы там набор букв все равно был большой) СПРОСИ У НЕЙРОСЕТИ КАКОВА ВЕРОЯТНОСТЬ СТОЛКНУТЬСЯС КОЛИЗИЯМИ ЕСЛИ ИСПОЛЬЗОВАТЬ BASE 32 А НЕ BASE 64
 
 
 //оригинальный текст чk25ю3 22|22ь1t13n847пoлЬЧШГЛуЬпЛбЬЧ?QQnгТвj 0ЗСUРоoъcъcMDdц$#б1вв4?48|1ъц - расшифровывается как надо

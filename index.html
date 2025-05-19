@@ -13,33 +13,36 @@
         СТРОКА POSITION STICKY
     2) СЛЕДУЮЩАЯ СТРОКА - ЦЕЛИКОМ БЛОК НА ВСЮ ШИРИНУ ГДЕ БУДУТ РЕЗУЛЬТАТЫ ШИФРОВАНИЯ-->
     <!--Добавь при подключении css и js ver=?-->
+    <!--Нужен ли тег форм, если запрос отправляется ajax?-->
     <div id="cipher-content">
-        <div id="cipher-content__encrypt-block" class="cipher-content__block">
-            <div id="content__encrypt-block__input" class="content__input-block">
-                <label for="encryptText">Текст для шифрования</label>
-                <input type="text" placeholder="Введите текст" id="encryptText" required>
-                <label for="cipherLength">Желамая длина шифра</label>
-                <!--подсказка: если шифруемый текст меньше длины шифра - фейковая длина не будет достигнута-->
-                <input type="number" placeholder="минимум 50 символов" id="cipherLength" min="50" max="100" required>
-                <label for="cipherCount">Кол-во итоговых шифров</label>
-                <input type="number" placeholder="Минимум 1" id="cipherCount" min="0" max="100" value="1" required>
-                <label for="cipherSalt">Соль для шифра</label>
-                <input type="text" placeholder="Введите текст" id="cipherSalt">
-                <button type="button" id="content__encrypt-block__input__encrypt">Зашифровать</button>
+        <div id="cipher-content__input-block">
+            <div id="cipher-content__encrypt-block" class="cipher-content__block">
+                <div id="content__encrypt-block__input" class="content__input-block">
+                    <label for="encryptText">Текст для шифрования</label>
+                    <input type="text" placeholder="Введите текст" id="encryptText" required>
+                    <label for="cipherLength">Желамая длина шифра</label>
+                    <!--подсказка: если шифруемый текст меньше длины шифра - фейковая длина не будет достигнута-->
+                    <input type="number" placeholder="минимум 50 символов" id="cipherLength" min="50" max="100" required>
+                    <label for="cipherCount">Кол-во итоговых шифров</label>
+                    <input type="number" placeholder="Минимум 1" id="cipherCount" min="0" max="100" value="1" required>
+                    <label for="cipherSalt">Соль для шифра</label>
+                    <input type="text" placeholder="Введите текст" id="cipherSalt">
+                    <button type="button" id="content__encrypt-block__input__encrypt">Зашифровать</button>
+                </div>
             </div>
-            <div id="content__encrypt-block__result">
-                
+            <div id="cipher-content__decrypt-block" class="cipher-content__block">
+                <div id="content__decrypt-block__input" class="content__input-block">
+                    <label for="decryptText">Текст для расшифровки</label>
+                    <input type="text" placeholder="Введите текст" id="decryptText">
+                    <label for="cipherSalt_decrypt">Соль для шифра</label>
+                    <input type="text" placeholder="Введите текст" id="cipherSalt_decrypt">
+                    <button type="button" id="content__decrypt-block__input__decrypt">Расшифровать</button>
+                </div>
+                <div id="content__decrypt-block__result">  
+                </div>
             </div>
         </div>
-        <div id="cipher-content__decrypt-block" class="cipher-content__block">
-            <div id="content__decrypt-block__input" class="content__input-block">
-                <label for="decryptText">Текст для расшифровки</label>
-                <input type="text" placeholder="Введите текст" id="decryptText">
-                <button type="button" id="content__decrypt-block__input__decrypt">Расшифровать</button>
-            </div>
-            <div id="content__decrypt-block__result">
-                
-            </div>
+        <div id="content__encrypt-block__result">   
         </div>
     </div>
     <script src="./index.js" type="text/javascript"></script>
