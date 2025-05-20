@@ -43,6 +43,10 @@ class SimpleCipher
 	 */
 	private $text;
 	/**
+	 * @var string соль для шифра
+	 */
+	private $salt;
+	/**
 	 * @var int фейковая длина зашифрованной строки (по умолчанию 100)
 	 */
 	private $fakeLength;
@@ -140,9 +144,10 @@ class SimpleCipher
 	private $fakeSymbolString = null;
 
 
-	public function __construct(string $text)
+	public function __construct(string $text, ?string $salt = null)
 	{
 		$this->text = $text;
+		$this->salt = $salt;
 		$this->matrixDepth = sqrt(mb_strlen($this->cipherKeyStorage[0]));
 	}
 
@@ -208,6 +213,43 @@ class SimpleCipher
 
 
 	/**
+	 * Метод преобразовывает ключ шифра, используя соль
+	 *
+	 * @param string $cipherKey - ключ для преобразования
+	 * @return string
+	 */
+	private function useSaltToCipherKey($cipherKey)
+	{
+		//Новый ключ шифрования
+		$newCipherKey = null;
+		$cipherKeySymbArr = $this->getStrArr($cipherKey);
+		/*Перебираем все символы в соли и если этот символ из соли найден в ключе шифра - кладем его в начало ключа шифра (например на нулевую позицию), а на этого символа кладем символ с нулевой позиции ключа шифра ДО замены. Например: 
+		ключ - abcdef123
+		соль - d2
+		находим символ d, помещаем его на нулевую позицию в ключе, предыдущий символ с нулевой позиции ключа (a) кладем на позицию символа d -> dbcaef123
+		то же самое делаем с символом 2 - меняем его местами с символом на 1 позиции (следующей после 0 позиции в предыдущей итерации) -> d2caef1b3*/ 
+		foreach ($this->getStrArr($this->salt) as $saltKey => $saltSymb){
+		  $sipherSymbKey = array_search($saltSymb, $cipherKeySymbArr);
+		  $replaceSymb = $cipherKeySymbArr[$saltKey];
+		  if ($sipherSymbKey !== false) {
+			$cipherKeySymbArr[$saltKey] = $saltSymb;
+			$cipherKeySymbArr[$sipherSymbKey] = $replaceSymb;
+		  }
+		}
+		$newCipherKey = implode('', $cipherKeySymbArr);
+
+		return $newCipherKey;
+	}
+
+
+	private function useSaltToMatrixParam($matrixParam){
+		$saltNumbers = preg_replace('/[^0-9+]/', '', $this->salt);
+
+		var_dump($saltNumbers);
+	}
+
+
+	/**
 	 * Метод шифрования текста
 	 *
 	 * @param integer $fakeLength фейковая длина шифра
@@ -234,6 +276,11 @@ class SimpleCipher
 		 * @var string версия приложения в зашифрованном виде
 		 */
 		$encryptVersion = $this->setVersion();
+		//Здесь дополнительно преобразуем ключ шифрования, так как в методе setVersion происходит формирование ключа
+		if ($this->salt) {
+			$this->cipherKey = $this->useSaltToCipherKey($this->cipherKey);
+			$this->cipherKey_second = $this->useSaltToCipherKey($this->cipherKey_second);
+		}
 		//Сдвигаем ключ шифра для первой матрицы
 		$mixedCipher = $this->shiftCipherKey($this->cipherKey, $this->windowSizeFirst, $this->shiftCountFirst, $reverseCipherKey);
 		//Заполняем массив с параметрами преобразования матриц (пока что данными для преобразования первой матрицы)
@@ -253,6 +300,8 @@ class SimpleCipher
 		//Добавляем в массив с параметрами формирования матриц оставшиеся параметры, на основании которых формировался ключ для второй матрицы
 		$transformMatrixParamArr[3] = $this->windowSizeSecond;
 		$transformMatrixParamArr[4] = $this->shiftCountSecond;
+		$this->useSaltToMatrixParam($transformMatrixParamArr);
+		var_dump($transformMatrixParamArr);
 		$this->matrixOne = $this->fillMatrix($mixedCipher, (int)substr(array_sum($transformMatrixParamArr), -1, 1));
 		//Добавляем 1 к предыдущей сумме параметров матрицы, так как это дает 50% шанс, что паттерн заполнения изменится для второй матрицы (так как паттерны делятся по двойкам: 0,1 - 1й паттерн, 2,3 - 2й и так далее). На самом деле, нам не обязательно, чтобы паттерн менялся, так как сама последовательность символов для формирования матрицы разная, поэтому добавление 1 позволит с равной вероятностью получить как тот же паттерн заполнения матрицы, что был для 1й матрицы (0 превратится в 1 - 1й паттерн), так и следующий паттерн (1 превратится в 2 - 2й паттерн).
 		$this->matrixTwo = $this->fillMatrix($mixedCipherTwo, (int)substr(array_sum($transformMatrixParamArr) + 1, -1, 1));
@@ -434,7 +483,10 @@ class SimpleCipher
 		//Получаем чистую версию алгоритма из зашифрованного отрезка, удаляя в строке два последних символа (вектор горизонтальной инициализации) и заменяя на пустоту сегмент, содержащий 2ю часть фейковой длины шифра ($lengthSecondMatches[1])
 		//$cipherVersion = $this->getVersion(mb_substr(str_replace($lengthSecondMatches[1], '', $cipherVersion), 0, -2));
 		$cipherVersion = $this->getVersion(mb_substr(str_replace($lengthSecondMatches[1], '', $cipherVersion), 0, -3));
-		//var_dump("версия $cipherVersion");
+		if ($this->salt) {
+			$this->cipherKey = $this->useSaltToCipherKey($this->cipherKey);
+			$this->cipherKey_second = $this->useSaltToCipherKey($this->cipherKey_second);
+		}
 		//В матрицу (?)
 		$reverseCipherKey = ($transformMatrixArr['2'] % 2 === 0) ? 0 : 1;
 		//Сдвигаем шифр только после определения версии, так как только на этом этапе происходит определение ключа шифра 
@@ -1384,8 +1436,8 @@ class SimpleCipher
 
 // $n = 1;
 // while ($n <= 50) {
-// 	$testCipher = (new SimpleCipher('мама мыла раму'))->encryptText(50);
-// 	echo '<pre>'; var_dump($testCipher); echo'</pre>';
+	// $testCipher = (new SimpleCipher('мама мыла раму', '6врАВлукрsdgqg%fdhs68'))->encryptText(50);
+	// echo '<pre>'; var_dump($testCipher); echo'</pre>';
 // 	$decryptText = (new SimpleCipher($testCipher))->decryptText();
 // 	echo '<pre>'; var_dump($decryptText); echo'</pre>';
 // 	$n++;

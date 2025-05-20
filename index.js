@@ -34,6 +34,42 @@ document.getElementById('content__decrypt-block__input__decrypt').addEventListen
 
 })
 
+
+document.getElementById('getSalt').addEventListener('click', async function () {
+    let cipherSalt = null;
+
+    let response = await fetch('./CipherController.php', {
+        method: "POST",
+        body: JSON.stringify({
+            action: 'getSalt'
+        }),
+        headers: {
+            'content-type': 'application/json'
+        }
+    });
+    let cipherSaltRqst = await response.json()
+        //decryptResultBlock = document.getElementById('content__decrypt-block__result')
+
+    console.log(cipherSaltRqst)
+
+    // if (response.status === 200) {
+    //     console.log(decryptResponse);
+    //     decryptResultBlock.innerHTML = '';
+    //     let childDecryptBlock = document.createElement('div');
+    //         childDecryptBlock.classList.add('content__block__result__text')
+    //         childDecryptBlock.innerHTML = decryptResponse.decryptText;
+    //         decryptResultBlock.appendChild(childDecryptBlock)
+ 
+    // }
+
+})
+
+
+
+
+
+//ПРИ КЛИКЕ ПО КНОПКЕ "РАСШИФРОВАТЬ" НЕМНОГО ВЫДВИГАТЬ И ПОДСВЕЧИВАТЬ ВЫБРАННЫЙ ЭЛЕМЕНТ  
+
 //Клик по кнопке расшифровать напротив каждого результата шифрования
 document.addEventListener('click', function(event) {
   if (event.target.classList.contains('content__encrypt-block__result__parent__call-decrypt')) {
@@ -45,19 +81,19 @@ document.addEventListener('click', function(event) {
     //document.getElementById('content__decrypt-block__input__decrypt').click()
   }
 });
-
+//Шифрование текста
 document.getElementById('content__encrypt-block__input__encrypt').addEventListener('click', async function () {
     let encryptText = document.getElementById('encryptText').value,
         encryptFakeLength = document.getElementById('cipherLength').value,
         resultCipherCount = document.getElementById('cipherCount').value,
-        encryptSalt = null,
+        encryptSalt = document.getElementById('cipherSalt').value,
         prevResulst = document.querySelectorAll('.content__encrypt-block__result__parent');
 
+    //Если есть предыдущие результаты шифрования - очищаем их
     if (prevResulst.length) {
         for (let encryptIndex = 0; encryptIndex < prevResulst.length; encryptIndex++){
             prevResulst[encryptIndex].classList.add('hide')
         }
-        
     }
 
     if (!encryptText.length) {

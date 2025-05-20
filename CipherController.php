@@ -7,31 +7,22 @@ class CipherController
      */
     private $cipherVer = 123;
     /**
-     * @var string текст для шифрования
+     * @var string соль для шифрования
      */
-    private $encryptText;
-    /**
-     * @var string текст для расшифровки
-     */
-    private $decryptText;
-    /**
-     * @var int желаемая длина шифра
-     */
-    private $fakeLength;
+    private $encryptSalt;
     
-
     
     /**
      * Конструктор
      *
+     * @param string $encryptSalt Соль для шифрования
      * @param string $encryptText Текст для шифрования
      * @param integer $fakeLength Желаемая длина шифра
+     * @param string $decryptText Текст для расшифрования
      */
-    public function __construct(?int $fakeLength = null, ?string $encryptText = null, ?string $decryptText = null)
+    public function __construct(?string $encryptSalt = null)
     {
-        $this->encryptText = $encryptText;
-        $this->fakeLength = $fakeLength;
-        $this->decryptText = $decryptText;
+        $this->encryptSalt = $encryptSalt;
 
         require_once ("./CipherVersion.php");
         $this->cipherVer = $decryptText ? CipherVersion::getCipherVersion($decryptText) : $this->cipherVer;
@@ -43,14 +34,29 @@ class CipherController
     }
 
 
+    public function createCipherSalt()
+    {
+        $cipherSalt = base64_encode(hash('whirlpool', $_SERVER['REQUEST_TIME_FLOAT'] . $_SERVER['REMOTE_ADDR'] . time()));
+
+        return $cipherSalt;
+    }
+
+
+    /**
+     * 
+     * REQUEST_TIME_FLOAT
+     * REMOTE_ADDR
+     * time()
+     */
+
     /**
      * Метод получения зашифрованного сообщения
      *
      * @return string
      */
-    public function getEncryptText(): string
+    public function getEncryptText(string $encryptText, int $fakeLength = 50): string
     {
-        $testCipher = (new SimpleCipher($this->encryptText))->encryptText($this->fakeLength);
+        $testCipher = (new SimpleCipher($encryptText, $this->encryptSalt))->encryptText($fakeLength);
 
         return $testCipher;
     }
@@ -60,13 +66,18 @@ class CipherController
      *
      * @return string
      */
-    public function getDecryptText(): string
+    public function getDecryptText(string $decryptText): string
     {
-        $testCipher = (new SimpleCipher($this->decryptText))->decryptText();
+        $testCipher = (new SimpleCipher($decryptText, $this->encryptSalt))->decryptText();
 
         return $testCipher;
     }
 }
+
+#Гаврилов
+//ПЕРЕПИШИ ТАКИМ ОБРАЗОМ, ЧТОБЫ ПОД КАЖДУЮ ВЕРСИЮ БЫЛА СВОЯ ПАПКА, А НЕ ВЕРСИЯ В НАЗВАНИИ СКРИПТА
+
+
 
 #Гаврилов
 //ПРОВЕРКА ПЕРЕДАНЫ ЛИ НУЖНЫЕ ПАРАМЕТРЫ И ИХ ВАЛИДАЦИЯ (ДЛИНА, ТИП)
@@ -79,7 +90,7 @@ if ($rqstParams->action == 'encrypt') {
     $resultCipherArr = [];
     $n = 1;
     while ($n <= $rqstParams->cipherCount) {
-        $resultCipherArr[] = (new CipherController($rqstParams->fakeLength, $rqstParams->encryptText))->getEncryptText();
+        $resultCipherArr[] = (new CipherController($rqstParams->encryptSalt))->getEncryptText($rqstParams->encryptText, $rqstParams->fakeLength);
         $n++;
     }
     //echo json_encode($resultCipherArr);
@@ -89,12 +100,10 @@ if ($rqstParams->action == 'encrypt') {
         //КОД ОТВЕТА?
         'encryptMsg' => 'Все ок',
     ];
-    // $encryptText = (new CipherController('test', 50))->getEncryptText();
-    // var_dump($encryptText);
 
    echo json_encode($resultCipherObj);
 } else if ($rqstParams->action == 'decrypt') {
-    $resultDecryptText = (new CipherController(null, null, $rqstParams->decryptText))->getDecryptText();
+    $resultDecryptText = (new CipherController($rqstParams->encryptSalt))->getDecryptText($rqstParams->decryptText);
     $resultCipherObj = [
         'decryptText' => $resultDecryptText,
         #Гаврилов
@@ -103,5 +112,19 @@ if ($rqstParams->action == 'encrypt') {
     ];
 
     echo json_encode($resultCipherObj);
+} else if ($rqstParams->action == 'getSalt') {
+    $resultSalt = (new CipherController(null))->createCipherSalt();
+    $resultSaltObj = [
+        'cipherSalt' => $resultSalt,
+        #Гаврилов
+        //КОД ОТВЕТА?
+        'saltMsg' => 'Все ок',
+    ];
+
+    echo json_encode($resultSaltObj);
+
+    #Гаврилов
+    //ПЕРЕДЕЛАТЬ БЕСКОНЕЧНЫЕ ELSEIF НА SWITCH CASE
+
 }
 
