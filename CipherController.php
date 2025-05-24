@@ -9,34 +9,40 @@ class CipherController
     /**
      * @var string соль для шифрования
      */
-    private $encryptSalt;
+    private $cipherSalt;
     
     
     /**
      * Конструктор
      *
-     * @param string $encryptSalt Соль для шифрования
+     * @param string $cipherSalt Соль для шифрования
      * @param string $encryptText Текст для шифрования
      * @param integer $fakeLength Желаемая длина шифра
      * @param string $decryptText Текст для расшифрования
      */
-    public function __construct(?string $encryptSalt = null)
+    public function __construct(?string $cipherSalt = null)
     {
-        $this->encryptSalt = $encryptSalt;
+        $this->cipherSalt = $cipherSalt;
 
         require_once ("./CipherVersion.php");
-        $this->cipherVer = $decryptText ? CipherVersion::getCipherVersion($decryptText) : $this->cipherVer;
+        //$this->cipherVer = $decryptText ? CipherVersion::getCipherVersion($decryptText) : $this->cipherVer;
         #Гаврилов
         //ПРОВЕРКА СУЩЕСТВУЕТ ЛИ СКРИПТ С ТАКОЙ ВЕРСИЕЙ. еСЛИ НЕТ - СООБЩЕНИЕ ОБ ОШИБКЕ РАЗРАБАМ И СООБЩЕНИЕ БЕЗ УКАЗАНИЯ НА ВЕРСИЮ ДЛЯ ПОЛЬЗОВАТЕЛЕЙ
-        require_once ("./cipher_ver" . $this->cipherVer . ".php");
+        //require_once ("./cipher_ver" . $this->cipherVer . ".php");
 
         //$encryptText = $this->getEncryptText();
     }
 
 
+    /**
+     * Метод формирует соль для шифра на основе уникальных для момента формирования параметрах
+     *
+     * @return string
+     */
     public function createCipherSalt()
     {
-        $cipherSalt = base64_encode(hash('whirlpool', $_SERVER['REQUEST_TIME_FLOAT'] . $_SERVER['REMOTE_ADDR'] . time()));
+        $cipherSalt = base64_encode(hash('whirlpool', $_SERVER['REMOTE_ADDR'] . time()));
+        $cipherSalt = str_replace('=', '', $cipherSalt);
 
         return $cipherSalt;
     }
@@ -56,7 +62,9 @@ class CipherController
      */
     public function getEncryptText(string $encryptText, int $fakeLength = 50): string
     {
-        $testCipher = (new SimpleCipher($encryptText, $this->encryptSalt))->encryptText($fakeLength);
+        $this->cipherVer = $this->cipherVer;
+        require_once ("./cipher_ver" . $this->cipherVer . ".php");
+        $testCipher = (new SimpleCipher($encryptText, $this->cipherSalt))->encryptText($fakeLength);
 
         return $testCipher;
     }
@@ -68,7 +76,9 @@ class CipherController
      */
     public function getDecryptText(string $decryptText): string
     {
-        $testCipher = (new SimpleCipher($decryptText, $this->encryptSalt))->decryptText();
+        $this->cipherVer = CipherVersion::getCipherVersion($decryptText);
+        require_once ("./cipher_ver" . $this->cipherVer . ".php");
+        $testCipher = (new SimpleCipher($decryptText, $this->cipherSalt))->decryptText();
 
         return $testCipher;
     }
@@ -90,7 +100,7 @@ if ($rqstParams->action == 'encrypt') {
     $resultCipherArr = [];
     $n = 1;
     while ($n <= $rqstParams->cipherCount) {
-        $resultCipherArr[] = (new CipherController($rqstParams->encryptSalt))->getEncryptText($rqstParams->encryptText, $rqstParams->fakeLength);
+        $resultCipherArr[] = (new CipherController($rqstParams->cipherSalt))->getEncryptText($rqstParams->encryptText, $rqstParams->fakeLength);
         $n++;
     }
     //echo json_encode($resultCipherArr);
@@ -103,7 +113,7 @@ if ($rqstParams->action == 'encrypt') {
 
    echo json_encode($resultCipherObj);
 } else if ($rqstParams->action == 'decrypt') {
-    $resultDecryptText = (new CipherController($rqstParams->encryptSalt))->getDecryptText($rqstParams->decryptText);
+    $resultDecryptText = (new CipherController($rqstParams->cipherSalt))->getDecryptText($rqstParams->decryptText);
     $resultCipherObj = [
         'decryptText' => $resultDecryptText,
         #Гаврилов
@@ -128,3 +138,8 @@ if ($rqstParams->action == 'encrypt') {
 
 }
 
+
+//NTI0M2FmNWEwOGU3NDY2YTc5MDFiMTEyOTdlNmY1NTQzY2Q4MzYzMmJkMTNiODRjOGI2YjY4NjEwYjNmM2NjZGJhOWY1NjRiYmU3OTEzZjdhZmIzNDExM2QwZTgwMjhkZDE1OTIwMDlhY2YxZjIxMDljNDA4MTllZjc3MmEzOTI
+/*YTVhYmU2NjY0YmJlNjQzOWNiZWFhNGM3NmMxYTE5YTc5ZmI1OWFhZWQ1YTA5YzM2ZDI1NTQzMzc2M2RlZTI2NGRhMmJkYjkwYTc2MjI0NjJiYjRhNzU2YTM0YzdlYTdjN2VjMWU3MzA1Zjg5NmNlMmNmODgyZmIwMzliOTg2ZjY
+MWY3NmUyNDU5MTA1ZGI2YmU0OTgwNTJmMDQ1OTI4MjY0NTI4ZTZmNjBlZmJlYWViNDI5Y2Y4NjZiY2Y2MmNhNzI1YjJiMzk3YWEwN2JlMzYwY2I1YzlhZDUwY2YyMjUxNDBlY2RkNzc1NTE2MjE2ZjA4MDQwY2E0ZDRkYmNhYWM
+*/

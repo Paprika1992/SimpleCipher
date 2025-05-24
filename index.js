@@ -1,12 +1,15 @@
 document.getElementById('content__decrypt-block__input__decrypt').addEventListener('click', async function () {
     let decryptText = document.getElementById('decryptText').value,
-        decryptSalt = null;
+        decryptSalt = document.getElementById('cipherSalt_decrypt').value ?? null;
 
 
     if (!decryptText.length) {
         alert('пусто')
         return;
     }
+
+    let decryptResultBlock = document.getElementById('content__decrypt-block__result')
+    decryptResultBlock.innerHTML = '';
 
     let response = await fetch('./CipherController.php', {
         method: "POST",
@@ -19,12 +22,10 @@ document.getElementById('content__decrypt-block__input__decrypt').addEventListen
             'content-type': 'application/json'
         }
     });
-    let decryptResponse = await response.json(),
-        decryptResultBlock = document.getElementById('content__decrypt-block__result')
+    let decryptResponse = await response.json()
 
     if (response.status === 200) {
         console.log(decryptResponse);
-        decryptResultBlock.innerHTML = '';
         let childDecryptBlock = document.createElement('div');
             childDecryptBlock.classList.add('content__block__result__text')
             childDecryptBlock.innerHTML = decryptResponse.decryptText;
@@ -35,6 +36,7 @@ document.getElementById('content__decrypt-block__input__decrypt').addEventListen
 })
 
 
+//Получение соли к шифру
 document.getElementById('getSalt').addEventListener('click', async function () {
     let cipherSalt = null;
 
@@ -48,20 +50,9 @@ document.getElementById('getSalt').addEventListener('click', async function () {
         }
     });
     let cipherSaltRqst = await response.json()
-        //decryptResultBlock = document.getElementById('content__decrypt-block__result')
+        cipherSalt = cipherSaltRqst.cipherSalt
 
-    console.log(cipherSaltRqst)
-
-    // if (response.status === 200) {
-    //     console.log(decryptResponse);
-    //     decryptResultBlock.innerHTML = '';
-    //     let childDecryptBlock = document.createElement('div');
-    //         childDecryptBlock.classList.add('content__block__result__text')
-    //         childDecryptBlock.innerHTML = decryptResponse.decryptText;
-    //         decryptResultBlock.appendChild(childDecryptBlock)
- 
-    // }
-
+    document.getElementById('GetCipherSalt').innerHTML = 'Ваш секретный ключ - ' + cipherSalt + '. <br>Обязательно сохраните его. Каждая строка, зашифрованная с помощью этого ключа может быть расшифрована только с помощью этого же ключа!'
 })
 
 
@@ -81,12 +72,14 @@ document.addEventListener('click', function(event) {
     //document.getElementById('content__decrypt-block__input__decrypt').click()
   }
 });
+
+
 //Шифрование текста
 document.getElementById('content__encrypt-block__input__encrypt').addEventListener('click', async function () {
     let encryptText = document.getElementById('encryptText').value,
         encryptFakeLength = document.getElementById('cipherLength').value,
         resultCipherCount = document.getElementById('cipherCount').value,
-        encryptSalt = document.getElementById('cipherSalt').value,
+        encryptSalt = document.getElementById('cipherSalt').value ?? null,
         prevResulst = document.querySelectorAll('.content__encrypt-block__result__parent');
 
     //Если есть предыдущие результаты шифрования - очищаем их
