@@ -1312,8 +1312,6 @@ class SimpleCipher
 		//В зависимости от того четный или нечетный символ (если это цифра), сдвигаем его либо по столбцам, либо по рядам матрицы
 		//В зависимости от того какой порядковый номер у ширфуемого элемента в ключе шифра (четный или нечетный) определяем меняем матрицу по столбцам или по строкам. Номер итерации прибавляем, чтобы гарантировать, что в 50% процентах будет смена четности на нечетность (четный ключ + четная итерация = четное число, нечетный ключ + нечетная итерация = четное чисо, нечетный ключ + четная итерация = нечетное число, четный ключ + нечетная итераия = нечетное число)
 		$transformedVector = ((array_search($symbol, $this->getStrArr(($matrixNum == 1 ? $this->cipherKey : $this->cipherKey_second))) + $iterationCount) % 2 !== 0) ? 'row' : 'col';
-		var_dump($iterationCount);
-		var_dump($transformedVector);
 		//Номер итерации шифрования прибавляем для того, чтобы гарантировать чередовать нечетность и нечетность даже если шифруется один тот же символ с одинаковыми координатами (описал подробнее выше по коду)
 		$coordSumm = (int)$symbCoord[0] + (int)$symbCoord[1] + $iterationCount;
 		#Гаврилов
@@ -1442,30 +1440,21 @@ class SimpleCipher
 			if ($symbKey % 2 !== 0) {
 				$transformedMatrixNum = ($this->encrypt ? 1 : 2);
 			} else {
+				$transformedMatrixNum = ($this->encrypt ? 2 : 1);
 				/**
-				 * При дешифровании мы делим строку шифра на биграмы и работаем с координатами символов биграма. Так как при дешифровке при определении координат каждого грама исходной строки грам шифра сдвигается и использовать его координаты в следующей итерации не получится
+				 * При дешифровании мы делим строку шифра на биграммы и работаем с координатами символов биграммы. Так как при дешифровке при определении координат каждого символа исходной строки символ шифра сдвигается и использовать его координаты в следующей итерации не получится
 				 */
 				$bigram = mb_substr($text, 1 * $symbKey, 2);
-				$bigramCoords[0] = $this->getSymbCoords($this->transformedMatrixArr[1], mb_substr($bigram, 0, 1)) ?? mb_substr($bigram, 0, 1);
-				$bigramCoords[1] = $this->getSymbCoords($this->transformedMatrixArr[2], mb_substr($bigram, 1, 1)) ?? mb_substr($bigram, 1, 1);
+				#Гаврилов
+				//ПРОВЕРЬ КАК ОТРАБОТАЕТ КОГДА В СТРОКЕ ОКАЖУТСЯ НЕШИФРУЕМЫЕ СИМВОЛЫ
+				//Пока подразумевается, что если симолы нешифруемы - они вместо координат размещаются в массиве биграммы в виде самих символов. Чтобы скрипт ниже мог понять, что символ не шифруем (если всместо координат сами символы)
+				$firstBigramSymbCoord = $this->getSymbCoords($this->transformedMatrixArr[$this->encrypt ? 2 : 1], mb_substr($bigram, 0, 1));
+				$secondBigramSymbCoord = $this->getSymbCoords($this->transformedMatrixArr[$this->encrypt ? 1 : 2], mb_substr($bigram, 1, 1));
+				$bigramCoords[0] = $firstBigramSymbCoord ? $firstBigramSymbCoord : mb_substr($bigram, 0, 1);
+				$bigramCoords[1] = $secondBigramSymbCoord ? $secondBigramSymbCoord : mb_substr($bigram, 1, 1);
 				var_dump($bigram);
-				// var_dump($bigramCoords);
-				$transformedMatrixNum = ($this->encrypt ? 2 : 1);
-			}
-			// if ($this->encrypt) {
-			// 	//Установка порядка матриц ниже отличается от аналогичной операции в методе createSymbCoords(). Это связано с определением противоположных биграмов при шифровании.
-			// 	if ($symbKey % 2 !== 0) {
-			// 		$transformedMatrixNum = 1;
-			// 	} else {
-			// 		$transformedMatrixNum = 2;
-			// 	}
-			// } else {
-			// 	if ($symbKey % 2 !== 0) {
-			// 		$transformedMatrixNum = 2;
-			// 	} else {
-			// 		$transformedMatrixNum = 1;
-			// 	}
-			// }
+				var_dump($bigramCoords);
+			}	
 			var_dump("номер матрицы - $transformedMatrixNum");
 			$symbCoord = $this->getSymbCoords($this->transformedMatrixArr[$transformedMatrixNum], $symbol);
 			var_dump("координаты символа - [" . implode(', ', $symbCoord) . "]");
@@ -1476,23 +1465,28 @@ class SimpleCipher
 
 				continue;
 			}
-			$grammKey = $this->returnNearbyGramm($symbKey);
-			var_dump("символ соседнего грама - " . $this->getStrArr($text)[$grammKey]);
+			$grammKey = $this->returnNearbyGramm($symbKey, $text);
+			var_dump("символ соседнего грама - " . ($grammKey !== false ? $this->getStrArr($text)[$grammKey] : 'false'));
 			/**
 			 * @var array массив координат соседнего грамма в биграме, координаты которого нужно использовать для шифрования/дешифрования текста.
 			 * Матрицы используем противоположные, так как соседний грамм ищется по определению в другой матрице
 			 */
-			$nearGrammCoords = $this->getSymbCoords(($this->transformedMatrixArr[($transformedMatrixNum == 1 ? 2 : 1)]), $this->getStrArr($text)[$grammKey]);
+			$nearGrammCoords = ($grammKey !== false) ? $this->getSymbCoords(($this->transformedMatrixArr[($transformedMatrixNum == 1 ? 2 : 1)]), $this->getStrArr($text)[$grammKey]) : false;
 			
 			#Гаврилов
 			//ЗАТЕСТИ ЭТОТ ВАРИАНТ КАК ИЗМЕНИТСЯ МАТРИЦА
 			//Если биграмм неполный (грамм не имеет "пары"), либо соседний грамм является нераспознанным символом - просто меняем координаты исходного символа местами
 			if ($grammKey === false || $nearGrammCoords === false) {
-				$interimSymbArr[] = $this->transformedMatrixArr[$transformedMatrixNum][$symbCoord[1]][$symbCoord[0]];
+				var_dump('there');
 				if ($this->encrypt) {
-					$this->transformMatrix($transformedMatrixNum, $symbKey, $symbCoord);
+					$interimSymbArr[] = $this->transformedMatrixArr[($transformedMatrixNum == 1 ? 2 : 1)][$symbCoord[1]][$symbCoord[0]];
+					$this->transformMatrix(($transformedMatrixNum == 1 ? 2 : 1), $symbKey, [$symbCoord[1], $symbCoord[0]]);
+				} else {
+					$interimSymbArr[] = $this->transformedMatrixArr[($transformedMatrixNum == 1 ? 2 : 1)][$symbCoord[1]][$symbCoord[0]];
+					var_dump("Заменяемый символ " . $this->transformedMatrixArr[($transformedMatrixNum == 1 ? 2 : 1)][$symbCoord[1]][$symbCoord[0]]);
+					var_dump("Координаты заменяемого символа - [" . implode(', ', [$symbCoord[1], $symbCoord[0]]) . "]");
+					$this->transformMatrix(($transformedMatrixNum == 1 ? 2 : 1), $symbKey, [$symbCoord[1], $symbCoord[0]]);
 				}
-				
 				continue;
 			} else {
 				$ciphrCoordArr[] = [$nearGrammCoords[0], $symbCoord[1]];
@@ -1504,49 +1498,21 @@ class SimpleCipher
 					var_dump("координаты заменяемого символа - [" . implode(', ', [$nearGrammCoords[0], $symbCoord[1]]) . "]");
 					$this->transformMatrix(($transformedMatrixNum == 1 ? 2 : 1), $symbKey, [$nearGrammCoords[0], $symbCoord[1]]);
 				} else {
-					// var_dump($bigramCoords);
-					// var_dump(($transformedMatrixNum == 1 ? 2 : 1));
-					// var_dump($bigramCoords[$transformedMatrixNum == 1 ? 1 : 0][0]);
-					// var_dump($bigramCoords[$transformedMatrixNum == 1 ? 0 : 1][1]);
-					$interimSymbArr[] = $this->transformedMatrixArr[($transformedMatrixNum == 1 ? 2 : 1)][$bigramCoords[$transformedMatrixNum == 1 ? 1 : 0][0]][$bigramCoords[$transformedMatrixNum == 1 ? 0 : 1][1]];
+					$matrixIndex = ($transformedMatrixNum == 1 ? 2 : 1);
+					//$bigrammIndex = ($transformedMatrixNum == 1 ? 1 : 0);
+					$interimSymbArr[] = $this->transformedMatrixArr[$matrixIndex][$bigramCoords[$transformedMatrixNum == 1 ? 1 : 0][0]][$bigramCoords[$transformedMatrixNum == 1 ? 0 : 1][1]];
 					var_dump("заменяемый символ - " . $this->transformedMatrixArr[($transformedMatrixNum == 1 ? 2 : 1)][$bigramCoords[$transformedMatrixNum == 1 ? 1 : 0][0]][$bigramCoords[$transformedMatrixNum == 1 ? 0 : 1][1]]);
 					var_dump("координаты заменяемого символа - [" . implode(', ', [$bigramCoords[$transformedMatrixNum == 1 ? 1 : 0][0], $bigramCoords[$transformedMatrixNum == 1 ? 0 : 1][1]]) . "]");
 					$this->transformMatrix($transformedMatrixNum, $symbKey, $symbCoord);				
 				}
-
 				$this->drawMatrix($this->transformedMatrixArr[1]);
 				$this->drawMatrix($this->transformedMatrixArr[2]);
 			}
 		}
-
-		// foreach ($interimSymbArr as $symbKey => $symbol){
-		// 	if ($this->encrypt) {
-		// 		if ($symbKey % 2 !== 0) {
-		// 			$transformedMatrixNum = 2;
-		// 		} else {
-		// 			$transformedMatrixNum = 1;
-		// 		}
-		// 	} else {
-		// 		if ($symbKey % 2 !== 0) {
-		// 			$transformedMatrixNum = 1;
-		// 		} else {
-		// 			$transformedMatrixNum = 2;
-		// 		}
-		// 	}
-		// 	$interimCoordArr[] = $this->getSymbCoords($this->transformedMatrixArr[$transformedMatrixNum], $symbol);
-		// }
-
 		var_dump("массив символов - " . implode('', $interimSymbArr));
 		var_dump($interimCoordArr);
 
 		return implode('', $interimSymbArr);
-
-		// if ($this->encrypt) {
-		// 	return implode('', $interimSymbArr);
-		// } else {
-		// 	return $ciphrCoordArr;
-		// }
-	
 	}
 
 
@@ -1559,6 +1525,8 @@ class SimpleCipher
 	 */
 	private function getSymbCoords(array $matrix, $symbol)
 	{
+		//var_dump($symbol);
+		//$this->drawMatrix($matrix);
 		$symbCoord = false;
 		foreach ($matrix as $rowNum => $rowData){
 			if (($symbCol = array_search($symbol, $matrix[$rowNum])) !== false) {
@@ -1578,7 +1546,7 @@ class SimpleCipher
 	 * @param array $coordArr массив со всеми символами сообщения
 	 * @return int|false false возвращается в случае неполного биграмма (грамм не имеет соседа), в остальных случаях возвращается ключ грамма, чьи координаты надо взять
 	 */
-	private function returnNearbyGramm($symbKey)
+	private function returnNearbyGramm($symbKey, $text)
 	{
 		$resultSymbKey = null;
 		if ($symbKey % 2 === 0) {
@@ -1586,7 +1554,7 @@ class SimpleCipher
 			//Эта ситуация может возникнуть только для четных символов, так как нечетные берут координаты у предыдущих символов
 			#Гаврилов
 			//ПРОВЕРЬ УСЛОВИЕ НИЖЕ ВЕРНО ЛИ ОТРАБАТЫВАЕТ
-			if ($symbKey + 1 == mb_strlen($this->text)) {
+			if ($symbKey + 1 == mb_strlen($text)) {
 				return false;
 			}
 			$resultSymbKey = $symbKey + 1;
@@ -1757,17 +1725,20 @@ class SimpleCipher
 
 #Гаврилов
 //ЕСЛИ ИСПОЛЬЗОВАТЬ СОЛЬ - ЛОМАЕТСЯ ПРИ ДЕШИФРОВКЕ
-// $n = 1;
-// while ($n <= 50) {
-	$testCipher = (new SimpleCipher('МАМА мыла раму', 'NTI0M2FmNWEwOGU3NDY2YTc5MDFiMTEyOTdlNmY1NTQzY2Q4MzYzMmJkMTNiODRjOGI2YjY4NjEwYjNmM2NjZGJhOWY1NjRiYmU3OTEzZjdhZmIzNDExM2QwZTgwMjhkZDE1OTIwMDlhY2YxZjIxMDljNDA4MTllZjc3MmEzOTI'))->encryptText(50);
+$n = 1;
+while ($n <= 50) {
+	$testCipher = (new SimpleCipher('МАМАн'))->encryptText(50);
 	echo '<pre>'; var_dump($testCipher); echo'</pre>';
 	// #Гаврилов
 	// //если заменить первую букву в соли - ничего не поменяется, хотя должно
 	// //ДОБАВЬ УЧЕТ БУКВ К ПЕРЕСЧЕТУ ПАРАМЕТРОВ ТРАНСФОРМАЦИИ МАТРИЦЫ. МАССИВ БУКВ ТРАНСФОРМИРУЕТСЯ В МАССИВ ЧИСЕЛ ПО КЛЮЧАМ ИЗ КЛЮЧА ШИФРА (НЕ ИЗ МАССИВА LETTERSARR) ДОБАВЛЯЕМ К КОЛИЧЕСТВУ ИТЕРАЦИЙ, ТАК КАК СУММА БУДЕТ БОЛЬШАЯ
-	$decryptText = (new SimpleCipher($testCipher, 'NTI0M2FmNWEwOGU3NDY2YTc5MDFiMTEyOTdlNmY1NTQzY2Q4MzYzMmJkMTNiODRjOGI2YjY4NjEwYjNmM2NjZGJhOWY1NjRiYmU3OTEzZjdhZmIzNDExM2QwZTgwMjhkZDE1OTIwMDlhY2YxZjIxMDljNDA4MTllZjc3MmEzOTI'))->decryptText();
+	$decryptText = (new SimpleCipher($testCipher))->decryptText();
 	echo '<pre>'; var_dump($decryptText); echo'</pre>';
-// 	$n++;
-// }
+	if ($decryptText !== 'МАМАн') {
+		var_dump('ОШИПКА!');f
+	}
+ 	$n++;
+}
 
 
 //ПЕРЕПИСАТЬ BASE64 на base32 (где нет заглавных букв, но нужно, чтобы там набор букв все равно был большой) СПРОСИ У НЕЙРОСЕТИ КАКОВА ВЕРОЯТНОСТЬ СТОЛКНУТЬСЯС КОЛИЗИЯМИ ЕСЛИ ИСПОЛЬЗОВАТЬ BASE 32 А НЕ BASE 64
