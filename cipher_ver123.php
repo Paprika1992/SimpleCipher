@@ -9,7 +9,6 @@ error_reporting(E_ALL);
 
 //TODO
 //проверь на уникальность все символы и подумай какие спецсимволы можно добавить
-//добавь (проверь как с слешами отработает) _-/\<>&`~
 
 class SimpleCipher
 {
@@ -17,16 +16,16 @@ class SimpleCipher
 	 * @var array массив ключей шифра, которые будут использоваться в зависимости от 3ей цифры в версии алогоритма
 	 */
 	private $cipherKeyStorage = [
-		0 => 'sТVцПzTjceoёжaЧB"е8LQчэЕЛ+ Аh№ДiщDPсMы6ЙЫ%pюН:мqSKWw5уHUХЩNпZX3РдIлйГnБJИ1я}uМ(ШО]бvъEн9ydшЭ{kзmgоЗ|ФGрьКаЁЖ!Уг?b7ЦxкC0)вЪlЮтЯtOA;В[2хYиRfЬrF4Сф',
-		1 => 'kde}7xЙV:ЬЕ]XГ(fyh1KтSТH щzсЪ6ел|мцTgЛр4бY5Aгзиv)r9ёНI!ЮнСЫйuCУЧЗМо%ФЯхР3tф{"Да8+ЦЭGjUАnчШpПХИ?;шюaдOБQжп[0ЁcJLуякlPqWыэDEZsК2ВMoЩNiBвьО№mbъFЖRw',
-		2 => '7|жJАК3d5цz8ЭуШЖXкЙpчъu:2дВbиЩZЁб4гsWIСFУ}БЗьAmLUэйYяoщёOjvЬrCSN!xвPiюV"{qИЪEа]Kл96о0enЕ;tфQ(HГ№lрОмyзМkDhwхGMa%ЛыД1)Tgc+ФЯРн?НЫеХRтПЧпfЮш[ТсЦB ',
-		3 => 'а"УЙKВn2юЬЗт[уЮJм№NЛX]Ъ+tЁ;1MHьыХ(ЖDл)aБVuКДЦ4нсgZ3LowбIsUРФ9Od7ёeвш6AжЕПиYrГc5SЧyТхbз?Rщ{рчАЭпijг8:Шxэq%цИЯkМйС !FъTfфЫQЩе}PоEmдCОvWя|кphG0zНBl',
-		4 => 'J;oeчэиЖ]"ЁцTwз7{ыфК3хГ+SюПzbИIЮОмkt!тUpвдРЫAViH?З4ХБvЛaЦоOGж2ruR%[C6ьXcMъёKL|sh ФЪE0DZ9FаУd№А}QЬYЧqЩШy(fейnуPлс)mбТЭНBС8В1ДМlЙгрЯяjнЕW5Ngx:пшкщ',
-		5 => 'Оvтh4фщЁM0л:аFёD)чЫИс(zRЭ№ВЧk3ЗЦДя Uпwъ6rю?mгXAt{HgБl5EФПa2ГjTдшУЛМхЯмsdэкЬGLJр!fZуKNp%Жй;[ЪqЙЮC]Х"ШвбЕIицuо8BnКOoы+Н9РYЩPьжАyxТ7С}нзiQcSb|е1WeV',
-		6 => 'ЪнCfЧх]ЖNРиbУ0поsВ4шhФOgжч|рцьJСШ;YЭЩБмъвo(тЮi8йсЗПЯ1:GЦу+dwzxщt cЙ7eёАлSAДlZvyфjU%№}qяKЛ"КQЕИюkГMLыХpn2)mB?3Нк{зеu!FдHаЁ6RТЬгМTWPE5[raIЫОб9XVэD',
-		7 => '3ФУzeЛАNЧ)A;rDС!дmеЬTылХRБh:яJyMьfЭUnЙdHkвYИэ 6{wОjкТcмBПКтЗнсР9+%EKЪ7ЕШ1pGЖCЮiЫцшВГНXоFLqзx5}ёvж2SЦчпбtаsуogЩйЁQъ0(х|84]юuгфМи"ЯlI№PZV?Wр[OДbaщ',
-		8 => 'gUЙИ{XohjTЁя]хBШУцрc8ъеs3Y+ФSкДqC0ЧRп%DсЦVжСE(дmPыОAdЯимзвy5bёxL?М"}Г!ЪOгКpщ2aMншПNРфfk lоuХ№FЭ1IQZn|ЬтТ9eюэБiGуrЫьЛЖ4ВЗчЩW6wJАл7Kt;ЮЕа:йzбHН[v)',
-		9 => 'йcЛuoэ№%hnqЕAж4afг!BJТv;шУ6HХпрsцXщл+ф3сLЪgQЗхкюtб)ШOПiKxyUФъчzPн}[2dm1ЦРЯ(WАз9НЫ7вGlот ЖО{иьb5ГIEа8ЭYZ:jFИуё0КДя]ЙweЧrЁ?ыВDNЮЩ|"МCдеTpБСЬkVSMRм',
+		0 => 'Sт⇔цVяСН@KИЮВr[5"Z:t*П}÷OmoЕЯврЗ08()ы4§чЙ9ГДУWэ7ишЛvcщАEH~ЖЩ!Iдеaлb/%3ОFу1`М-пёYюШsqJ©;LC_xЫQ\P.zp=ьGdЦy2аз×жX+ nhЬ€NЪм>kХб,{#AфR^]Т6ФРuКЁъБг|efоi≠wMкUπTЭн$jg<&хйЧ№?BсDl',
+		1 => '}tлз0sWyк1пЕ%N×\с3LеЯДXу:дTЙцw€мE?)о№G|]pPвщFπIг`rz6хkeЬOj8эяВuDZ>ШьSКМh$Э4аИУЁ2Щ*Рmx@Uрш©и"Т=vъ#(QФн[i≠l<Ъ;Г+П5Jч⇔Зф§coБYёХЫ~Лbы.йVОтq^C,СЦKd{ M_gHб&А7aRю/НЧf÷Ю-A9Ж!Bnж',
+		2 => 'йЧо83з]МылlK≠©;d0eW1wэYЖh4v+xЪ>аГ9{ШЙн*bуюCИФЕoпёХвБzУТyЮЫ€ЛНiV÷⇔X?геgК~#Q"Ашa)AЁSт&J§75`%хСкjr(|ВFB:sRжLмTG@ф/t^П×яОMqЩ,ZH}ЯЭ2Nд._u[O<иъ=\Dpцч$πPEсЗ IРfЬUcnЦkбрД6щ!m-ь№',
+		3 => 'T&π[03eшМэnВoqГДNX2в{П)о÷4д!Биs<€Ы]B`же}>9hарщKг#%k5Шaiь©PЁl(ЮmUHGQЗA*=№хФХЪЧЦRР+чLЭп"§О-~jwлrСgtO⇔АЬv8ЕxЙЯ\Dй×я/z≠SЖтЩ @ёНEF.Y$кZъИКV:?JбfзCc|Wuм1юц^ынуIpс7_yУЛb;,фd6MТ',
+		4 => 'J;oeчэиЖ]"ЁцTwз7{ыфК3хГ+SюПzbИIЮОмkt!тUpвдРЫAViH?З4ХБvЛaЦоOGж2ruR%[C6ьXcMъёKL|sh ФЪE0DZ9FаУd№А}QЬYЧqЩШy(fейnуPлс)mбТЭНBС8В1ДМlЙгрЯяjнЕW5Ngx:пшкщ&*\^-=`~@#$_/,.<>©§π≠×÷€⇔',
+		5 => '])2h8Т_гK:ИСoGсП4§щёЦSgЬГ&≠\wcЕrт€FJыyЮ©?aНlm@бндzшжЗх#.Ё~Вqef/$3ХеЧво№uЭь⇔vDБWQ7id|з=уФH`кj(юМTπ"k*0КЖяф×N[UЯVIRп1CиXр;%Z {}мчЛцpДЙ^O6лtЪYАL,ъEMPsОA!B÷эШЫx<а5-РУb+й>9nЩ',
+		6 => ',пЙЩ@GRS]#YHМ$€цUчж5pхьl}©ЮъJgF94ф0шРНЖЗзЪ1мmto×юaЁны>uQ⇔ОэЯа3EВТ!БЬIу|XisBд"К8WD≠y/nтkС A<с{:оё`÷h-jлГfФqe.Ур~Е*ИTя2А+[x?P=бL%K6ЫrйO§№г;ЛcV)ДЦvwbZвк_^ПC&ХщMЧd(7\ШиNеzπЭ',
+		7 => 'н)Ичph[:EзH"π&К71^фВLy©AGё]§ьRnbmэг!%NуЫO*М№3DYS#o{вЛI/ШЧ€ЁАwJ2Te5zПГ$VxЖl?-тQС `@б≠UX;цпО_ЕBлЭvж~÷и}БъdйсЙZ|рыЮа\оs8.uХю⇔FKP,WCЩхмcФfУЬqЦgщР×iТ<9шЪr0tяЯеЗДН(j6M+=кa>kд4',
+		8 => 'B§)яе{Лf$,Ыщi№сВpМb.jlI*KудшСЯЦktzЙ>MЪкgnмx=47Wy^ehDФз÷;ё€ГЖъ(rZ×©~юХd%вэv08цc\л⇔й[_C#So`OЧчGОЕuп3m<т2FД гQEЩ&ы!ЁиA]оπЮЭУYPa+|Т"}L:@нVРЬН/ь-а?RБ6ЗUжШб1хрИJHs9XфП5NTw≠КqА',
+		9 => 'ТS9NИz&оxMlзе!эпGL<yМБYRДf$v{КОч€akыЫq⇔=Лw/туJлHh#mё4~ЮOшб|CюTAШ0F?я*ъngЁГ(oXС5VЕн§Ьu[U@ b>Жф%,Пπ}8ЭЙФ2©PЩЪtХ:А_-хЗЧp÷I+и`6рщйrгс№sDмiьcкжУKBв≠E"eQН;d17^)ацдВ]\W3Z.Ц×ЯРj',
 	];
 
 
@@ -46,14 +45,14 @@ class SimpleCipher
 	 * @var string соль для шифра
 	 */
 	private $salt;
+	// /**
+	//  * @var int фейковая длина зашифрованной строки (по умолчанию 100)
+	//  */
+	// private $fakeLength;
 	/**
-	 * @var int фейковая длина зашифрованной строки (по умолчанию 100)
+	 * @var array массив различных символов из ключа шифра, которые не являются буквами или цифрами. Массив нужен для выделения частей указателя на реальную длину исходного текста
 	 */
-	private $fakeLength;
-	/**
-	 * @var array массив различных символов, которые не являются буквами или цифрами. Массив нужен для обрамления частей указателя на реальную длину шифруемого текста
-	 */
-	private $encryptLengthDelimetr;
+	private $encryptLengthDelimeter;
 	/**
 	 * @var int версия приложения. Перовая версия 12|случайная_версия_ключа_шифра|, чтобы не начинать с 001
 	 */
@@ -98,30 +97,30 @@ class SimpleCipher
 	 * @var int количество итераций смещения шифра для второй матрицы
 	 */
 	private $shiftCountSecond;
-	/**
-	 * @var bool флаг реверсивности ключа. Используем ли его в оригинальном виде, либо переворачиваем
-	 */
+	// /**
+	//  * @var bool флаг реверсивности ключа. Используем ли его в оригинальном виде, либо переворачиваем
+	//  */
 	//private $reverseFlag;
 	/**
    * @var int количество символов в векторе инициализации
    */
   private $vectorLength = 3;
 	/**
-   * @var string формируемый вектор вертикальной инициализации в виде биграмма
+   * @var string первый вектор инициализации в виде биграммы
    */
-  private $cipherVectorVert;
+  private $cipherVectorFirst;
   /**
-   * @var string формируемый вектор горизонтальной инициализации в виде биграмма
+   * @var string второй вектор инициализации в виде биграммы
    */
-  private $cipherVectorHor;
+  private $cipherVectorSecond;
 	/**
-   * @var string вектор вертикальной инициализации в виде числа
+   * @var string первый вектор инициализации в виде числа
    */
-  private $initializationVectorVert;
+  private $initializationVectorFirst;
   /**
-   * @var string вектор горизонтальной инициализации в виде числа
+   * @var string второй вектор инициализации в виде числа
    */
-  private $initializationVectorHor;
+  private $initializationVectorSecond;
 	/**
    * @var array первая матрица на основе преобразованного ключа шифра
    */
@@ -133,11 +132,11 @@ class SimpleCipher
 	/**
    * @var array преобразованноая первая матрица после сдвига по векторам инициализации
    */
-	private $transformedMatrixOne;
+	private $shiftedMatrixOne;
 	/**
 	 * @var array преобразованноая вторая матрица после сдвига по векторам инициализации
 	 */
-	private $transformedMatrixTwo;
+	private $shiftedMatrixTwo;
 	/**
 	 * @var array объединяющий массив трансформированных матриц
 	 */
@@ -157,135 +156,9 @@ class SimpleCipher
 		$this->text = $text;
 		#Гаврилов
 		//ПОПРОБУЙ В СОЛЬ ПЕРЕДАТЬ КИТАЙСКИЙ СИМВОЛ ИЛИ РУССКИЙ, ОНИ ДОЛЖНЫ УДАЛЯТЬСЯ ТУТ. В СОЛИ МОЖЕТ БЫТЬ ТОЛЬКО ЛАТИНСКИЕ СИМВОЛЫ И ЦИФРЫ
+		//ОНИ НИ В КОЕМ СЛУЧАЕ НЕ ДОЛЖНЫ УДАЛЯТЬСЯ ТУТ. СОЛЬ ДОЛЖНА ВАЛИДИРОВАТЬСЯ НА КАКОМ-ТО ЭТАПЕ. ЕСЛИ ВАЛИДАЦИЯ НЕ ПРОШЛА - ВОЗВРАЩАЕМ ОШИБКУ И СООБЩАЕМ ПОЛЬЗОВАТЕЛЮ О КРИВОЙ СОЛИ
 		$this->salt = preg_replace('/[^a-zA-Z0-9]+/', '', $salt);
 		$this->matrixDepth = sqrt(mb_strlen($this->cipherKeyStorage[0]));
-	}
-
-
-	/**
-	 * Метод формирует массив-указатель на хэш исходной строки, который кладется в шифр для сравнения такого же массива-указателя на хэш дешифруемой строки. Если они не совпадают - в шифре был подменен символ исходной строки. В этом случае возвращаем пользователю фейковую строку 
-	 *
-	 * Работает следующим образом: хэшируем текст, после чего вычленяем оттуда только цифры и отдельно только буквы. 
-	 * Получаем сумму всех цифр и сумму букв (суммируя ключи массива с буквами).
-	 * От сумм берем только первые 2 цифры. В этом случае к шифру в итоге добавляется 6 фейковых символов. Чем больше цифр будет будем брать, тем меньше вероятность наткнуться на колизию (когда сумма всех цифр или всех букв 2х разных хэшов совпадет), но тем больше фейковых символов будет добавлено к итоговому шифру.
-	 * Добавляем к суммам по 1 букве из хэша букв для разнообразия. 
-	 * Сформировавшиеся отрезки кладем вместо векторов инициализации. 
-	 * При дешифровке шифра, получив итоговый (исходный) текст, повторяем эту операцию. Если элементы получившегося массива будут совпадаеть с векторами инициализации - считаем, что символы исходной строки не были подменены в шифре. В противном случае возвращаем фейковую строку
-	 * 
-	 * @param string $text текст на хэш которого будет указывать полученный массив
-	 * @param string $matrixParamString строка с параметрами преобразования матриц и случайными разделителями между параметрами Нужны для уникальности результатов работы метода для каждого шифра
-	 * @return array
-	 */
-	private function getTextHashPointer(string $text, string $matrixParamString): array
-	{
-		//ПЕРЕПИСАТЬ СЛЕДУЮЩИМ ОБРАЗОМ. ХЭШИРУЕМ СТРОКУ, КОДИРУЕМ В BASE64. ПЕРВЫЕ 3 СИМВОЛА И ПОСЛЕДНИЕ 3 СИМВОЛА ИСПОЛЬЗУЕМ КАК ВЕТОРЫ ИНИЦИАЛИЗАЦИИ. ИХ ЖЕ И СРАВНИВАЕМ ПРИ ДЕШИФРОВАНИИ
-		//base32
-		//Массив указатель
-	  	$hashPointerArr = [
-			'firstVector' => null,		//Элемент формируется на основе цифр хэша строки
-			'secondVector' => null		//Элемент формируется на основе букв хэша строки
-		];
-		//Хэш строки. Подмешиваем строку с параметрами преобразования матриц для уникальности
-		$hashText = hash('whirlpool', $text . $this->reverseString($matrixParamString));
-		//Кодируем в base64 для разбавшения хэша более широким диапазоном используемых символов. В алгоритме хэша используются цифры 0-9 и буквы abcdef. При кодировании в base64 больше символов.
-		$encodeText = preg_replace('/[^a-z0-9]/i', '', base64_encode($hashText));
-		//var_dump($encodeText);
-		$firstVector = substr($encodeText, 0, 3);
-		$secondVector = substr($encodeText, -3);
-		// var_dump($firstVector);
-		// var_dump($lastVector);
-		//Сумма чисел из хэша строки
-		//$hashText_numbersSumm = array_sum(str_split(preg_replace('/[^0-9]+/', '', $hashText)));
-		//Добавляем элементы массива случайных параметров преобразования матриц. Преобразовываем в строку, чтобы в результате забрать только первые 2 цифры из получившейся суммы
-		//$hashText_numbersSumm = $hashText_numbersSumm + $matrixParamArr[4] + $matrixParamArr[3] . "";
-		//$hashText_numbersSumm = substr($hashText_numbersSumm, 0, 2);
-		#Гаврилов
-		//ПРОВЕРИТЬ. МОЖЕТ ЛИ БЫТЬ МЕНЬШЕ 2Х ЦИФР В ПЕРВОМ И ВТОРОМ ОТРЕЗКЕ. еСЛИ МОЖЕТ - СУЩЕСТВУЕТ ОПАСНОСТЬ, ЧТО МЫ НЕ СМОЖЕМ ДОСТАТЬ ЭТИ ОТРЕЗКИ, ТАК КАК ПЛАНИРУЕТСЯ, ЧТО ОТРЕЗОК БУДЕТ СОСТОЯТЬ ИЗ БУКВЫ + 2 ЧИСЛА. еСЛИ ЧИСЛА МОЖЕТ БЫТЬ МЕНЬШЕ 2Х - ПРОБЛЕМА
-		//Массив букв из хэша строки
-		//$hashText_letters = str_split(preg_replace('/[^a-z]+/i', '', $hashText));
-		//Случайным образом определяем букву, которая будет добавлена к первому элементу итогового массива (для разбавления, чтобы не было заметно, что элемент представляет собой только цифры)
-		//$firstLetter = $hashText_letters[array_sum(str_split($hashText_numbersSumm))];
-		//Сумма букв из хэша строки. Определяется путем сложений ключей соответствующих элементов массива $this->lettersArr 
-		//$hashTextLettersSum = array_sum(array_map(function($el) {return array_key_exists($el, $this->lettersArr) !== false ? $this->lettersArr[$el] : null;}, $hashText_letters));
-		//Добавляем элементы массива случайных параметров преобразования матриц. Преобразовываем в строку, чтобы в результате забрать только первые 2 цифры из получившейся суммы
-		//$hashTextLettersSum = $hashTextLettersSum + $matrixParamArr[0] + $matrixParamArr[1] . "";
-		//$hashTextLettersSum = substr($hashTextLettersSum, 0, 2);
-		//Случайным образом определяем букву, которая будет добавлена ко второму элементу итогового массива (для разбавления, чтобы не было заметно, что элемент представляет собой только цифры)
-		//$lastLetter = $hashText_letters[array_sum(str_split($hashTextLettersSum))];
-		//В процессе формирования итогового массива случайным образом определяем где в полученном значении будет находиться буква - перед цифрами, либо после них. Нужно для разнообразия
-		// $hashPointerArr['numbersSum'] = str_split($hashText_numbersSumm)[0] % 2 == 0 ? $firstLetter . $hashText_numbersSumm : $hashText_numbersSumm . $firstLetter;
-		$hashPointerArr['firstVector'] = $firstVector;
-		// $hashPointerArr['lettersSum'] = str_split($hashTextLettersSum)[0] % 2 == 0 ? $lastLetter . $hashTextLettersSum : $hashTextLettersSum . $lastLetter;
-		$hashPointerArr['secondVector'] = $secondVector;
-
-	  	return $hashPointerArr;
-	}
-
-
-	/**
-	 * Метод преобразовывает ключ шифра, используя соль
-	 *
-	 * @param string $cipherKey - ключ для преобразования
-	 * @return string
-	 */
-	private function useSaltToCipherKey($cipherKey)
-	{
-		// $cipherKey = 'sТVцПzTjceoёжaЧB"е8LQчэЕЛ+ Аh№ДiщDPсMы6ЙЫ%pюН:мqSKWw5уHUХЩNпZX3РдIлйГnБJИ1я}uМ(ШО]бvъEн9ydшЭ{kзmgоЗ|ФGрьКаЁЖ!Уг?b7ЦxкC0)вЪlЮтЯtOA;В[2хYиRfЬrF4Сф';
-		// var_dump($cipherKey);
-		//Новый ключ шифрования
-		$newCipherKey = null;
-		$cipherKeySymbArr = $this->getStrArr($cipherKey);
-		//var_dump($cipherKeySymbArr);
-		/*Перебираем все символы в соли и если этот символ из соли найден в ключе шифра - кладем его в начало (или конец в зависимости от четности/нечетности порядка итерации) ключа шифра (например на нулевую позицию), с прежней позиции элемент из массива удаляем. Например: 
-		ключ - abcdef123
-		соль - d2
-		находим символ d, с изначальной позиции массива элемент удаляем (abcef123) и помещаем его на нулевую позицию в ключе -> dabcef123
-		то же самое делаем с символом 2 - перемещаем его уже в конец массива (так как номер итерации теперь четный) ->dabcef132*/ 
-		$keyCounter = 0;
-		foreach ($this->getStrArr($this->salt) as $saltKey => $saltSymb){
-			$сipherSymbKey = array_search($saltSymb, $cipherKeySymbArr);
-			if ($сipherSymbKey !== false) {
-				unset($cipherKeySymbArr[$сipherSymbKey]);
-				if ($saltKey % 2 !== 0) {
-					array_unshift($cipherKeySymbArr, $saltSymb);
-				} else {
-					$cipherKeySymbArr[] = $saltSymb;
-				}
-			}
-		}
-		$newCipherKey = implode('', $cipherKeySymbArr);
-
-		return $newCipherKey;
-	}
-
-
-	/**
-	 * Метод применяет соль к параметрам преобразования матриц, чтобы по разному формировались ключи к матрицам в зависимости от секретного ключа
-	 *
-	 * @param array $matrixParam
-	 * @return array
-	 */
-	private function useSaltToMatrixParam($matrixParam)
-	{
-		$transformedMatrixParam = $matrixParam;
-		$cipherSalatArr = $this->getStrArr($this->salt);
-		//Массив с латинскими буквами в верхнем регистре, который мы ниже объединим с массивом латинских букв в нижнем регистре и на его основе [n => 2, H => 3, s => 4 ...] будем считать сумму ключей символов в соли
-		
-		$upperLatinLetters = array_map(function($el){ return strtoupper($el);}, array_flip($this->latinLetters));
-		$cipherSalatArr = array_map(function($el) use($upperLatinLetters) {return preg_match('/[^0-9]/', $el) ? array_flip(array_flip($this->latinLetters) + array_merge($upperLatinLetters, []))[$el] : (int)$el;}, $cipherSalatArr);
-		$saltSymbSum = array_sum($cipherSalatArr);
-		//Первую цифру из суммы символов соли добавляем к размеру окна захвата символов для преобразования первого ключа (если их сумма не больше 55, в противном случае - вычитаем). Последнюю цифру из суммы, соответственно добавляем к размеру окна захвата для преобразования второго ключа
-		$shiftWindowSize_first = substr($saltSymbSum, 0, 1);
-		$shiftWindowSize_second = substr($saltSymbSum, -1);
-		//Двузначное число из начала суммы символов добавляем к количеству итераций сдвига первого ключа, двузначное число из конца суммы, соответственно, к количеству итераций второго ключа
-		$shiftIteration_first = substr($saltSymbSum, 0, 2);
-		$shiftIteration_second = substr($saltSymbSum, -2);
-		$transformedMatrixParam[0] = ($transformedMatrixParam[0] + $shiftWindowSize_first >= 55) ? $transformedMatrixParam[0] - $shiftWindowSize_first : $transformedMatrixParam[0] - $shiftWindowSize_first;
-		$transformedMatrixParam[1] = $transformedMatrixParam[1] + $shiftIteration_first;
-		$transformedMatrixParam[3] = ($transformedMatrixParam[3] + $shiftWindowSize_second >= 55) ? $transformedMatrixParam[3] - $shiftWindowSize_second : $transformedMatrixParam[3] - $shiftWindowSize_second;
-		$transformedMatrixParam[4] = $transformedMatrixParam[4] + $shiftIteration_second;
-
-		return $transformedMatrixParam;
 	}
 
 
@@ -300,13 +173,8 @@ class SimpleCipher
 		//Фейковая длина не может быть меньше 50 символов
 		$fakeLength = $fakeLength < 50 ? 50 : $fakeLength;
 		$this->encrypt = true;
-		//Должно быть нечетным! Чтобы дойдя до конца, начиналось каждый раз с разной позиции в начале строки
-		//Сделать так, чтобы при выпадении четного числа - к нему прибавлялась единица
-		//Минимум 11
-		//ВЫЯСНИТЬ МАКСИМАЛЬНО ЭФФЕКТИВНЫЙ РАЗМЕР
-		$this->windowSizeFirst = $this->getRandNum(55, 12);
-		//минимум 99
-		//ВЫЯСНИТЬ МАКСИМАЛЬНО ЭФФЕКТИВНЫЙ РАЗМЕР
+		//Максимальное значение - примерно половина от длины ключа шифра
+		$this->windowSizeFirst = $this->getRandNum(floor(count($this->getStrArr($this->cipherKeyStorage[0])) / 2), 12);
 		$this->shiftCountFirst = $this->getRandNum(999, 99);
 		/**
 		 * @var string Флаг реверса ключа шифра, который используется для формирования первой матрицы. Ключ для второй матрицы всегда имеет противоположное значение
@@ -316,17 +184,21 @@ class SimpleCipher
 		 * @var string версия приложения в зашифрованном виде
 		 */
 		$encryptVersion = $this->setVersion();
-		$this->windowSizeSecond = $this->getRandNum(55, 12);
+		$this->windowSizeSecond = $this->getRandNum(floor(count($this->getStrArr($this->cipherKeyStorage[0])) / 2), 12);
 		$this->shiftCountSecond = $this->shiftCountFirst + $this->getRandNum(1999, 99);
 		//Заполняем массив с параметрами преобразования матриц (пока что данными для преобразования первой матрицы)
 		$matrixParamArr = [
-										0 => $this->windowSizeFirst, 
-										1 => $this->shiftCountFirst, 
-										2 => $reverseCipherKey,
-										3 => $this->windowSizeSecond,
-										4 => $this->shiftCountSecond,
-									];
+							0 => $this->windowSizeFirst, 
+							1 => $this->shiftCountFirst, 
+							2 => $reverseCipherKey,
+							3 => $this->windowSizeSecond,
+							4 => $this->shiftCountSecond,
+						];
+		/**
+		 * @var array массив, который был изменен с помощью переданной соли
+		 */
 		$transformedMatrixParamArr = [];
+		//Ниже преобразуем ключевые параметры шифра, если была передана соль
 		//Здесь дополнительно преобразуем ключ шифрования, так как только в методе setVersion происходит формирование ключа
 		if ($this->salt) {
 			$this->cipherKey = $this->useSaltToCipherKey($this->cipherKey);
@@ -343,72 +215,39 @@ class SimpleCipher
 		$reverseCipherKey = ($reverseCipherKey ? 0 : 1);
 		//Сдвигаем ключ шифра для второй матрицы
 		$mixedCipherTwo = $this->shiftCipherKey($this->cipherKey_second, $this->windowSizeSecond, $this->shiftCountSecond, $reverseCipherKey);
-		#Гаврилов
-		//УБЕРИ ПОСЛЕ ТЕСТИРОВАНИЯ
-		//$mixedCipher = '7|жJАК3d5цz8ЭуШЖXкЙpчъu:2дВbиЩZЁб4гsWIСFУ}БЗьAmLUэйYяoщёOjvЬrCSN!xвPiюV"{qИЪEа]Kл96о0enЕ;tфQ(HГ№lрОмyзМkDhwхGMa%ЛыД1)Tgc+ФЯРн?НЫеХRтПЧпfЮш[ТсЦB ';
-		#Гаврилов
-		//УБЕРИ ПОСЛЕ ТЕСТИРОВАНИЯ	
-		//$mixedCipherTwo = 'kde}7xЙV:ЬЕ]XГ(fyh1KтSТH щzсЪ6ел|мцTgЛр4бY5Aгзиv)r9ёНI!ЮнСЫйuCУЧЗМо%ФЯхР3tф{"Да8+ЦЭGjUАnчШpПХИ?;шюaдOБQжп[0ЁcJLуякlPqWыэDEZsК2ВMoЩNiBвьО№mbъFЖRw';
+		$this->matrixOne = $this->fillMatrix($mixedCipher, (int)substr(array_sum($this->salt ? $transformedMatrixParamArr : $matrixParamArr), -1, 1));
+		//Добавляем 1 к предыдущей сумме параметров матрицы, так как это дает 50% шанс, что паттерн заполнения изменится для второй матрицы (так как паттерны делятся по двойкам: 0,1 - 1й паттерн, 2,3 - 2й и так далее). На самом деле, нам не обязательно, чтобы паттерн менялся, так как сама последовательность символов для формирования матрицы разная, поэтому добавление 1 позволит с равной вероятностью получить как тот же паттерн заполнения матрицы, что был для 1й матрицы (0 превратится в 1 - и то и то 1й паттерн), так и следующий паттерн (1 превратится в 2 - это уже 2й паттерн).
+		$this->matrixTwo = $this->fillMatrix($mixedCipherTwo, (int)substr(array_sum($this->salt ? $transformedMatrixParamArr : $matrixParamArr) + 1, -1, 1));
 		//Только буквы для рандомной вставки между параметрами полезной нагрузки для трансформации матриц
 		$lettersArr = array_flip($this->lettersArr);
-		$this->matrixOne = $this->fillMatrix($mixedCipher, (int)substr(array_sum($this->salt ? $transformedMatrixParamArr : $matrixParamArr), -1, 1));
-		#Гаврилов
-		//УБЕРИ ПОСЛЕ ТЕСТИРОВАНИЯ
-		//ДЛЯ ТЕСТИРОВАНИЯ ГРАМОВ НА ОДИНАКОВОЙ ЛИНИИ СФОРМИРУЙ МАТРИЦУ НА ОСНОВЕ ПЕРВОГО КЛЮЧА ИЗ МАССИВОВ КЛЮЧЕЙ МАТРИЦЫ
-		//$this->matrixOne = $this->fillMatrix($mixedCipher, 1);
-		//Добавляем 1 к предыдущей сумме параметров матрицы, так как это дает 50% шанс, что паттерн заполнения изменится для второй матрицы (так как паттерны делятся по двойкам: 0,1 - 1й паттерн, 2,3 - 2й и так далее). На самом деле, нам не обязательно, чтобы паттерн менялся, так как сама последовательность символов для формирования матрицы разная, поэтому добавление 1 позволит с равной вероятностью получить как тот же паттерн заполнения матрицы, что был для 1й матрицы (0 превратится в 1 - 1й паттерн), так и следующий паттерн (1 превратится в 2 - 2й паттерн).
-		$this->matrixTwo = $this->fillMatrix($mixedCipherTwo, (int)substr(array_sum($this->salt ? $transformedMatrixParamArr : $matrixParamArr) + 1, -1, 1));
-		#Гаврилов
-		//УБЕРИ ПОСЛЕ ТЕСТИРОВАНИЯ
-		//$this->matrixTwo = $this->fillMatrix($mixedCipherTwo, 2);
 		//Формируем итоговую строку с параметрами формирования матриц. В качестве разделителя между параметрами формирования матриц использовать только случайные БУКВЫ, без знаков препинаний и различных спецсимволов (@, ^ и т.д.), потому что эти символы, в свою очередь, будут использоваться для обособления в параметрах преобразований матрицы первой части указателя на реальную длину шифруемого текста
 		$transformMatrixParam = implode('', array_map(function($el) use($lettersArr) {return $el . $lettersArr[array_rand($lettersArr)];}, $matrixParamArr));
 		$hashTextParams = $this->getTextHashPointer($this->text, $transformMatrixParam);
-		//Числа от 1 до 9 используются, так как два вектора идут подряд и если векторы будут содержать 2 числа непонятно будет где заканчивается первый вектор и начинается второй.
-		//TODO
-		//ПЕРЕИМЕНУЙ ВЕКТОРЫ ИНИЦИАЛИЗАЦИИ "ВЕРТИКАЛЬНЫЙ/ГОРИЗОНТАЛЬНЫЙ" НА "ПЕРВЫЙ/ВТОРОЙ"
-		// $this->cipherVectorVert = $this->createVector(array_merge(array_flip($this->cyrilicLetters), array_flip($this->latinLetters), ['0','1','2','3','4','5','6','7','8','9']));
-		$this->cipherVectorVert = $hashTextParams['firstVector'];
-		// $this->cipherVectorHor = $this->createVector(array_merge(array_flip($this->cyrilicLetters), array_flip($this->latinLetters), ['0','1','2','3','4','5','6','7','8','9']));
-		$this->cipherVectorHor = $hashTextParams['secondVector'];
-		$this->initializationVectorVert = $this->getVector($this->cipherVectorVert, 'vert');
-		$this->initializationVectorHor = $this->getVector($this->cipherVectorHor, 'hor');
-		$this->transformedMatrixOne = $this->shiftMatrix($this->matrixOne, 1, $this->initializationVectorVert, $this->initializationVectorHor);
-		$this->transformedMatrixTwo = $this->shiftMatrix($this->matrixTwo, 0, $this->initializationVectorVert, $this->initializationVectorHor);
-		$this->transformedMatrixArr[1] = $this->transformedMatrixOne;
-		$this->transformedMatrixArr[2] = $this->transformedMatrixTwo;
-		#Гаврилов
-		//УБЕРИ ПОСЛЕ ТЕСТИРОВАНИЯ
-		// $this->transformedMatrixArr[1] = $this->matrixOne;
-		// $this->transformedMatrixArr[2] = $this->matrixTwo;
-		// var_dump('ШИФРОВАНИЕ');
-		// $this->drawMatrix($this->transformedMatrixArr[1]);
-		// $this->drawMatrix($this->transformedMatrixArr[2]);
-		// die();
-		//$this->originalSymbCoordArr = $this->createSymbCoords($this->text);
-		//$coordCiphrSymbArr_interim = $this->createCiphrCoords();
-		$ecnryptText_interim = $this->createCiphrCoords($this->text);
-		//var_dump($coordCiphrSymbArr_interim);
-		// var_dump('после трансформации');
-		// $this->drawMatrix($this->transformedMatrixArr[1]);
-		// $this->drawMatrix($this->transformedMatrixArr[2]);
-		//Промежуточный зашифрованный текст (без внедренных фейковых символов)
-		//$ecnryptText_interim = $this->createCiphr($coordCiphrSymbArr_interim);
+		$this->cipherVectorFirst = $hashTextParams['firstVector'];
+		$this->cipherVectorSecond = $hashTextParams['secondVector'];
+		$this->initializationVectorFirst = $this->getVector($this->cipherVectorFirst, 'vert');
+		$this->initializationVectorSecond = $this->getVector($this->cipherVectorSecond, 'hor');
+		$this->shiftedMatrixOne = $this->shiftMatrix($this->matrixOne, 1, $this->initializationVectorFirst, $this->initializationVectorSecond);
+		$this->shiftedMatrixTwo = $this->shiftMatrix($this->matrixTwo, 0, $this->initializationVectorFirst, $this->initializationVectorSecond);
+		$this->transformedMatrixArr[1] = $this->shiftedMatrixOne;
+		$this->transformedMatrixArr[2] = $this->shiftedMatrixTwo;
+		$ecnryptText_interim = $this->transformSourceText($this->text);
 		var_dump($ecnryptText_interim);
-		$this->encryptLengthDelimetr = array_filter($this->getStrArr($this->cipherKey), function($el){return preg_match('/[^a-zа-ё0-9]/ui', $el);});
+		//Промежуточный зашифрованный текст (без внедренных фейковых символов)
+		$this->encryptLengthDelimeter = array_filter($this->getStrArr($this->cipherKey), function($el){return preg_match('/[^a-zа-ё0-9]/ui', $el);});
 		//Итоговая длина шифруемого текста
 		$encryptTextLength = $this->encryptLengthPointer($transformMatrixParam);
 		//Первая часть указателя на длину исходного сообщения (3546) без разграничителей - 35
-		$encryptLengthWithoutDelimetr_first = mb_substr((string)$encryptTextLength, 0, $this->getRandNum(mb_strlen((string)$encryptTextLength) + 1));
+		$encryptLengthWithoutDelimeter_first = mb_substr((string)$encryptTextLength, 0, $this->getRandNum(mb_strlen((string)$encryptTextLength) + 1));
 		//Вторая часть указателя на длину исходного сообщения (3546) с разграничителями - {46"
-		$encryptLength_second = $this->encryptLengthDelimetr[array_rand($this->encryptLengthDelimetr)] . mb_substr((string)$encryptTextLength, mb_strlen($encryptLengthWithoutDelimetr_first)) . $this->encryptLengthDelimetr[array_rand($this->encryptLengthDelimetr)];
+		$encryptLength_second = $this->encryptLengthDelimeter[array_rand($this->encryptLengthDelimeter)] . mb_substr((string)$encryptTextLength, mb_strlen($encryptLengthWithoutDelimeter_first)) . $this->encryptLengthDelimeter[array_rand($this->encryptLengthDelimeter)];
 		//Первая часть указателя на длину исходного сообщения (3546) с разграничителями - *35$
-		$encryptLength_first = $this->encryptLengthDelimetr[array_rand($this->encryptLengthDelimetr)] . $encryptLengthWithoutDelimetr_first . $this->encryptLengthDelimetr[array_rand($this->encryptLengthDelimetr)];
-		$fakeLength = $this->calcLenFakeSymb($fakeLength, $ecnryptText_interim, $this->cipherVectorVert . $this->cipherVectorHor . $transformMatrixParam . $encryptVersion . $encryptLength_first . $encryptLength_second);
+		$encryptLength_first = $this->encryptLengthDelimeter[array_rand($this->encryptLengthDelimeter)] . $encryptLengthWithoutDelimeter_first . $this->encryptLengthDelimeter[array_rand($this->encryptLengthDelimeter)];
+		$fakeLength = $this->calcLenFakeSymb($fakeLength, $ecnryptText_interim, $this->cipherVectorFirst . $this->cipherVectorSecond . $transformMatrixParam . $encryptVersion . $encryptLength_first . $encryptLength_second);
 		//Итоговый зашифрованный текст исходного сообщения (заполненный фейковыми символами)
 		$resultCipherText = $this->fillFakeLength($ecnryptText_interim, $fakeLength, $this->createFakeLengthHash($ecnryptText_interim, $transformMatrixParam));                  
 		//Итоговый шифр, включающий в себя зашифрованный текст исходного сообщений + полезная нагрузка шифра
-		$resutCipher = $this->constructCipherText($this->cipherVectorVert, $this->cipherVectorHor, $resultCipherText, $transformMatrixParam, $encryptVersion, $encryptLength_first, $encryptLength_second);
+		$resutCipher = $this->constructCipherText($this->cipherVectorFirst, $this->cipherVectorSecond, $resultCipherText, $transformMatrixParam, $encryptVersion, $encryptLength_first, $encryptLength_second);
 
 		return $resutCipher;
 	}
@@ -506,8 +345,8 @@ class SimpleCipher
 		//$vectorHor = mb_substr($this->text, -2);
 		$vectorHor = mb_substr($this->text, -3);
 		//var_dump("горизонтальный вектор $vectorHor");
-		$this->initializationVectorVert = $this->getVector($vectorVert, 'vert');
-		$this->initializationVectorHor = $this->getVector($vectorHor, 'hor');
+		$this->initializationVectorFirst = $this->getVector($vectorVert, 'vert');
+		$this->initializationVectorSecond = $this->getVector($vectorHor, 'hor');
 		//Получаем строку, содержащую информацию с параметрами преобразования матриц + первая часть версии алгоритма
 		//Отрезок с параметрами преобразования матриц изначально состоит из 5 сегментов ([цифра]+[буква]{1}, например, 123d). Однако, в этот отрезок на рандомную позицию вставляется сегмент с первой частью вверсии алгоритма ([какой-то символ]{1}[цифра]+[какой-то символ]{1}), например, (|23!). Итоговый вариант отрезка с параметрами преобразования матрицы - 20e89№19%0о0e22г1169w.
 		//Получаем отрезок с параметрами преобразования матриц + первая часть указателя на длину исходной строки - 20e89№19%0о0e22г1169w
@@ -571,26 +410,12 @@ class SimpleCipher
 		$reverseCipherKey = ($matrixParamArr['2'] % 2 === 0) ? 0 : 1;
 		//Сдвигаем шифр только после определения версии, так как только на этом этапе происходит определение ключа шифра 
 		$mixedCipher = $this->shiftCipherKey($this->cipherKey, $this->windowSizeFirst, $this->shiftCountFirst, $reverseCipherKey);
-		#Гаврилов
-		//УБЕРИ ПОСЛЕ ТЕСТИРОВАНИЯ
-		//$mixedCipher = '7|жJАК3d5цz8ЭуШЖXкЙpчъu:2дВbиЩZЁб4гsWIСFУ}БЗьAmLUэйYяoщёOjvЬrCSN!xвPiюV"{qИЪEа]Kл96о0enЕ;tфQ(HГ№lрОмyзМkDhwхGMa%ЛыД1)Tgc+ФЯРн?НЫеХRтПЧпfЮш[ТсЦB ';
 		$reverseCipherKey = ($reverseCipherKey ? 0 : 1);
 		$mixedCipherTwo = $this->shiftCipherKey($this->cipherKey_second, $this->windowSizeSecond, $this->shiftCountSecond, $reverseCipherKey);
-		#Гаврилов
-		//УБЕРИ ПОСЛЕ ТЕСТИРОВАНИЯ
-		//$mixedCipherTwo = 'kde}7xЙV:ЬЕ]XГ(fyh1KтSТH щzсЪ6ел|мцTgЛр4бY5Aгзиv)r9ёНI!ЮнСЫйuCУЧЗМо%ФЯхР3tф{"Да8+ЦЭGjUАnчШpПХИ?;шюaдOБQжп[0ЁcJLуякlPqWыэDEZsК2ВMoЩNiBвьО№mbъFЖRw';
 		$this->matrixOne = $this->fillMatrix($mixedCipher, (int)substr(array_sum($this->salt ? $transformedMatrixParamArr : $matrixParamArr), -1, 1));
 		$this->matrixTwo = $this->fillMatrix($mixedCipherTwo, (int)substr(array_sum($this->salt ? $transformedMatrixParamArr : $matrixParamArr) + 1, -1, 1));
-		#Гаврилов
-		//УБЕРИ ПОСЛЕ ТЕСТИРОВАНИЯ
-		// $this->matrixOne = $this->fillMatrix($mixedCipher, 1);
-		// $this->matrixTwo = $this->fillMatrix($mixedCipherTwo, 2);
-		$this->transformedMatrixArr[1] = $this->shiftMatrix($this->matrixOne, 1, $this->initializationVectorVert, $this->initializationVectorHor);
-		$this->transformedMatrixArr[2] = $this->shiftMatrix($this->matrixTwo, 0, $this->initializationVectorVert, $this->initializationVectorHor);
-		#Гаврилов
-		//УБЕРИ ПОСЛЕ ТЕСТИРОВАНИЯ
-		// $this->transformedMatrixArr[1] = $this->matrixOne;
-		// $this->transformedMatrixArr[2] = $this->matrixTwo;
+		$this->transformedMatrixArr[1] = $this->shiftMatrix($this->matrixOne, 1, $this->initializationVectorFirst, $this->initializationVectorSecond);
+		$this->transformedMatrixArr[2] = $this->shiftMatrix($this->matrixTwo, 0, $this->initializationVectorFirst, $this->initializationVectorSecond);
 		$realStringLength = $this->getRealStringLength(str_replace($versionMatch[0], '', $lengthFirstMatches[0]), $fakeLengthFirst . $fakeLengthSecond);
 		#Гаврилов
 		//ИСПОЛЬЗОВАТЬ ДЛЯ ВТОРОЙ МАТРИЦЫ ПРЕОБРАЗОВАННУЮ ОТРЕВЕРШЕННУЮ ПАРУ ИЗ 10 ВЕРСИЙ КЛЮЧЕЙ ШИФРА, ВМЕСТО ПОПЫТОК ПРЕОБРАЗОВАТЬ ПЕРВЫЙ КЛЮЧ ШИФРА
@@ -613,12 +438,12 @@ class SimpleCipher
 		// var_dump($clearDecryptText);
 		//$this->originalSymbCoordArr = $this->createSymbCoords($clearDecryptText);
 		//var_dump($coordSymbArr_interim);
-		//$coordCiphrSymbArr_interim = $this->createCiphrCoords($clearDecryptText);
-		$ecnryptText_interim = $this->createCiphrCoords($clearDecryptText);
+		//$coordCiphrSymbArr_interim = $this->transformSourceText($clearDecryptText);
+		$ecnryptText_interim = $this->transformSourceText($clearDecryptText);
 		// var_dump('после трансформации');
 		// $this->drawMatrix($this->transformedMatrixArr[1]);
 		// $this->drawMatrix($this->transformedMatrixArr[2]);
-		// //$ecnryptText_interim = $this->createCiphr($coordCiphrSymbArr_interim);
+		// //$ecnryptText_interim = $this->transformSourceText($coordCiphrSymbArr_interim);
 		// var_dump($ecnryptText_interim);
 		// die();
 		$compareTextHash = $this->getTextHashPointer($ecnryptText_interim, $transformMatrixString);
@@ -628,6 +453,98 @@ class SimpleCipher
 		}
 
 		return $ecnryptText_interim; 
+	}
+
+
+	/**
+	 * Метод преобразовывает ключ шифра, используя соль
+	 *
+	 * @param string $cipherKey - ключ для преобразования
+	 * @return string
+	 */
+	private function useSaltToCipherKey(string $cipherKey): string
+	{
+		//Новый ключ шифрования
+		$newCipherKey = null;
+		$cipherKeySymbArr = $this->getStrArr($cipherKey);
+		/*Перебираем все символы в соли и если этот символ из соли найден в ключе шифра - кладем его в начало (или конец в зависимости от четности/нечетности порядка итерации) ключа шифра (например на нулевую позицию). С прежней позиции элемент из массива удаляем. Например:
+		ключ - abcdef123
+		соль - d2
+		находим символ d, с изначальной позиции массива элемент удаляем -> abcef123; и помещаем его на нулевую позицию в ключе -> dabcef123
+		то же самое делаем с символом 2 - перемещаем его уже в конец массива (так как номер итерации теперь четный) ->dabcef132*/ 
+		foreach ($this->getStrArr($this->salt) as $saltKey => $saltSymb){
+			$сipherSymbKey = array_search($saltSymb, $cipherKeySymbArr);
+			if ($сipherSymbKey !== false) {
+				unset($cipherKeySymbArr[$сipherSymbKey]);
+				if ($saltKey % 2 !== 0) {
+					array_unshift($cipherKeySymbArr, $saltSymb);
+				} else {
+					$cipherKeySymbArr[] = $saltSymb;
+				}
+			}
+		}
+		$newCipherKey = implode('', $cipherKeySymbArr);
+
+		return $newCipherKey;
+	}
+
+
+	/**
+	 * Метод применяет соль к параметрам преобразования матриц, чтобы по разному формировались ключи к матрицам, в зависимости от секретного ключа
+	 *
+	 * @param array $matrixParam массив параметров преобразования матриц
+	 * @return array
+	 */
+	private function useSaltToMatrixParam(array $matrixParam): array
+	{
+		$transformedMatrixParam = $matrixParam;
+		$cipherSaltArr = $this->getStrArr($this->salt);
+		//Массив с латинскими буквами в верхнем регистре, который мы ниже объединим с массивом латинских букв в нижнем регистре и на его основе [n => 2, H => 3, s => 4 ...] будем считать сумму ключей символов в соли
+		$upperLatinLetters = array_map(function($el){return strtoupper($el);}, array_flip($this->latinLetters));
+		//Формируем сумму цифр и символов (ключей элементов массива [n => 2, H => 3, s => 4 ...]) соли
+		$cipherSaltArr = array_map(function($el) use($upperLatinLetters) {return preg_match('/[^0-9]/', $el) ? array_flip(array_flip($this->latinLetters) + array_merge($upperLatinLetters, []))[$el] : (int)$el;}, $cipherSaltArr);
+		$saltSymbSum = array_sum($cipherSaltArr);
+		//Первую цифру из суммы символов соли добавляем к размеру окна захвата символов для преобразования первого ключа (если их сумма не больше 55, в противном случае - вычитаем). Последнюю цифру из суммы, соответственно, добавляем к размеру окна захвата для преобразования второго ключа
+		$shiftWindowSize_first = substr($saltSymbSum, 0, 1);
+		$shiftWindowSize_second = substr($saltSymbSum, -1);
+		//Двузначное число из начала суммы символов добавляем к количеству итераций сдвига первого ключа, двузначное число из конца суммы, соответственно, к количеству итераций второго ключа
+		$shiftIteration_first = substr($saltSymbSum, 0, 2);
+		$shiftIteration_second = substr($saltSymbSum, -2);
+		$transformedMatrixParam[0] = ($transformedMatrixParam[0] + $shiftWindowSize_first >= 55) ? $transformedMatrixParam[0] - $shiftWindowSize_first : $transformedMatrixParam[0] - $shiftWindowSize_first;
+		$transformedMatrixParam[1] = $transformedMatrixParam[1] + $shiftIteration_first;
+		$transformedMatrixParam[3] = ($transformedMatrixParam[3] + $shiftWindowSize_second >= 55) ? $transformedMatrixParam[3] - $shiftWindowSize_second : $transformedMatrixParam[3] - $shiftWindowSize_second;
+		$transformedMatrixParam[4] = $transformedMatrixParam[4] + $shiftIteration_second;
+
+		return $transformedMatrixParam;
+	}
+
+
+	/**
+	 * Метод формирует массив-указатель на хэш исходной строки, который кладется в шифр для сравнения такого же массива-указателя на хэш дешифруемой строки. Если они не совпадают - в шифре был подменен символ исходной строки. В этом случае возвращаем пользователю фейковую строку 
+	 * 
+	 * @param string $text текст на хэш которого будет указывать полученный массив
+	 * @param string $matrixParamString строка с параметрами преобразования матриц и случайными разделителями между параметрами Нужны для уникальности результатов работы метода для каждого шифра
+	 * @return array
+	 */
+	private function getTextHashPointer(string $text, string $matrixParamString): array
+	{
+		//Массив указатель
+	  	$hashPointerArr = [
+			'firstVector' => null,		//Элемент формируется на основе цифр хэша строки
+			'secondVector' => null		//Элемент формируется на основе букв хэша строки
+		];
+		//Хэш строки. Подмешиваем строку с параметрами преобразования матриц для уникальности
+		$hashText = hash('whirlpool', $text . $this->reverseString($matrixParamString));
+		//Кодируем в base64 для разбавшения хэша более широким диапазоном используемых символов. В алгоритме хэша используются цифры 0-9 и буквы abcdef. При кодировании в base64 больше символов.
+		$encodeText = preg_replace('/[^a-z0-9]/i', '', base64_encode($hashText));
+		//Первые 3 символа с начала хэша - первый вектор
+		$firstVector = substr($encodeText, 0, 3);
+		//Последние 3 символа с конца строки - второй вектор
+		$secondVector = substr($encodeText, -3);
+		$hashPointerArr['firstVector'] = $firstVector;
+		$hashPointerArr['secondVector'] = $secondVector;
+
+	  	return $hashPointerArr;
 	}
 
 
@@ -858,7 +775,7 @@ class SimpleCipher
 	 * Метод сдвига ключа шифра
 	 * 
 	 * @param string $cipherKey ключ, который нужно преобразовать
-	 * @param int $windowSize окно захвата символов, которое сдвигается каждую итерацию. В шифре abj36fh5k окно захвата символов будет (в случае значения 4) abj3 - [abj3]6fh5k
+	 * @param int $windowSize окно захвата символов, которое сдвигается каждую итерацию. В шифре abj36fh5k окно захвата символов будет (в случае величины 4 - abj3 ([abj3]6fh5k)
 	 * @param int $shiftCount количество итераций сдвига в шифре
 	 * @param bool reverseCipherKey флаг реверсивности ключа шифра
 	 * @return string
@@ -867,7 +784,7 @@ class SimpleCipher
 	{
 		$transformedCipherKey = $cipherKey;
 		//generalIteration - счетчик общего количества итераций
-		//stringIteration - счетчик итераций в рамках одного прохода по строке ключу шифра. Сбрасывается как только перебор проходит ключ полностью до конца и должен вернуться в начало
+		//stringIteration - счетчик итераций в рамках одного прохода по строке ключу шифра. Сбрасывается как только цикл проходит ключ полностью до конца и должен вернуться в начало
 		$generalIteration = $stringIteration = 0;
 		//Шаг сдвига окна (в большую или меньшую сторону) после каждой итерации.
 		$shiftSize = 1;
@@ -884,18 +801,19 @@ class SimpleCipher
 				$leftPart = $windowSize + $shiftSize + $rightPart;
 				//Перерасчитываем правую часть после пересчета остальных частей
 				$rightPart = mb_strlen($transformedCipherKey) - $leftPart - $windowSize - $shiftSize;
-				//При достижении конца строки сбрасываем количество итераций пробега по строке
+				//При достижении конца строки сбрасываем количество итераций цикла
 				$stringIteration = 0;
 			}
+			//Регулярка, с помощью которой бьем строку на сегменты, которые будем переставлять
 			$pattern = "/" . ($leftPart ? "(.{" . $leftPart . "})" : null) . "(.{" . $windowSize . "})(.{" . $shiftSize . "})(.{" . $rightPart . "})/u";
 			$replacement = ($leftPart ? '${1}${3}${2}${4}' : '${2}${1}${3}');
-			//Само действие перестановки кусков шифра
+			//Само действие перестановки сгементов шифра
 			$transformedCipherKey = preg_replace($pattern, $replacement, $transformedCipherKey);
 			//Если вектор увеличения отключен, окно захвата символов уменьшается, промежуток пропуска символов увеличивается.
 			if ($increaseVector == false) {
 				$windowSize--;
 				$shiftSize++;
-				//Как только окнок захвата уменьшается до нуля, вектор увеличения включается - окно захвата увеличивается, промежуток пропуска символов уменьшается
+				//Как только окнок захвата уменьшается до нуля, вектор увеличения включается, окно захвата увеличивается, промежуток пропуска символов уменьшается
 				if ($windowSize == 0) {
 					//Присваиваем двойку, а не единицу, так как единица была в последней итерации (перед уменьшением до нуля)
 					$windowSize = 2;
@@ -927,35 +845,26 @@ class SimpleCipher
 	 */
 	private function constructCipherText($vectorVert, $vectorHor, $cipherText, $matrixParams, $cipherVersion, $fakeLenFirst, $fakeLenSecond)
 	{
-		// echo '<pre>'; var_dump("вертикальный вектор $vectorVert"); echo'</pre>';
-		// echo '<pre>'; var_dump("горизонтальный вектор $vectorHor"); echo'</pre>';
-		// echo '<pre>'; var_dump("параметры матрицы $matrixParams"); echo'</pre>';
-		// echo '<pre>'; var_dump("фейковая длина " . $fakeLenFirst . $fakeLenSecond); echo'</pre>';
 		//Позиция разделения строки с параметрами матриц после которогой будет вставлена первая часть фейковой длины. Например, параметры преобразования матрицы - 20e890о0e22г1169w, первая часть версии - №1%, позиция разделения - 5. Итоговый сегмент с параметрами преобразования матрицы + первой частью версии алгоритма - 20e89№1%0о0e22г1169w
 		//По аналогии работает шифрование второй части фейковой длины с версией алгоритма ниже в этом методе
 		//Максимальная позиция  куда вставляется отрезок с первой частью указателя на длину исходной строки ( №1% ) должна быть равна длине сегмента с параметрами матрицы ( 20e890о0e22г1169w ) минус 1, так как если позиция будет равна длине сегмента, отрезок вставится в самый конец сегмента ( 20e890о0e22г1169w№1% ) и при расшифровке будет проблема
-		$matrixParamsDelimetr = $this->getRandNum(mb_strlen($matrixParams));
-		$transformMatrixParams = mb_substr($matrixParams, 0, $matrixParamsDelimetr) . $fakeLenFirst . mb_substr($matrixParams, $matrixParamsDelimetr);
-		//echo '<pre>'; var_dump($cipherVersion); echo'</pre>';
+		$matrixParamsDelimeter = $this->getRandNum(mb_strlen($matrixParams));
+		$transformMatrixParams = mb_substr($matrixParams, 0, $matrixParamsDelimeter) . $fakeLenFirst . mb_substr($matrixParams, $matrixParamsDelimeter);
 		//Место разделения строки с параметрами матриц после которогой будет вставлена первая часть фейковой длины
-		$cipherVerDelimetr = $this->getRandNum(mb_strlen($cipherVersion) + 1);
-		//echo '<pre>'; var_dump($cipherVerDelimetr); echo'</pre>';
-		$transformСipherVer = mb_substr($cipherVersion, 0, $cipherVerDelimetr) . $fakeLenSecond . mb_substr($cipherVersion, $cipherVerDelimetr);
-		//echo '<pre>'; var_dump($transformСipherVer); echo'</pre>';
+		$cipherVerDelimeter = $this->getRandNum(mb_strlen($cipherVersion) + 1);
+		$transformСipherVer = mb_substr($cipherVersion, 0, $cipherVerDelimeter) . $fakeLenSecond . mb_substr($cipherVersion, $cipherVerDelimeter);
 		$resultCipherText = $vectorVert . $transformMatrixParams . $cipherText . $transformСipherVer . $vectorHor;
 
 		return $resultCipherText;
 	}
 
 
-	//ДЛЯ ЗАПОЛНЕНИЯ ВТОРОЙ МАТРИЦЫ ИСПОЛЬЗОВАТЬ ДРУГОЙ РАНДОМНЫЙ МЕТОД ФОРМИРОВАНИЯ 
-	//Заполнение матриц
 	/**
 	 * Метод заполнения матрицы
 	 *
-	 * @param string $mixedCipherKey преобразованный ключ шифра
+	 * @param string $mixedCipherKey преобразованный ключ шифра, на основе которого будет формироваться матрица
 	 * @param int $pattern ключ паттерна заполнения матрицы
-	 * @return void
+	 * @return array
 	 */
 	private function fillMatrix($mixedCipherKey, $pattern)
 	{
@@ -983,7 +892,6 @@ class SimpleCipher
 					$x++;
 				}
 			break;
-			//сверху вниз справа налево
 			/*Заполнение по строкам сверху внизу справа налево на примере массива 4х4 [1,2...16]
 				[4,   3,   2,   1]
 				[8,   7,   6,   5],
@@ -1072,14 +980,12 @@ class SimpleCipher
 						$t++;
 						$xCol++;
 					}
-					//Без этой сортировки ключи массивов начинаются не по порядку в плане чисел НАПРИМЕР! 0,1,2,3,4,5,6,7,8,9,10,11 а по порядку в порядке заполнения 0,1,11,3,4,10,5,6,9,7,8
+					//Без этой сортировки ключи массивов начинаются не по порядку в плане чисел НАПРИМЕР, не 0,1,2,3,4,5,6,7,8,9,10,11 а по порядку в порядке заполнения их в этом методе - 0,1,11,3,4,10,5,6,9,7,8
 					ksort($matrixOne[$xRow]);
 					$xRow++;
 				}
 				break;
-
 		}	
-
 		return $matrixOne;
 	}
 
@@ -1125,10 +1031,6 @@ class SimpleCipher
 		//Определяем ключ конкретного шифра, беря последнюю цифру из версии алгоритма
 		$this->cipherKey = $this->cipherKeyStorage[substr($version, -1)];
 		$this->cipherKey_second = $this->cipherKeyStorage[substr($version, -1) == (count($this->cipherKeyStorage) - 1) ? 0 : substr($version, -1) + 1];
-		#Гаврилов
-		//УБЕРИ ПОСЛЕ ТЕСТИРОВАНИЯ
-		// $this->cipherKey = 'йcЛuoэ№%hnqЕAж4afг!BJТv;шУ6HХпрsцXщл+ф3сLЪgQЗхкюtб)ШOПiKxyUФъчzPн}[2dm1ЦРЯ(WАз9НЫ7вGlот ЖО{иьb5ГIEа8ЭYZ:jFИуё0КДя]ЙweЧrЁ?ыВDNЮЩ|"МCдеTpБСЬkVSMRм';
-		// $this->cipherKey_second = 'gUЙИ{XohjTЁя]хBШУцрc8ъеs3Y+ФSкДqC0ЧRп%DсЦVжСE(дmPыОAdЯимзвy5bёxL?М"}Г!ЪOгКpщ2aMншПNРфfk lоuХ№FЭ1IQZn|ЬтТ9eюэБiGуrЫьЛЖ4ВЗчЩW6wJАл7Kt;ЮЕа:йzбHН[v)';
 
 		return (int)$version;
 	}
@@ -1136,8 +1038,8 @@ class SimpleCipher
 
 	/**
 	 * Метод формирования версии конкретного шифра. Версия самого алгоритма/скрипта фиксирована и прописывается в свойстве класса $this->version, метод ниже определяет каким образом версия конкретного шифра будет сформирована
-	 * Версия состоит из 6ти значений: 3 значения - чистая версия шифра + 3 значения - параметры формирования итоговой версии шифра версии, на основании которых все элементы будут перемешаны
-	 * Например. Версия алгоритма - 12, используемый индекс ключа для матриц - 3. Итоговая версия шифра - 123. Паттерн преобразования цифр шифра в буквы - 4 (версия шифра 123 преобразуется в 'bsg'), флаг реверсивности - 0, рандомное число - 8. Дальше эти значения перемешиваются, полная зашифрованная версия шифра - b40sg8
+	 * Версия состоит из 6ти символов: 3 символа (чистая версия шифра) + 3 символа (ПАРАМЕТРЫ формирования итоговой версии шифра) версии, на основании которых все элементы версии будут перемешаны
+	 * Например. Версия алгоритма - 12, используемый индекс ключа шифра ($this->cipherKeyStorage) - 3. Итоговая версия шифра - 123. Паттерн преобразования цифр шифра в буквы - 4 (версия шифра 123 преобразуется в 'bsg'), флаг реверсивности - 0, рандомное число - 8. Дальше эти значения перемешиваются, полная зашифрованная версия шифра - b40sg8
 	 *
 	 * @return string
 	 */
@@ -1153,21 +1055,15 @@ class SimpleCipher
 		№5 - rand_1(б)_23(ц)
 		*/
 		$pattern = $this->getRandNum(6);
-		//Индекс ключа шифрования на основании которого будет формироваться 1 матрица
+		//Индекс ключа шифрования на основании которого будет формироваться 1я матрица
 		$cipherKeyIndex = $this->getRandNum(10);
 		//Версия алгоритма + индекс рандомного ключа
 		$cipherVersion = $this->version . $cipherKeyIndex;
 		#Гаврилов
 		//ВЫНЕСИ ФОРМИРОВАНИЕ КЛЮЧА ШИФРОВАНИЯ ЗА ПРЕДЕЛЫ ДАННОГО МЕТОДА
 		$this->cipherKey = $this->cipherKeyStorage[$cipherKeyIndex];
-		#Гаврилов
-		//УБЕРИ ПОСЛЕ ТЕСТИРОВАНИЯ
-		//$this->cipherKey = 'йcЛuoэ№%hnqЕAж4afг!BJТv;шУ6HХпрsцXщл+ф3сLЪgQЗхкюtб)ШOПiKxyUФъчzPн}[2dm1ЦРЯ(WАз9НЫ7вGlот ЖО{иьb5ГIEа8ЭYZ:jFИуё0КДя]ЙweЧrЁ?ыВDNЮЩ|"МCдеTpБСЬkVSMRм';
 		//Ключ второго шифра для формирования второй матрицы строится на основании другого ключа из массива $this->cipherKeyStorage (следующего ключ после ключа первой матрицы, либо первый ключ массива, если ключ для первый матрицы оказался последним в массиве)
 		$this->cipherKey_second = $this->cipherKeyStorage[$cipherKeyIndex == (count($this->cipherKeyStorage) - 1) ? 0 : $cipherKeyIndex + 1];
-		#Гаврилов
-		//УБЕРИ ПОСЛЕ ТЕСТИРОВАНИЯ
-		//$this->cipherKey_second = 'gUЙИ{XohjTЁя]хBШУцрc8ъеs3Y+ФSкДqC0ЧRп%DсЦVжСE(дmPыОAdЯимзвy5bёxL?М"}Г!ЪOгКpщ2aMншПNРфfk lоuХ№FЭ1IQZn|ЬтТ9eюэБiGуrЫьЛЖ4ВЗчЩW6wJАл7Kt;ЮЕа:йzбHН[v)';
 		//Флаг реверсивности (относится только к формированию версии, к реверсивности других параметров шифра отношения не имеет). Второе число в массиве параметров формирования версии. Если число четное - массив с буквами/цифрами, на основании которого цифры версии преобразуются в буквы, не реверсим, иначе реверсим. Дополнительный фактор запутывания
 		$reverseLettersArr = $this->getRandNum(10);
 		if (!($reverseLettersArr % 2 === 0)) {
@@ -1209,10 +1105,10 @@ class SimpleCipher
 				break;
 		}
 		$resultVersionArr = [];
-		//Цикл ниже должен объединить массив цифр и массив букв таким образом, чтобы относительная последовательность символов в итоговом массиве совпадала с последовательностью символов входящих в него подмасивов. Например, в случае объединения двух массивов [1, 2, 3] и ['a', 'b', 'c']
-		//Подходящие результаты [1, 2, 3, 'a', 'b', 'c'] или [1, 'a', 'b', 'c', 2, 3] или ['a', 'b', 1, 2, 'c', 3]
-		//Неподходящие результаты: [3, 2, 'a', 'b', 'c', 1] или [1, 'a', 2, 'c', 3, 'b']
-		//Это позволит, получив 6 символов, вычленить из них отдельно буквы и отдельно цифры в том же порядке, в каком они были объединены
+		/*Цикл ниже должен объединить массив цифр и массив букв таким образом, чтобы относительная последовательность символов в итоговом массиве совпадала с последовательностью символов входящих в него подмасивов. Например, в случае объединения двух массивов [1, 2, 3] и ['a', 'b', 'c']
+		Подходящие результаты [1, 2, 3, 'a', 'b', 'c'] или [1, 'a', 'b', 'c', 2, 3] или ['a', 'b', 1, 2, 'c', 3]
+		Неподходящие результаты: [3, 2, 'a', 'b', 'c', 1] или [1, 'a', 2, 'c', 3, 'b']
+		Это позволит, получив 6 символов, вычленить из них отдельно буквы и отдельно цифры в ТОМ же порядке, в каком они были объединены*/
 		$n = true;
 		while($n)
 		{
@@ -1342,254 +1238,162 @@ class SimpleCipher
 
 
 
-	/**
-	 * Метод формирует массив с координатами символов исходного сообщения
-	 * 
-	 * @param string $text текст требующий преобразования
-	 * @return array массив символов исходного текста с координатами из матриц
-	 */
-	private function createSymbCoords($text)
-	{
-		$symbCoordArr = [];
-		$transformedMatrixNum = 0;
-		//Бьем фразу для шифрования по символам на массив и ищем каждый символ в матрицах
-		foreach ($this->getStrArr($text) as $symbKey => $symbol) {
-			$transformedMatrixNum = 0;
-			//Определяем в какой матрице ищем символ. При шифровке если элемент четный - в 1й, если нечетный - во 2й. При дешифровке обратная ситуация
-			if ($this->encrypt) {
-				if ($symbKey % 2 !== 0) {
-					$matrix = $this->transformedMatrixArr[1];
-					$transformedMatrixNum = 1;
-				} else {
-					$transformedMatrixNum = 2;
-					$matrix = $this->transformedMatrixArr[2];
-				}
-				//$matrix = ($symbKey % 2 !== 0 ? $this->transformedMatrixArr[2] : $this->transformedMatrixArr[1]);
-			} else {
-				if ($symbKey % 2 !== 0) {
-					$matrix = $this->transformedMatrixArr[2];
-					$transformedMatrixNum = 2;
-				} else {
-					$transformedMatrixNum = 1;
-					$matrix = $this->transformedMatrixArr[1];
-				}
-				//$matrix = ($symbKey % 2 !== 0 ? $this->transformedMatrixArr[1] : $this->transformedMatrixArr[2]);
-			}
+	// /**
+	//  * Метод формирует массив с координатами символов исходного сообщения
+	//  * 
+	//  * @param string $text текст требующий преобразования
+	//  * @return array массив символов исходного текста с координатами из матриц
+	//  */
+	// private function createSymbCoords($text)
+	// {
+	// 	$symbCoordArr = [];
+	// 	$transformedMatrixNum = 0;
+	// 	//Бьем фразу для шифрования по символам на массив и ищем каждый символ в матрицах
+	// 	foreach ($this->getStrArr($text) as $symbKey => $symbol) {
+	// 		$transformedMatrixNum = 0;
+	// 		//Определяем в какой матрице ищем символ. При шифровке если элемент четный - в 1й, если нечетный - во 2й. При дешифровке обратная ситуация
+	// 		if ($this->encrypt) {
+	// 			if ($symbKey % 2 !== 0) {
+	// 				$matrix = $this->transformedMatrixArr[1];
+	// 				$transformedMatrixNum = 1;
+	// 			} else {
+	// 				$transformedMatrixNum = 2;
+	// 				$matrix = $this->transformedMatrixArr[2];
+	// 			}
+	// 		} else {
+	// 			if ($symbKey % 2 !== 0) {
+	// 				$matrix = $this->transformedMatrixArr[2];
+	// 				$transformedMatrixNum = 2;
+	// 			} else {
+	// 				$transformedMatrixNum = 1;
+	// 				$matrix = $this->transformedMatrixArr[1];
+	// 			}
+	// 		}
 
-			//Флаг - был ли найден символ в матрицах. Если нет - символ не шифруется
-			$findSymbol = false;
-			foreach ($matrix as $matrixRow => $rowData) {
-				if (($symbolCol = array_search($symbol, $rowData, true)) !== false) {
-					var_dump($rowData);
-					var_dump($symbol);
-					// var_dump($matrixRow);
-					// var_dump($symbolCol);
-					$symbCoordArr[] = [$matrixRow, $symbolCol];
-					$findSymbol = true;
-					//При дешифровке мы трансформируем матрицу при формировании массива с координатами символов, так как в случае дешифровки эти символы - символы шифра, а они должны сдвигаться, так как символы исходного сообщения двигаться не должны в матрице
-					if (!$this->encrypt) {
-						//Если символ не имеет пары (последний символ в строке, притом четный, либо если символ не найден в матрицах)
-						// if (($grammKey = $this->returnNearbyGramm($symbKey)) === false || !$findSymbol) {
-						// 	var_dump($grammKey);
-						// } else {
-						// 	var_dump($grammKey);
-						// }
-						$this->transformMatrix($transformedMatrixNum, $symbKey, [$matrixRow, $symbolCol]);
-						// var_dump('итерация дешифровки - ' . $symbKey);
-						// var_dump($symbol);
-						// var_dump($transformedMatrixNum);
-						// var_dump([$matrixRow, $symbolCol]);
-						
-						// $this->drawMatrix($this->transformedMatrixArr[1]);
-						// $this->drawMatrix($this->transformedMatrixArr[2]);	
-					}
-					
-					
-
-					break;
-				}
-			}
-			//Если символ не найден в матрицах - не шифруем его
-			if (!$findSymbol) {
-				$symbCoordArr[] = $symbol;
-			}
-		}
-		return $symbCoordArr;
-	}
+	// 		//Флаг - был ли найден символ в матрицах. Если нет - символ не шифруется
+	// 		$findSymbol = false;
+	// 		foreach ($matrix as $matrixRow => $rowData) {
+	// 			if (($symbolCol = array_search($symbol, $rowData, true)) !== false) {
+	// 				$symbCoordArr[] = [$matrixRow, $symbolCol];
+	// 				$findSymbol = true;
+	// 				//При дешифровке мы трансформируем матрицу при формировании массива с координатами символов, так как в случае дешифровки эти символы - символы шифра, а они должны сдвигаться, так как символы исходного сообщения двигаться не должны в матрице
+	// 				if (!$this->encrypt) {
+	// 					$this->transformMatrix($transformedMatrixNum, $symbKey, [$matrixRow, $symbolCol]);
+	// 				}
+	// 				break;
+	// 			}
+	// 		}
+	// 		//Если символ не найден в матрицах - не шифруем его
+	// 		if (!$findSymbol) {
+	// 			$symbCoordArr[] = $symbol;
+	// 		}
+	// 	}
+	// 	return $symbCoordArr;
+	// }
 
 
 	/**
-	 * Метод формирует массив с координатами символов зашифрованного сообщения
+	 * Метод преобразует исходный текст. Создает шифр из исходного сообщения, либо возвраащет исходное сообщение из шифра
 	 *
-	 * @param array $coordSymbArr массив с координатами символов исходного текста из матриц
-	 * @return array массив символов преобразованного текста с координатами из матриц
+	 * Каждую итерацию шифрования/дешифровки биграммы матрицы должны трансформироваться, передвигая обрабатываемые символы, чтобы даже последовательности одинаковых символов шифровались в разные символы, а не повторяли очередность шифруемогой строки
+	 * 
+	 * @param string $text текст для преобразования
+	 * @return string
 	 */
-	private function createCiphrCoords(string $text)
+	private function transformSourceText(string $text): string
 	{
-		$bigram = [];
-		$bigramCoords = [];
-		// var_dump($this->originalSymbCoordArr);
-		//var_dump($coordSymbArr);
-		$interimCoordArr = [];
-		//Промежуточный массив символов шифра без координат
-		$interimSymbArr = [];
-		$ciphrCoordArr = [];
+		/**
+		 * @var string Биграмма текста, которая преобразуется в итерации цикла
+		 */
+		$bigramma = [];
+		/**
+		 * @var array Массив координат символов биграммы
+		 */
+		$bigrammaCoords = [];
+		/**
+		 * @var array Массив символо преобразованного текста
+		 */
+		$transfomedTextSymbArr = [];
 		$transformedMatrixNum = 0;
-		//$matrix = null;
-		#Гаврилов
-		//ПРОБУЙ НЕРАСПОЗНАННЫЙ СИМВОЛЫ
 		foreach ($this->getStrArr($text) as $symbKey => $symbol) {
-			// var_dump('итерация шифрования - ' . $symbKey);
-			// var_dump("символ - $symbol");
-			/**
-				 * При дешифровании мы делим строку шифра на биграммы и работаем с координатами символов биграммы. Так как при дешифровке при определении координат каждого символа исходной строки символ шифра сдвигается и использовать его координаты в следующей итерации не получится
-				 */
-				
+			//В зависимости от того четный или нечетный символ преобразовываемой строки определяем с какой матрицей работаем для его преобразования. При шифровании первый символ биграммы ищется в 1й матрице, но шифруется символом 2й матрицы. 2й символ биграммы ищется во 2й матрице и шифруется символом из 1й. При дешифровке, соответственно, ситуация противоположная
 			if ($symbKey % 2 !== 0) {
-				//$bigram = $this->transformedMatrixArr[1][$bigramCoords[0][0]][$bigramCoords[0][1]] . mb_substr($text, 1 * $symbKey, 1);
-				// $bigram = mb_substr($text, 1 * ($symbKey - 1), 2);
 				$transformedMatrixNum = ($this->encrypt ? 1 : 2);
-				#Гаврилов
-				//ПРОВЕРЬ КАК ОТРАБОТАЕТ КОГДА В СТРОКЕ ОКАЖУТСЯ НЕШИФРУЕМЫЕ СИМВОЛЫ
-				//Пока подразумевается, что если симолы нешифруемы - они вместо координат размещаются в массиве биграммы в виде самих символов. Чтобы скрипт ниже мог понять, что символ не шифруем (если всместо координат сами символы)
-				// $firstBigramSymbCoord = $this->getSymbCoords($this->transformedMatrixArr[$this->encrypt ? 2 : 1], mb_substr($bigram, 0, 1));
-				// $secondBigramSymbCoord = $this->getSymbCoords($this->transformedMatrixArr[$this->encrypt ? 1 : 2], mb_substr($bigram, 1, 1));
-				// //$bigramCoords[0] = $firstBigramSymbCoord ? $firstBigramSymbCoord : mb_substr($bigram, 0, 1);
-				// $bigramCoords[1] = $secondBigramSymbCoord ? $secondBigramSymbCoord : mb_substr($bigram, 1, 1);
-
-				// $bigrammSum_CORRECT = array_sum($bigramCoords[0]) + $bigramCoords[1][0] + $bigramCoords[0][0];
-				// $bigrammSum_CURRENT = array_sum($bigramCoords[0]) + array_sum($bigramCoords[1]);
-				// var_dump("ВЕРНАЯ СУММА - $bigrammSum_CORRECT");
-				// var_dump("ТЕКУЩАЯ СУММА - $bigrammSum_CURRENT");
-
 			} else {
-				$bigram = mb_substr($text, 1 * $symbKey, 2);
+				$bigramma = mb_substr($text, 1 * $symbKey, 2);
 				$transformedMatrixNum = ($this->encrypt ? 2 : 1);
-				
-				#Гаврилов
-				//ПРОВЕРЬ КАК ОТРАБОТАЕТ КОГДА В СТРОКЕ ОКАЖУТСЯ НЕШИФРУЕМЫЕ СИМВОЛЫ
-				//Пока подразумевается, что если симолы нешифруемы - они вместо координат размещаются в массиве биграммы в виде самих символов. Чтобы скрипт ниже мог понять, что символ не шифруем (если всместо координат сами символы)
-				$firstBigramSymbCoord = $this->getSymbCoords($this->transformedMatrixArr[$this->encrypt ? 2 : 1], mb_substr($bigram, 0, 1));
-				$secondBigramSymbCoord = $this->getSymbCoords($this->transformedMatrixArr[$this->encrypt ? 1 : 2], mb_substr($bigram, 1, 1));
-				$bigramCoords[0] = $firstBigramSymbCoord ? $firstBigramSymbCoord : mb_substr($bigram, 0, 1);
-				$bigramCoords[1] = $secondBigramSymbCoord ? $secondBigramSymbCoord : mb_substr($bigram, 1, 1);
-				// var_dump($bigram);
-				// var_dump($bigramCoords);
+				/**
+				 *При дешифровании мы делим строку шифра на биграммы и работаем с координатами символов биграммы. Так как при дешифровке при определении координат каждого символа исходной строки каждый символ шифра постепенно сдвигается и использовать его координаты в следующей итерации не получится. Например, одна из биграмм шифра Fh. Символ F после дешифровки сдвинется в матрице так же как он сдвигался и при шифровании. В при дешифровке второго символа биграммы - h - координаты символа F нельязя использовать, так как он сдвинулся. Поэтому определяем координаты символов биграммы на этапе вычленения из строки биграммы и не пересчитываем их пока не дешифруем полностью биграмму
+				*/
+				$firstBigrammaSymbCoord = $this->getSymbCoords($this->transformedMatrixArr[$this->encrypt ? 2 : 1], mb_substr($bigramma, 0, 1));
+				$secondBigrammaSymbCoord = $this->getSymbCoords($this->transformedMatrixArr[$this->encrypt ? 1 : 2], mb_substr($bigramma, 1, 1));
+				//Если координаты биграммы не определились - в массив с координатами положится сам символ, а не масссив координат. Это позволит скрипту в дальнейшем определять символ биграммы нашелся или нет. Учитывая, что мы будем возвращать ошибку, если в шифруемой строке пользователя будут нераспознаваемые символы, смысла в этом нет вроде бы. Но пока рабоатет лучше не трогать...
+				$bigrammaCoords[0] = $firstBigrammaSymbCoord ? $firstBigrammaSymbCoord : mb_substr($bigramma, 0, 1);
+				$bigrammaCoords[1] = $secondBigrammaSymbCoord ? $secondBigrammaSymbCoord : mb_substr($bigramma, 1, 1);
 			}	
-			// var_dump($bigram);
-			// var_dump($bigramCoords);
-			// var_dump("номер матрицы - $transformedMatrixNum");
 			$symbCoord = $this->getSymbCoords($this->transformedMatrixArr[$transformedMatrixNum], $symbol);
-			//var_dump("координаты символа - [" . implode(', ', $symbCoord) . "]");
 			//Если грамм не является массивом с координатами - это нераспознанный символ, не шифруем его
 			if (!$symbCoord) {
-				$ciphrCoordArr[] = $symbol;
-				$interimCoordArr[] = $symbol;
+				$transfomedTextSymbArr[] = $symbol;
 
 				continue;
 			}
-			$grammKey = $this->returnNearbyGramm($symbKey, $text);
-			//var_dump("символ соседнего грама - " . ($grammKey !== false ? $this->getStrArr($text)[$grammKey] : 'false'));
 			/**
-			 * @var array массив координат соседнего грамма в биграме, координаты которого нужно использовать для шифрования/дешифрования текста.
-			 * Матрицы используем противоположные, так как соседний грамм ищется по определению в другой матрице
+			 * @var int Ключ пары символа биграммы. В биграмме Fh, если работаем с символом F, его сосед - h и наоборот  
 			 */
-			$nearGrammCoords = ($grammKey !== false) ? $this->getSymbCoords(($this->transformedMatrixArr[($transformedMatrixNum == 1 ? 2 : 1)]), $this->getStrArr($text)[$grammKey]) : false;
-			
-			if ($bigramCoords[1] && $bigramCoords[0][1] == $bigramCoords[1][1]) {
+			$nearBigrammaSymbKey = $this->returnNearbyGramm($symbKey, $text);
+			/**
+			 * @var array массив координат соседнего грамма в биграме, координаты которого нужно использовать для преобразования текста
+			 * Матрицы используем противоположные, так как соседний символ биграммы ищется в соседней же матрице
+			 */
+			$nearBigrammaSymbCoords = ($nearBigrammaSymbKey !== false) ? $this->getSymbCoords(($this->transformedMatrixArr[($transformedMatrixNum == 1 ? 2 : 1)]), $this->getStrArr($text)[$nearBigrammaSymbKey]) : false;
+			//Если столбцы символов биграммы в соседних матрицах совпадают - мы преобразуем символы биграммы, используя в качестве номера строки координаты символов противоположной матрицы. Например. Биграмма Fh, ее координаты F[1 матрица ][5,6], h[2][2,6]. Шифруемая биграмма будет с координатами [1][2,6],[2][5,6]. 
+			if (is_array($bigrammaCoords[0]) && is_array($bigrammaCoords[1]) && $bigrammaCoords[0][1] == $bigrammaCoords[1][1]) {
 				if ($this->encrypt) {
 					if ($symbKey % 2 !== 0) {
-						$interimSymbArr[] = $this->transformedMatrixArr[2][$bigramCoords[1][0]][$bigramCoords[1][1]];
-						// var_dump("Добавляемый символ (2 матрица) - " . $this->transformedMatrixArr[2][$bigramCoords[1][0]][$bigramCoords[1][1]]);
-						// var_dump("координаты символа (2 матрица) - [" . $bigramCoords[1][0] . "," . $bigramCoords[1][1] . "]");
-						#Гаврилов
-						//ЕСЛИ МЫ БУДЕМ ПЕРЕСТРАИВАТЬ МАТРИЦЫ ПЕРЕД ТЕМ КАК СОБИРАТЬ ШИФРОВАННЫЕ СИМВОЛЫ, ТО ПРИ ДЕШИФРОВКЕ ЭТИ ЖЕ СИМВОЛЫ БУДУТ НЕ В ОДНОМ СТОЛБЦЕ, А ЗНАЧИТ, МЫ НЕ СМОЖЕМ С ИХ ПОМОЩЬЮ НАЙТИ СИМВОЛЫ ИСХОДНОЙ СТРОКИ
-						//Матрицы перестраиваются один раз при обработке полного биграмма, у которого совпадают столбцы. Если их перестраивать каждую итерацию при шифровании/дешифровании биграммы - могут возникнуть проблемы (если координаты символов биграммы полностью совпадают между матрицами М[1,1], А[1,1])
-						$this->transformMatrix(1, $symbKey, $bigramCoords[1]);
-						$this->transformMatrix(2, $symbKey, $bigramCoords[0]);
+						$transfomedTextSymbArr[] = $this->transformedMatrixArr[2][$bigrammaCoords[1][0]][$bigrammaCoords[1][1]];
+						//Матрицы перестраиваются один раз при обработке полной биграммы, у которой совпадают столбцы. Если их перестраивать каждую итерацию при шифровании/дешифровании биграммы - могут возникнуть проблемы (если координаты символов биграммы полностью совпадают между матрицами М[1,1], А[1,1])
+						$this->transformMatrix(1, $symbKey, $bigrammaCoords[1]);
+						$this->transformMatrix(2, $symbKey, $bigrammaCoords[0]);
 					} else {
-						$interimSymbArr[] = $this->transformedMatrixArr[1][$bigramCoords[0][0]][$bigramCoords[0][1]];
-						// var_dump("Добавляемый символ (1 матрица) - " . $this->transformedMatrixArr[1][$bigramCoords[0][0]][$bigramCoords[0][1]]);
-						// var_dump("координаты символа (1 матрица) - [" . $bigramCoords[0][0] . "," . $bigramCoords[0][1] . "]");
-						#Гаврилов
-						//ЕСЛИ МЫ БУДЕМ ПЕРЕСТРАИВАТЬ МАТРИЦЫ ПЕРЕД ТЕМ КАК СОБИРАТЬ ШИФРОВАННЫЕ СИМВОЛЫ, ТО ПРИ ДЕШИФРОВКЕ ЭТИ ЖЕ СИМВОЛЫ БУДУТ НЕ В ОДНОМ СТОЛБЦЕ, А ЗНАЧИТ, МЫ НЕ СМОЖЕМ С ИХ ПОМОЩЬЮ НАЙТИ СИМВОЛЫ ИСХОДНОЙ СТРОКИ
-						
+						$transfomedTextSymbArr[] = $this->transformedMatrixArr[1][$bigrammaCoords[0][0]][$bigrammaCoords[0][1]];
 					}
 				} else {
 					if ($symbKey % 2 !== 0) {
-						$interimSymbArr[] = $this->transformedMatrixArr[1][$bigramCoords[1][0]][$bigramCoords[1][1]];
-						// var_dump("Добавляемый символ (1 матрица) - " . $this->transformedMatrixArr[1][$bigramCoords[1][0]][$bigramCoords[1][1]]);
-						// var_dump("координаты символа (1 матрица) - [" . $bigramCoords[1][0] . "," . $bigramCoords[1][1] . "]");
-						#Гаврилов
-						//ЕСЛИ МЫ БУДЕМ ПЕРЕСТРАИВАТЬ МАТРИЦЫ ПЕРЕД ТЕМ КАК СОБИРАТЬ ШИФРОВАННЫЕ СИМВОЛЫ, ТО ПРИ ДЕШИФРОВКЕ ЭТИ ЖЕ СИМВОЛЫ БУДУТ НЕ В ОДНОМ СТОЛБЦЕ, А ЗНАЧИТ, МЫ НЕ СМОЖЕМ С ИХ ПОМОЩЬЮ НАЙТИ СИМВОЛЫ ИСХОДНОЙ СТРОКИ
-						$this->transformMatrix(2, $symbKey, $bigramCoords[0]);
-						$this->transformMatrix(1, $symbKey, $bigramCoords[1]);
+						$transfomedTextSymbArr[] = $this->transformedMatrixArr[1][$bigrammaCoords[1][0]][$bigrammaCoords[1][1]];
+						$this->transformMatrix(1, $symbKey, $bigrammaCoords[1]);
+						$this->transformMatrix(2, $symbKey, $bigrammaCoords[0]);
 					} else {
-						$interimSymbArr[] = $this->transformedMatrixArr[2][$bigramCoords[0][0]][$bigramCoords[0][1]];
-						// var_dump("Добавляемый символ (2 матрица) - " . $this->transformedMatrixArr[2][$bigramCoords[0][0]][$bigramCoords[0][1]]);
-						// var_dump("координаты символа (2 матрица) - [" . $bigramCoords[0][0] . "," . $bigramCoords[0][1] . "]");
-						#Гаврилов
-						//ЕСЛИ МЫ БУДЕМ ПЕРЕСТРАИВАТЬ МАТРИЦЫ ПЕРЕД ТЕМ КАК СОБИРАТЬ ШИФРОВАННЫЕ СИМВОЛЫ, ТО ПРИ ДЕШИФРОВКЕ ЭТИ ЖЕ СИМВОЛЫ БУДУТ НЕ В ОДНОМ СТОЛБЦЕ, А ЗНАЧИТ, МЫ НЕ СМОЖЕМ С ИХ ПОМОЩЬЮ НАЙТИ СИМВОЛЫ ИСХОДНОЙ СТРОКИ
-						
+						$transfomedTextSymbArr[] = $this->transformedMatrixArr[2][$bigrammaCoords[0][0]][$bigrammaCoords[0][1]];
 					}
 				}
-
-				
-				// $this->drawMatrix($this->transformedMatrixArr[1]);
-				// $this->drawMatrix($this->transformedMatrixArr[2]);
-
-				// var_dump($interimSymbArr);
-
-				// die();
 
 				continue;
 			}
-			#Гаврилов
-			//ЗАТЕСТИ ЭТОТ ВАРИАНТ КАК ИЗМЕНИТСЯ МАТРИЦА
-			//Если биграмм неполный (грамм не имеет "пары"), либо соседний грамм является нераспознанным символом - просто меняем координаты исходного символа местами
-			if ($grammKey === false || $nearGrammCoords === false) {
-				//var_dump('there');
+			//Если биграмма неполная (символ не имеет "пары"), либо соседний символ является нераспознанным, просто меняем координаты строки и столбца символа местами
+			if ($nearBigrammaSymbKey === false || $nearBigrammaSymbCoords === false) {
 				if ($this->encrypt) {
-					$interimSymbArr[] = $this->transformedMatrixArr[($transformedMatrixNum == 1 ? 2 : 1)][$symbCoord[1]][$symbCoord[0]];
+					$transfomedTextSymbArr[] = $this->transformedMatrixArr[($transformedMatrixNum == 1 ? 2 : 1)][$symbCoord[1]][$symbCoord[0]];
 					$this->transformMatrix(($transformedMatrixNum == 1 ? 2 : 1), $symbKey, [$symbCoord[1], $symbCoord[0]]);
 				} else {
-					$interimSymbArr[] = $this->transformedMatrixArr[($transformedMatrixNum == 1 ? 2 : 1)][$symbCoord[1]][$symbCoord[0]];
-					// var_dump("Заменяемый символ " . $this->transformedMatrixArr[($transformedMatrixNum == 1 ? 2 : 1)][$symbCoord[1]][$symbCoord[0]]);
-					// var_dump("Координаты заменяемого символа - [" . implode(', ', [$symbCoord[1], $symbCoord[0]]) . "]");
+					$transfomedTextSymbArr[] = $this->transformedMatrixArr[($transformedMatrixNum == 1 ? 2 : 1)][$symbCoord[1]][$symbCoord[0]];
 					$this->transformMatrix(($transformedMatrixNum == 1 ? 2 : 1), $symbKey, [$symbCoord[1], $symbCoord[0]]);
 				}
-
 				continue;
+			//Стандартная обработки биграммы согласно алгоритму двойного квадрата Полибия - координаты символов биграммы передаваемой строки меняеются местами (строка/столбец и их порядок в массиве координат), таким образом формируется биграмма преобразованной строки
 			} else {
-				$ciphrCoordArr[] = [$nearGrammCoords[0], $symbCoord[1]];
-				//$interimSymbArr[] = $this->transformedMatrixArr[($transformedMatrixNum == 1 ? 2 : 1)][$nearGrammCoords[0]][$symbCoord[1]];
 				if ($this->encrypt) {
-					//var_dump("координаты соседнего грамма - [" . implode(', ', $nearGrammCoords) . "]");
-					$interimSymbArr[] = $this->transformedMatrixArr[($transformedMatrixNum == 1 ? 2 : 1)][$nearGrammCoords[0]][$symbCoord[1]];
-					//var_dump("заменяемый симв	ол - " . $this->transformedMatrixArr[($transformedMatrixNum == 1 ? 2 : 1)][$nearGrammCoords[0]][$symbCoord[1]]);
-					//var_dump("координаты заменяемого символа - [" . implode(', ', [$nearGrammCoords[0], $symbCoord[1]]) . "]");
-					$this->transformMatrix(($transformedMatrixNum == 1 ? 2 : 1), $symbKey, [$nearGrammCoords[0], $symbCoord[1]]);
+					$transfomedTextSymbArr[] = $this->transformedMatrixArr[($transformedMatrixNum == 1 ? 2 : 1)][$nearBigrammaSymbCoords[0]][$symbCoord[1]];
+					$this->transformMatrix(($transformedMatrixNum == 1 ? 2 : 1), $symbKey, [$nearBigrammaSymbCoords[0], $symbCoord[1]]);
 				} else {
 					$matrixIndex = ($transformedMatrixNum == 1 ? 2 : 1);
-					//$bigrammIndex = ($transformedMatrixNum == 1 ? 1 : 0);
-					$interimSymbArr[] = $this->transformedMatrixArr[$matrixIndex][$bigramCoords[$transformedMatrixNum == 1 ? 1 : 0][0]][$bigramCoords[$transformedMatrixNum == 1 ? 0 : 1][1]];
-					//var_dump("заменяемый символ - " . $this->transformedMatrixArr[($transformedMatrixNum == 1 ? 2 : 1)][$bigramCoords[$transformedMatrixNum == 1 ? 1 : 0][0]][$bigramCoords[$transformedMatrixNum == 1 ? 0 : 1][1]]);
-					//var_dump("координаты заменяемого символа - [" . implode(', ', [$bigramCoords[$transformedMatrixNum == 1 ? 1 : 0][0], $bigramCoords[$transformedMatrixNum == 1 ? 0 : 1][1]]) . "]");
+					$transfomedTextSymbArr[] = $this->transformedMatrixArr[$matrixIndex][$bigrammaCoords[$transformedMatrixNum == 1 ? 1 : 0][0]][$bigrammaCoords[$transformedMatrixNum == 1 ? 0 : 1][1]];
 					$this->transformMatrix($transformedMatrixNum, $symbKey, $symbCoord);				
 				}
-
-				// var_dump($interimSymbArr);
-
-				// $this->drawMatrix($this->transformedMatrixArr[1]);
-				// $this->drawMatrix($this->transformedMatrixArr[2]);
 			}
 		}
-		// var_dump("массив символов - " . implode('', $interimSymbArr));
-		// var_dump($interimCoordArr);
-
-
 		
-		return implode('', $interimSymbArr);
+		return implode('', $transfomedTextSymbArr);
 	}
 
 
@@ -1602,12 +1406,9 @@ class SimpleCipher
 	 */
 	private function getSymbCoords(array $matrix, $symbol)
 	{
-		//var_dump($symbol);
-		//$this->drawMatrix($matrix);
 		$symbCoord = false;
 		foreach ($matrix as $rowNum => $rowData){
 			if (($symbCol = array_search($symbol, $matrix[$rowNum])) !== false) {
-				//var_dump([$rowNum, $symbCol]);
 				$symbCoord = [$rowNum, $symbCol];
 			} 
 		}
@@ -1615,22 +1416,19 @@ class SimpleCipher
 	}
 
 
-
 	/**
-	 * Метод возвращает ключ грамма, который нужно использовать для определения координат зашифрованного символа
+	 * Метод возвращает ключ соседнего символа биграммы. Он требуется для определения координат зашифрованного символа
 	 *
-	 * @param int $symbKey ключ символа, координаты которого нужно заменить на координаты соседнего (предыдущего, либо следующего) символа в биграмме, из которых соитоит шифруемая строка
-	 * @param array $coordArr массив со всеми символами сообщения
-	 * @return int|false false возвращается в случае неполного биграмма (грамм не имеет соседа), в остальных случаях возвращается ключ грамма, чьи координаты надо взять
+	 * @param int $symbKey ключ символа, координаты которого нужно заменить на координаты соседнего (предыдущего, либо следующего) символа в биграмме, из которых соитоит преобразуемая строка
+	 * @param string преобразуемый текст
+	 * @return int|false false возвращается в случае неполной биграммы (символ не имеет соседа), в остальных случаях возвращается ключ символа
 	 */
-	private function returnNearbyGramm($symbKey, $text)
+	private function returnNearbyGramm(int $symbKey, string $text)
 	{
 		$resultSymbKey = null;
 		if ($symbKey % 2 === 0) {
-			//Если у последнего символа нет "пары" (биграмм не полный), то меняем местами координаты строки и столбца. 
-			//Эта ситуация может возникнуть только для четных символов, так как нечетные берут координаты у предыдущих символов
-			#Гаврилов
-			//ПРОВЕРЬ УСЛОВИЕ НИЖЕ ВЕРНО ЛИ ОТРАБАТЫВАЕТ
+			//Если у последнего символа биграммы нет "пары" (биграмма не полная, находится в конце текста), то не возвращаем соседний символ. В итоге просто меняем местами координаты строки и столбца для этого символа 
+			//Эта ситуация может возникнуть только для четных символов, так как нечетные берут координаты у предыдущих символов биграммы
 			if ($symbKey + 1 == mb_strlen($text)) {
 				return false;
 			}
@@ -1638,60 +1436,59 @@ class SimpleCipher
 		} else {
 			$resultSymbKey = $symbKey - 1;
 		}
-
     	return $resultSymbKey;
   	}
 
 	
-	/**
-	 * Метод возвращает преобразованное (зашифрованное/расшифрованное) сообщение
-	 *
-	 * @param array $symbCoordArr массив с координатами символов преобразованного сообщения
-	 * @return string
-	 */
-  	private function createCiphr($symbCoordArr)
-	{
-		$ciphrArr = [];
-		foreach ($symbCoordArr as $symbKey => $symbCoord) {
-			//Если вместо координат символа указан сам символ - он не был найден в матрицах. Пропускаем и не подбираем для него значение
-			if (!is_array($symbCoord)) {
-				$ciphrArr[] = $symbCoord;
+	// /**
+	//  * Метод возвращает преобразованное (зашифрованное/расшифрованное) сообщение
+	//  *
+	//  * @param array $symbCoordArr массив с координатами символов преобразованного сообщения
+	//  * @return string
+	//  */
+  	// private function createCiphr($symbCoordArr)
+	// {
+	// 	$ciphrArr = [];
+	// 	foreach ($symbCoordArr as $symbKey => $symbCoord) {
+	// 		//Если вместо координат символа указан сам символ - он не был найден в матрицах. Пропускаем и не подбираем для него значение
+	// 		if (!is_array($symbCoord)) {
+	// 			$ciphrArr[] = $symbCoord;
 
-				//return $symbCoord;
-				continue;
-			}
-			$resultSymbCoord = $symbCoord;
-			//Если грамм имеет "пару" в биграмме
-			// if (($nearbyGramm = $this->returnNearbyGramm($symbKey)) !== false) {
-			// 	//Если один из граммов - нераспознанный символ - не проверяем находятся ли граммы в одном столбце
-			// 	if (is_array($symbCoordArr[$nearbyGramm])) {
-			// 		//Если столбцы граммов совпадают - меняем граммы местами в исходом биграмме. Таким образом, мы меняем местами и координаты символов в прямоугольниках и избегаем простой смены символов в преобразованном биграмме в случае, когда они находятся в одном столбце (чтобы не было ситуации DG -> GD). Подробнее https://ru.wikipedia.org/wiki/Шифр_Уитстона в пункте "В случае, если буквы исходной биграммы сообщения находятся в одной строке (в горизонтальном шифровании)..."
-			// 		if ($symbCoord[1] == $symbCoordArr[$nearbyGramm][1]) {
-			// 			var_dump('da');
-			// 			$resultSymbCoord = $symbCoordArr[$nearbyGramm];
-			// 		}
-			// 	}
-			// }
-			if ($this->encrypt) {
-				// var_dump($symbKey);
-				// var_dump($symbCoord);
-				// var_dump($resultSymbCoord);
+	// 			//return $symbCoord;
+	// 			continue;
+	// 		}
+	// 		$resultSymbCoord = $symbCoord;
+	// 		//Если грамм имеет "пару" в биграмме
+	// 		// if (($nearbyGramm = $this->returnNearbyGramm($symbKey)) !== false) {
+	// 		// 	//Если один из граммов - нераспознанный символ - не проверяем находятся ли граммы в одном столбце
+	// 		// 	if (is_array($symbCoordArr[$nearbyGramm])) {
+	// 		// 		//Если столбцы граммов совпадают - меняем граммы местами в исходом биграмме. Таким образом, мы меняем местами и координаты символов в прямоугольниках и избегаем простой смены символов в преобразованном биграмме в случае, когда они находятся в одном столбце (чтобы не было ситуации DG -> GD). Подробнее https://ru.wikipedia.org/wiki/Шифр_Уитстона в пункте "В случае, если буквы исходной биграммы сообщения находятся в одной строке (в горизонтальном шифровании)..."
+	// 		// 		if ($symbCoord[1] == $symbCoordArr[$nearbyGramm][1]) {
+	// 		// 			var_dump('da');
+	// 		// 			$resultSymbCoord = $symbCoordArr[$nearbyGramm];
+	// 		// 		}
+	// 		// 	}
+	// 		// }
+	// 		if ($this->encrypt) {
+	// 			// var_dump($symbKey);
+	// 			// var_dump($symbCoord);
+	// 			// var_dump($resultSymbCoord);
 				
-				$matrix = ($symbKey % 2 !== 0 ? $this->transformedMatrixArr[2] : $this->transformedMatrixArr[1]);
-				// $this->drawMatrix($this->transformedMatrixArr[1]);
-				// $this->drawMatrix($this->transformedMatrixArr[2]);
-				$ciphrArr[] = $matrix[$resultSymbCoord[0]][$resultSymbCoord[1]];
-			} else {
-				$matrix = ($symbKey % 2 !== 0 ? $this->transformedMatrixArr[1] : $this->transformedMatrixArr[2]);
-				$ciphrArr[] = $matrix[$resultSymbCoord[0]][$resultSymbCoord[1]];
-			}
-			//Если шифруем - возвращаем символ из одной матрицы, если расшифровываем - из другой
-		}
+	// 			$matrix = ($symbKey % 2 !== 0 ? $this->transformedMatrixArr[2] : $this->transformedMatrixArr[1]);
+	// 			// $this->drawMatrix($this->transformedMatrixArr[1]);
+	// 			// $this->drawMatrix($this->transformedMatrixArr[2]);
+	// 			$ciphrArr[] = $matrix[$resultSymbCoord[0]][$resultSymbCoord[1]];
+	// 		} else {
+	// 			$matrix = ($symbKey % 2 !== 0 ? $this->transformedMatrixArr[1] : $this->transformedMatrixArr[2]);
+	// 			$ciphrArr[] = $matrix[$resultSymbCoord[0]][$resultSymbCoord[1]];
+	// 		}
+	// 		//Если шифруем - возвращаем символ из одной матрицы, если расшифровываем - из другой
+	// 	}
 
-		//die();
+	// 	//die();
 
-    return implode('', $ciphrArr);
-  }
+	// 	return implode('', $ciphrArr);
+	// }
 
 
 	/**
@@ -1802,20 +1599,22 @@ class SimpleCipher
 
 #Гаврилов
 //ЕСЛИ ИСПОЛЬЗОВАТЬ СОЛЬ - ЛОМАЕТСЯ ПРИ ДЕШИФРОВКЕ
+$cipherText = 'тест мама€ 123 ?';
+$salt = 'NTI0M2FmNWEwOGU3NDY2YTc5MDFiMTEyOTdlNmY1NTQzY2Q4MzYzMmJkMTNiODRjOGI2YjY4NjEwYjNmM2NjZGJhOWY1NjRiYmU3OTEzZjdhZmIzNDExM2QwZTgwMjhkZDE1OTIwMDlhY2YxZjIxMDljNDA4MTllZjc3MmEzOTI';
 $n = 1;
-while ($n <= 50) {
-	$testCipher = (new SimpleCipher('1'))->encryptText(50);
+// while ($n <= 5) {
+	$testCipher = (new SimpleCipher($cipherText, $salt))->encryptText(50);
 	echo '<pre>'; var_dump($testCipher); echo'</pre>';
 	// #Гаврилов
 	// //если заменить первую букву в соли - ничего не поменяется, хотя должно
 	// //ДОБАВЬ УЧЕТ БУКВ К ПЕРЕСЧЕТУ ПАРАМЕТРОВ ТРАНСФОРМАЦИИ МАТРИЦЫ. МАССИВ БУКВ ТРАНСФОРМИРУЕТСЯ В МАССИВ ЧИСЕЛ ПО КЛЮЧАМ ИЗ КЛЮЧА ШИФРА (НЕ ИЗ МАССИВА LETTERSARR) ДОБАВЛЯЕМ К КОЛИЧЕСТВУ ИТЕРАЦИЙ, ТАК КАК СУММА БУДЕТ БОЛЬШАЯ
-	$decryptText = (new SimpleCipher($testCipher))->decryptText();
+	$decryptText = (new SimpleCipher($testCipher, $salt))->decryptText();
 	echo '<pre>'; var_dump($decryptText); echo'</pre>';
-	if ($decryptText !== '1') {
+	if ($decryptText !== $cipherText) {
 		var_dump('ОШИПКА!');
 	}
- 	$n++;
-}
+//  	$n++;
+// }
 
 
 //ПЕРЕПИСАТЬ BASE64 на base32 (где нет заглавных букв, но нужно, чтобы там набор букв все равно был большой) СПРОСИ У НЕЙРОСЕТИ КАКОВА ВЕРОЯТНОСТЬ СТОЛКНУТЬСЯС КОЛИЗИЯМИ ЕСЛИ ИСПОЛЬЗОВАТЬ BASE 32 А НЕ BASE 64
