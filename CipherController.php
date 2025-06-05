@@ -69,6 +69,7 @@ class CipherController
         return $testCipher;
     }
 
+
     /**
      * Метод получения зашифрованного сообщения
      *
@@ -130,13 +131,15 @@ if ($rqstParams->action == 'encrypt') {
         //КОД ОТВЕТА?
         'saltMsg' => 'Все ок',
     ];
-
     echo json_encode($resultSaltObj);
-
     #Гаврилов
     //ПЕРЕДЕЛАТЬ БЕСКОНЕЧНЫЕ ELSEIF НА SWITCH CASE
-
 }
+
+
+
+
+
 
 
 //NTI0M2FmNWEwOGU3NDY2YTc5MDFiMTEyOTdlNmY1NTQzY2Q4MzYzMmJkMTNiODRjOGI2YjY4NjEwYjNmM2NjZGJhOWY1NjRiYmU3OTEzZjdhZmIzNDExM2QwZTgwMjhkZDE1OTIwMDlhY2YxZjIxMDljNDA4MTllZjc3MmEzOTI

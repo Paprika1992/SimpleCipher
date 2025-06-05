@@ -27,6 +27,64 @@ input{
   transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
 }
 
+#page-background{
+  width: 100%;
+  height: 100%;
+  background: grey;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 99;
+  opacity: 0.8;
+  display: none;
+
+  &.visible{
+    display: block;
+  }
+}
+
+
+#page__navigation{
+  background: yellow;
+  display: flex;
+    gap: 10px;
+    justify-content: space-around;
+  width: 50%;
+  margin: auto;
+  margin-bottom: 50px;
+  z-index: 100;
+  position: relative;
+
+  &>.navigation__block{
+    flex-basis: 30%;
+    position: relative;
+
+    &>.navigation__block__title{
+      background: lightblue;
+      height: 100px;
+      cursor: pointer;
+      padding: 5px;
+      font-size: 2rem;
+      align-content: center;
+      text-align: center;
+
+      &+.navigation__block__content{
+        background: lightcoral;
+        padding: 10px;
+        position: absolute;
+        width: 200%;
+        display: none;
+        /* z-index: 3; */
+      }
+    }
+
+    &.show>.navigation__block__content{
+      display: block;
+    }
+  }
+}
+
+
 #cipher-content{
     background: red;
     /* height: 100vh; */

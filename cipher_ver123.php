@@ -6,6 +6,7 @@ mb_internal_encoding("UTF-8");
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
+set_time_limit(180);
 
 //TODO
 //проверь на уникальность все символы и подумай какие спецсимволы можно добавить
@@ -232,7 +233,7 @@ class SimpleCipher
 		$this->transformedMatrixArr[1] = $this->shiftedMatrixOne;
 		$this->transformedMatrixArr[2] = $this->shiftedMatrixTwo;
 		$ecnryptText_interim = $this->transformSourceText($this->text);
-		var_dump($ecnryptText_interim);
+		//var_dump($ecnryptText_interim);
 		//Промежуточный зашифрованный текст (без внедренных фейковых символов)
 		$this->encryptLengthDelimeter = array_filter($this->getStrArr($this->cipherKey), function($el){return preg_match('/[^a-zа-ё0-9]/ui', $el);});
 		//Итоговая длина шифруемого текста
@@ -1208,8 +1209,8 @@ class SimpleCipher
 		//В зависимости от того четный или нечетный символ (если это цифра), сдвигаем его либо по столбцам, либо по рядам матрицы
 		//В зависимости от того какой порядковый номер у ширфуемого элемента в ключе шифра (четный или нечетный) определяем меняем матрицу по столбцам или по строкам. Номер итерации прибавляем, чтобы гарантировать, что в 50% процентах будет смена четности на нечетность (четный ключ + четная итерация = четное число, нечетный ключ + нечетная итерация = четное чисо, нечетный ключ + четная итерация = нечетное число, четный ключ + нечетная итераия = нечетное число)
 		$transformedVector = ((array_search($symbol, $this->getStrArr(($matrixNum == 1 ? $this->cipherKey : $this->cipherKey_second))) + $iterationCount) % 2 !== 0) ? 'row' : 'col';
-		//Номер итерации шифрования прибавляем для того, чтобы гарантировать чередовать нечетность и нечетность даже если шифруется один тот же символ с одинаковыми координатами (описал подробнее выше по коду)
-		$coordSumm = (int)$symbCoord[0] + (int)$symbCoord[1] + $iterationCount;
+		//Номер итерации шифрования прибавляем для того, чтобы гарантировать чередовать нечетность и нечетность даже если шифруется один тот же символ с одинаковыми координатами (описал подробнее выше по коду). Номер матрицы добавляется, чтобы гарантировать, что если один и тот же символ в разных матрицах находится на одной и той же позиции, после трансформации они поменяют координаты относительно друг друга
+		$coordSumm = (int)$symbCoord[0] + (int)$symbCoord[1] + $iterationCount + $matrixNum;
 		#Гаврилов
 		//ЧТО ЕСЛИ ВЫПАДЕТ 0? НЕ БУДЕТ МЕНЯТЬСЯ СИМВОЛ?
 		$newCoordOne = (int)substr((string)$coordSumm, -1);
@@ -1315,7 +1316,10 @@ class SimpleCipher
 		 */
 		$transfomedTextSymbArr = [];
 		$transformedMatrixNum = 0;
+		//var_dump('start');
 		foreach ($this->getStrArr($text) as $symbKey => $symbol) {
+			// $this->drawMatrix($this->transformedMatrixArr[1]);
+	 		// $this->drawMatrix($this->transformedMatrixArr[2]);
 			//В зависимости от того четный или нечетный символ преобразовываемой строки определяем с какой матрицей работаем для его преобразования. При шифровании первый символ биграммы ищется в 1й матрице, но шифруется символом 2й матрицы. 2й символ биграммы ищется во 2й матрице и шифруется символом из 1й. При дешифровке, соответственно, ситуация противоположная
 			if ($symbKey % 2 !== 0) {
 				$transformedMatrixNum = ($this->encrypt ? 1 : 2);
@@ -1347,7 +1351,7 @@ class SimpleCipher
 			 * Матрицы используем противоположные, так как соседний символ биграммы ищется в соседней же матрице
 			 */
 			$nearBigrammaSymbCoords = ($nearBigrammaSymbKey !== false) ? $this->getSymbCoords(($this->transformedMatrixArr[($transformedMatrixNum == 1 ? 2 : 1)]), $this->getStrArr($text)[$nearBigrammaSymbKey]) : false;
-			//Если столбцы символов биграммы в соседних матрицах совпадают - мы преобразуем символы биграммы, используя в качестве номера строки координаты символов противоположной матрицы. Например. Биграмма Fh, ее координаты F[1 матрица ][5,6], h[2][2,6]. Шифруемая биграмма будет с координатами [1][2,6],[2][5,6]. 
+			//Если столбцы символов биграммы в соседних матрицах совпадают - мы преобразуем символы биграммы, используя в качестве номера строки координаты символов противоположной матрицы. Например. Биграмма Fh, ее координаты F[1 матрица][5,6], h[2][2,6]. Шифруемая биграмма будет с координатами [1][2,6],[2][5,6]. 
 			if (is_array($bigrammaCoords[0]) && is_array($bigrammaCoords[1]) && $bigrammaCoords[0][1] == $bigrammaCoords[1][1]) {
 				if ($this->encrypt) {
 					if ($symbKey % 2 !== 0) {
@@ -1579,7 +1583,9 @@ class SimpleCipher
    * @param string $str строка для разбивки на массив
    * @return array
    */
-  private function getStrArr($str)
+  #Гаврилов
+  //ПОМЕНЯЙ МЕТОД НИЖЕ НА PRIVATE
+  public function getStrArr($str)
   {
     return preg_split('//u', $str, -1, PREG_SPLIT_NO_EMPTY);
   }
@@ -1599,16 +1605,64 @@ class SimpleCipher
 
 #Гаврилов
 //ЕСЛИ ИСПОЛЬЗОВАТЬ СОЛЬ - ЛОМАЕТСЯ ПРИ ДЕШИФРОВКЕ
-$cipherText = 'тест мама€ 123 ?';
+$cipherText = 'мама мыла раму';
+//$cipherText = '1111111111111111111111111';
+$salt = null;
 $salt = 'NTI0M2FmNWEwOGU3NDY2YTc5MDFiMTEyOTdlNmY1NTQzY2Q4MzYzMmJkMTNiODRjOGI2YjY4NjEwYjNmM2NjZGJhOWY1NjRiYmU3OTEzZjdhZmIzNDExM2QwZTgwMjhkZDE1OTIwMDlhY2YxZjIxMDljNDA4MTllZjc3MmEzOTI';
 $n = 1;
-// while ($n <= 5) {
-	$testCipher = (new SimpleCipher($cipherText, $salt))->encryptText(50);
+// while ($n <= 500) {
+	$testCipher = (new SimpleCipher($cipherText, $salt))->encryptText(67);
+	// if (mb_strstr($testCipher, '11111') !== false) {
+	// 	var_dump('АШИБКА');
+	// }
 	echo '<pre>'; var_dump($testCipher); echo'</pre>';
 	// #Гаврилов
 	// //если заменить первую букву в соли - ничего не поменяется, хотя должно
 	// //ДОБАВЬ УЧЕТ БУКВ К ПЕРЕСЧЕТУ ПАРАМЕТРОВ ТРАНСФОРМАЦИИ МАТРИЦЫ. МАССИВ БУКВ ТРАНСФОРМИРУЕТСЯ В МАССИВ ЧИСЕЛ ПО КЛЮЧАМ ИЗ КЛЮЧА ШИФРА (НЕ ИЗ МАССИВА LETTERSARR) ДОБАВЛЯЕМ К КОЛИЧЕСТВУ ИТЕРАЦИЙ, ТАК КАК СУММА БУДЕТ БОЛЬШАЯ
 	$decryptText = (new SimpleCipher($testCipher, $salt))->decryptText();
+
+
+	$symbArr = ['а'=>0, 'б'=>1, 'в'=>2, 'г'=>3, 'д'=>4, 'е'=>5, 'ё'=>6, 'ж'=>7, 'з'=>8, 'и'=>9, 'й'=>10, 'к'=>11, 'л'=>12, 'м'=>13, 'н'=>14, 'о'=>15, 'п'=>16, 'р'=>17, 'с'=>18, 'т'=>19, 'у'=>20, 'ф'=>21, 'х'=>22, 'ц'=>23, 'ч'=>24, 'ш'=>25, 'щ'=>26, 'ъ'=>27, 'ы'=>28, 'ь'=>29, 'э'=>30, 'ю'=>31, 'я'=>32, 'z'=>58, 'y'=>57, 'x'=>56, 'w'=>55, 'v'=>54, 'u'=>53, 't'=>52, 's'=>51, 'r'=>50, 'p'=>49, 'q'=>48, 'o'=>47, 'n'=>46, 'm'=>45, 'l'=>44, 'k'=>43, 'j'=>42, 'i'=>41,'h'=>40, 'g'=>39, 'f'=>38, 'e'=>37, 'd'=>36, 'c'=>35, 'b'=>34, 'a'=>33];
+	$symbArr = array_flip($symbArr);
+	foreach ($symbArr as $key => $value){
+		$symbArr[] = mb_strtoupper($value);
+	}
+	$symbArr[] = 0;
+	$symbArr[] = 1;
+	$symbArr[] = 2;
+	$symbArr[] = 3;
+	$symbArr[] = 4;
+	$symbArr[] = 5;
+	$symbArr[] = 6;
+	$symbArr[] = 7;
+	$symbArr[] = 8;
+	$symbArr[] = 9;
+
+	$newSaltArr = preg_split('//u', $salt, -1, PREG_SPLIT_NO_EMPTY);
+	$s = 0;
+	while ($s < count($newSaltArr)) {
+		$newSaltArr_transform = $newSaltArr;
+		$a = 0;
+		while ($a < count($symbArr)) {
+			$newSaltStr = implode('', $newSaltArr);
+			$newSaltArr_transform[$s] = $symbArr[$a];
+			$newSaltStr = implode('', $newSaltArr_transform);
+
+			$newDecryptText = (new SimpleCipher($testCipher, $newSaltStr))->decryptText();
+
+			if ($newDecryptText == $cipherText && $newSaltStr !== $salt) {
+				var_dump('Жаль');
+				var_dump($newSaltStr);
+				var_dump(count($newSaltArr) * $s + $a);
+			}
+
+			// var_dump($newSaltStr);
+			$a++;
+		}
+
+		$s++;
+	}
+
 	echo '<pre>'; var_dump($decryptText); echo'</pre>';
 	if ($decryptText !== $cipherText) {
 		var_dump('ОШИПКА!');
@@ -1616,6 +1670,25 @@ $n = 1;
 //  	$n++;
 // }
 
+#Гаврилов
+//ПЕРЕПИСАТЬ ИСПОЛЬЗОВАНИЯ КЛЮЧА СЛЕДУЮЩИМ ОБРАЗОМ. БРАТЬ НЕ СУММУ ВСЕХ ЧИСЕЛ И ИЗ НЕЕ ВЫЧЛЕНЯТЬ ЦИФРЫ, А ГЕНЕРИТЬ СУММЫ ПО ОТРЕЗКАМ: СУММА ПЕРВЫХ ПЯТИ СИМВОЛОВ, СУММА ВТОРЫХ ПЯТИ СИМВОЛОВ И ТАК СКОЛЬКО НАДО
+//НА ВЫХОДЕ (ПЕРЕД ЗАПОЛНЕНИЕМ ФЕЙКОВЫМИ СИМВОЛАМИ) В промежуточном результате БРАТЬ ИЗ соли БУКВЫ И ЦИФРЫ И ИХ В ШИФРЕ/ДЕШИФРЕ МЕНЯТЬ МЕСТАМИ, ПЕРЕНОСИТЬ В КОНЕЦ? КАКИМ ТО ОБРАЗОМ ИХ ИСПОЛЬЗОВАТЬ ДЛЯ ПЕРЕМЕШИВАНИЯ
+
+#Гаврилов
+//НУЖНО ДОБИТЬСЯ КОЛИЧЕСТВА КОЛИЗИЙ ПРИ ИСПОЛЬЗОВАНИИ СОЛИ (ПЕРЕБОР СИМВОЛОВ В СОЛИ) В 
+
+#Гаврилов
+//ОДИН ИЗ ВАРИАНТОВ ТЕКСТА 0000000000000000000000000 ЗАШИФРОВАЛСЯ В OTA78b103ы0ы29l+2(959f000000000000000000000000Lab6306b15cf9#194[MjM
+//ТО ЕСТЬ НЕ ЗАШИФРОВАЛСЯ....КАК ТАК ?
+
+
+
+#Гаврилов
+//ОДИН РАЗ ПРИ НАЖАТИИ НА КНОПКУ ЗАШИФРОВАТЬ Я ПОЛУЧИЛ ШИФР НЕ ЖЕЛАЕМОЙ ДЛИНЫ, А МЕНЬШЕЙ. ХЗ ПОЧЕМУ
+//ВЫБИРАЛ КОЛИЧЕСТВО ФЕЙКОВЫХ СИМВОЛОВ 67. ЛИБО СТАРЫЕ РЕЗУЛЬТАТ, ЛИБО ШИФР ОБРЕЗАЛСЯ ПО КАКОМУ-ТО СИМВОЛУ И НЕ СФОРМИРОВАЛСЯ ПОЛНОСТЬЮ? В ЭТОМ СЛУЧАЕ МОГУТ БЫТЬ ВИНОВАТЫ СПЕЦСИМВОЛЫ?
+
+#Гаврилов
+//ПРОВЕСТИ ТЕСТИРОВАНИЕ: КАЖДЫЙ СИМВОЛ СОЛИ ПРИ РАСШИФРОВКЕ ПЕРЕБИРАТЬ ПО АЛФАВИТУ (ЛАТИНСКОМУ И КИРИЛИЧЕСКОМУ), РЕГИСТРУ И ЦИФРАМ И ПРОВЕРЯТЬ ПОЛУЧИТСЯ ЛИ ПОЛУЧИТЬ С КРИВОЙ СОЛЬЮ ТУ ЖЕ СТРОКУ ПРИ РАСШИФРОВКЕ КАК И ПРИ ШИФРОВКЕ
 
 //ПЕРЕПИСАТЬ BASE64 на base32 (где нет заглавных букв, но нужно, чтобы там набор букв все равно был большой) СПРОСИ У НЕЙРОСЕТИ КАКОВА ВЕРОЯТНОСТЬ СТОЛКНУТЬСЯС КОЛИЗИЯМИ ЕСЛИ ИСПОЛЬЗОВАТЬ BASE 32 А НЕ BASE 64
 

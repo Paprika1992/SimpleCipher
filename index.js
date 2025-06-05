@@ -1,7 +1,8 @@
+const backgroundEl = document.getElementById('page-background');
+
 document.getElementById('content__decrypt-block__input__decrypt').addEventListener('click', async function () {
     let decryptText = document.getElementById('decryptText').value,
         decryptSalt = document.getElementById('cipherSalt_decrypt').value ?? null;
-
 
     if (!decryptText.length) {
         alert('пусто')
@@ -9,7 +10,7 @@ document.getElementById('content__decrypt-block__input__decrypt').addEventListen
     }
 
     let decryptResultBlock = document.getElementById('content__decrypt-block__result')
-    decryptResultBlock.innerHTML = '';
+    decryptResultBlock.textContent = '';
 
     let response = await fetch('./CipherController.php', {
         method: "POST",
@@ -28,11 +29,9 @@ document.getElementById('content__decrypt-block__input__decrypt').addEventListen
         console.log(decryptResponse);
         let childDecryptBlock = document.createElement('div');
             childDecryptBlock.classList.add('content__block__result__text')
-            childDecryptBlock.innerHTML = decryptResponse.decryptText;
+            childDecryptBlock.textContent = decryptResponse.decryptText;
             decryptResultBlock.appendChild(childDecryptBlock)
- 
     }
-
 })
 
 
@@ -54,9 +53,6 @@ document.getElementById('getSalt').addEventListener('click', async function () {
 
     document.getElementById('GetCipherSalt').innerHTML = 'Ваш секретный ключ - ' + cipherSalt + '. <br>Обязательно сохраните его. Каждая строка, зашифрованная с помощью этого ключа может быть расшифрована только с помощью этого же ключа!'
 })
-
-
-
 
 
 //ПРИ КЛИКЕ ПО КНОПКЕ "РАСШИФРОВАТЬ" НЕМНОГО ВЫДВИГАТЬ И ПОДСВЕЧИВАТЬ ВЫБРАННЫЙ ЭЛЕМЕНТ  
@@ -112,9 +108,9 @@ document.getElementById('content__encrypt-block__input__encrypt').addEventListen
     if (response.status === 200) {
         setTimeout(() => {
             // console.log(encryptResponse);
-            encryptResultBlock.innerHTML = '';
+            encryptResultBlock.textContent = '';
             encryptResponse.cipherArr.forEach((encryptText, index) => {
-                
+                //console.log(encryptText)
                 let childEncryptBlock = document.createElement('div'),
                     encryptTextBlock = document.createElement('div'),
                     callDecryptButton = document.createElement('button');
@@ -122,8 +118,8 @@ document.getElementById('content__encrypt-block__input__encrypt').addEventListen
                 encryptTextBlock.classList.add('content__block__result__text')
                 callDecryptButton.classList.add('content__encrypt-block__result__parent__call-decrypt')
                 callDecryptButton.setAttribute('type', 'button');
-                encryptTextBlock.innerHTML = encryptText
-                callDecryptButton.innerHTML = "Расшифровать"
+                encryptTextBlock.textContent = encryptText
+                callDecryptButton.textContent = "Расшифровать"
                 childEncryptBlock.appendChild(callDecryptButton);
                 childEncryptBlock.appendChild(encryptTextBlock);
                 
@@ -137,4 +133,26 @@ document.getElementById('content__encrypt-block__input__encrypt').addEventListen
         
  
     }
+})
+
+const navigationElem = document.querySelectorAll('.navigation__block__title');
+
+navigationElem.forEach((elem) => {
+    elem.addEventListener('click', () => {
+        let showClass = elem.parentElement.classList.contains('show');
+        navigationElem.forEach((allElem) => {
+            allElem.parentElement.classList.remove('show')
+        })
+
+        if (!showClass) {
+            elem.parentElement.classList.add('show')
+            backgroundEl.classList.add('visible')
+        } else {
+            backgroundEl.classList.remove('visible')
+        }
+        console.log(elem.parentElement.classList.contains('click'))
+       // elem.parentElement.nextElementSibling.classList.remove('click')
+        //elem.parentElement.previousElementSibling.classList.remove('click')
+        
+    })
 })
