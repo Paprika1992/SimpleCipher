@@ -1605,68 +1605,68 @@ class SimpleCipher
 
 #Гаврилов
 //ЕСЛИ ИСПОЛЬЗОВАТЬ СОЛЬ - ЛОМАЕТСЯ ПРИ ДЕШИФРОВКЕ
-$cipherText = 'мама мыла раму';
-//$cipherText = '1111111111111111111111111';
-$salt = null;
-$salt = 'NTI0M2FmNWEwOGU3NDY2YTc5MDFiMTEyOTdlNmY1NTQzY2Q4MzYzMmJkMTNiODRjOGI2YjY4NjEwYjNmM2NjZGJhOWY1NjRiYmU3OTEzZjdhZmIzNDExM2QwZTgwMjhkZDE1OTIwMDlhY2YxZjIxMDljNDA4MTllZjc3MmEzOTI';
-$n = 1;
-// while ($n <= 500) {
-	$testCipher = (new SimpleCipher($cipherText, $salt))->encryptText(67);
-	// if (mb_strstr($testCipher, '11111') !== false) {
-	// 	var_dump('АШИБКА');
-	// }
-	echo '<pre>'; var_dump($testCipher); echo'</pre>';
-	// #Гаврилов
-	// //если заменить первую букву в соли - ничего не поменяется, хотя должно
-	// //ДОБАВЬ УЧЕТ БУКВ К ПЕРЕСЧЕТУ ПАРАМЕТРОВ ТРАНСФОРМАЦИИ МАТРИЦЫ. МАССИВ БУКВ ТРАНСФОРМИРУЕТСЯ В МАССИВ ЧИСЕЛ ПО КЛЮЧАМ ИЗ КЛЮЧА ШИФРА (НЕ ИЗ МАССИВА LETTERSARR) ДОБАВЛЯЕМ К КОЛИЧЕСТВУ ИТЕРАЦИЙ, ТАК КАК СУММА БУДЕТ БОЛЬШАЯ
-	$decryptText = (new SimpleCipher($testCipher, $salt))->decryptText();
+// $cipherText = 'мама мыла раму';
+// //$cipherText = '1111111111111111111111111';
+// $salt = null;
+// $salt = 'NTI0M2FmNWEwOGU3NDY2YTc5MDFiMTEyOTdlNmY1NTQzY2Q4MzYzMmJkMTNiODRjOGI2YjY4NjEwYjNmM2NjZGJhOWY1NjRiYmU3OTEzZjdhZmIzNDExM2QwZTgwMjhkZDE1OTIwMDlhY2YxZjIxMDljNDA4MTllZjc3MmEzOTI';
+// $n = 1;
+// // while ($n <= 500) {
+// 	$testCipher = (new SimpleCipher($cipherText, $salt))->encryptText(67);
+// 	// if (mb_strstr($testCipher, '11111') !== false) {
+// 	// 	var_dump('АШИБКА');
+// 	// }
+// 	echo '<pre>'; var_dump($testCipher); echo'</pre>';
+// 	// #Гаврилов
+// 	// //если заменить первую букву в соли - ничего не поменяется, хотя должно
+// 	// //ДОБАВЬ УЧЕТ БУКВ К ПЕРЕСЧЕТУ ПАРАМЕТРОВ ТРАНСФОРМАЦИИ МАТРИЦЫ. МАССИВ БУКВ ТРАНСФОРМИРУЕТСЯ В МАССИВ ЧИСЕЛ ПО КЛЮЧАМ ИЗ КЛЮЧА ШИФРА (НЕ ИЗ МАССИВА LETTERSARR) ДОБАВЛЯЕМ К КОЛИЧЕСТВУ ИТЕРАЦИЙ, ТАК КАК СУММА БУДЕТ БОЛЬШАЯ
+// 	$decryptText = (new SimpleCipher($testCipher, $salt))->decryptText();
 
 
-	$symbArr = ['а'=>0, 'б'=>1, 'в'=>2, 'г'=>3, 'д'=>4, 'е'=>5, 'ё'=>6, 'ж'=>7, 'з'=>8, 'и'=>9, 'й'=>10, 'к'=>11, 'л'=>12, 'м'=>13, 'н'=>14, 'о'=>15, 'п'=>16, 'р'=>17, 'с'=>18, 'т'=>19, 'у'=>20, 'ф'=>21, 'х'=>22, 'ц'=>23, 'ч'=>24, 'ш'=>25, 'щ'=>26, 'ъ'=>27, 'ы'=>28, 'ь'=>29, 'э'=>30, 'ю'=>31, 'я'=>32, 'z'=>58, 'y'=>57, 'x'=>56, 'w'=>55, 'v'=>54, 'u'=>53, 't'=>52, 's'=>51, 'r'=>50, 'p'=>49, 'q'=>48, 'o'=>47, 'n'=>46, 'm'=>45, 'l'=>44, 'k'=>43, 'j'=>42, 'i'=>41,'h'=>40, 'g'=>39, 'f'=>38, 'e'=>37, 'd'=>36, 'c'=>35, 'b'=>34, 'a'=>33];
-	$symbArr = array_flip($symbArr);
-	foreach ($symbArr as $key => $value){
-		$symbArr[] = mb_strtoupper($value);
-	}
-	$symbArr[] = 0;
-	$symbArr[] = 1;
-	$symbArr[] = 2;
-	$symbArr[] = 3;
-	$symbArr[] = 4;
-	$symbArr[] = 5;
-	$symbArr[] = 6;
-	$symbArr[] = 7;
-	$symbArr[] = 8;
-	$symbArr[] = 9;
+// 	$symbArr = ['а'=>0, 'б'=>1, 'в'=>2, 'г'=>3, 'д'=>4, 'е'=>5, 'ё'=>6, 'ж'=>7, 'з'=>8, 'и'=>9, 'й'=>10, 'к'=>11, 'л'=>12, 'м'=>13, 'н'=>14, 'о'=>15, 'п'=>16, 'р'=>17, 'с'=>18, 'т'=>19, 'у'=>20, 'ф'=>21, 'х'=>22, 'ц'=>23, 'ч'=>24, 'ш'=>25, 'щ'=>26, 'ъ'=>27, 'ы'=>28, 'ь'=>29, 'э'=>30, 'ю'=>31, 'я'=>32, 'z'=>58, 'y'=>57, 'x'=>56, 'w'=>55, 'v'=>54, 'u'=>53, 't'=>52, 's'=>51, 'r'=>50, 'p'=>49, 'q'=>48, 'o'=>47, 'n'=>46, 'm'=>45, 'l'=>44, 'k'=>43, 'j'=>42, 'i'=>41,'h'=>40, 'g'=>39, 'f'=>38, 'e'=>37, 'd'=>36, 'c'=>35, 'b'=>34, 'a'=>33];
+// 	$symbArr = array_flip($symbArr);
+// 	foreach ($symbArr as $key => $value){
+// 		$symbArr[] = mb_strtoupper($value);
+// 	}
+// 	$symbArr[] = 0;
+// 	$symbArr[] = 1;
+// 	$symbArr[] = 2;
+// 	$symbArr[] = 3;
+// 	$symbArr[] = 4;
+// 	$symbArr[] = 5;
+// 	$symbArr[] = 6;
+// 	$symbArr[] = 7;
+// 	$symbArr[] = 8;
+// 	$symbArr[] = 9;
 
-	$newSaltArr = preg_split('//u', $salt, -1, PREG_SPLIT_NO_EMPTY);
-	$s = 0;
-	while ($s < count($newSaltArr)) {
-		$newSaltArr_transform = $newSaltArr;
-		$a = 0;
-		while ($a < count($symbArr)) {
-			$newSaltStr = implode('', $newSaltArr);
-			$newSaltArr_transform[$s] = $symbArr[$a];
-			$newSaltStr = implode('', $newSaltArr_transform);
+// 	$newSaltArr = preg_split('//u', $salt, -1, PREG_SPLIT_NO_EMPTY);
+// 	$s = 0;
+// 	while ($s < count($newSaltArr)) {
+// 		$newSaltArr_transform = $newSaltArr;
+// 		$a = 0;
+// 		while ($a < count($symbArr)) {
+// 			$newSaltStr = implode('', $newSaltArr);
+// 			$newSaltArr_transform[$s] = $symbArr[$a];
+// 			$newSaltStr = implode('', $newSaltArr_transform);
 
-			$newDecryptText = (new SimpleCipher($testCipher, $newSaltStr))->decryptText();
+// 			$newDecryptText = (new SimpleCipher($testCipher, $newSaltStr))->decryptText();
 
-			if ($newDecryptText == $cipherText && $newSaltStr !== $salt) {
-				var_dump('Жаль');
-				var_dump($newSaltStr);
-				var_dump(count($newSaltArr) * $s + $a);
-			}
+// 			if ($newDecryptText == $cipherText && $newSaltStr !== $salt) {
+// 				var_dump('Жаль');
+// 				var_dump($newSaltStr);
+// 				var_dump(count($newSaltArr) * $s + $a);
+// 			}
 
-			// var_dump($newSaltStr);
-			$a++;
-		}
+// 			// var_dump($newSaltStr);
+// 			$a++;
+// 		}
 
-		$s++;
-	}
+// 		$s++;
+// 	}
 
-	echo '<pre>'; var_dump($decryptText); echo'</pre>';
-	if ($decryptText !== $cipherText) {
-		var_dump('ОШИПКА!');
-	}
+// 	echo '<pre>'; var_dump($decryptText); echo'</pre>';
+// 	if ($decryptText !== $cipherText) {
+// 		var_dump('ОШИПКА!');
+// 	}
 //  	$n++;
 // }
 
