@@ -8,6 +8,10 @@ ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 set_time_limit(180);
 
+ini_set('xdebug.var_display_max_depth', -1); // без ограничения глубины
+ini_set('xdebug.var_display_max_children', -1); // без ограничения количества элементов
+ini_set('xdebug.var_display_max_data', -1); // без ограничения длины строк
+
 //TODO
 //проверь на уникальность все символы и подумай какие спецсимволы можно добавить
 
@@ -468,26 +472,45 @@ class SimpleCipher
 		//Новый ключ шифрования
 		$newCipherKey = null;
 		$cipherKeySymbArr = $this->getStrArr($cipherKey);
-		/*Перебираем все символы в соли и если этот символ из соли найден в ключе шифра - кладем его в начало (или конец в зависимости от четности/нечетности порядка итерации) ключа шифра (например на нулевую позицию). С прежней позиции элемент из массива удаляем. Например:
-		ключ - abcdef123
-		соль - d2
-		находим символ d, с изначальной позиции массива элемент удаляем -> abcef123; и помещаем его на нулевую позицию в ключе -> dabcef123
-		то же самое делаем с символом 2 - перемещаем его уже в конец массива (так как номер итерации теперь четный) ->dabcef132*/ 
+		preg_match_all('/[0-9]+/', $this->salt, $saltNumbers);
+		$saltNumbers = array_map(function($el){return intval($el);}, $saltNumbers[0]);
+		$saltNumbersCount = 0;
 		foreach ($this->getStrArr($this->salt) as $saltKey => $saltSymb){
 			$сipherSymbKey = array_search($saltSymb, $cipherKeySymbArr);
-			if ($сipherSymbKey !== false) {
-				unset($cipherKeySymbArr[$сipherSymbKey]);
-				if ($saltKey % 2 !== 0) {
-					array_unshift($cipherKeySymbArr, $saltSymb);
-				} else {
-					$cipherKeySymbArr[] = $saltSymb;
-				}
+			/**
+			 * @var int $newPosition новая позиция в ключе шифра символа из соли
+			 */
+			$newPosition = $сipherSymbKey + $saltKey + $saltNumbers[$saltNumbersCount];
+			//Если число из перебираемого массива чисел соли нечетное, новая позиция символа берется с конца ключа шифра, а не с начала. Например, если новая позиция = 15, то она пересчитывается на 169 - 15 = 154 
+			if ($saltNumbers[$saltNumbersCount] % 2 !== 0) {	
+				$newPosition = count($cipherKeySymbArr) - $newPosition;
+			}
+			/**
+			 * @var $replaceSymbol заменяемый символ в ключе шифра
+			 */
+			$replaceSymbol = null;
+			//Проверяем новую позицию символа из соли. Если новая позиция больше чем длина ключа шифра, пересчитываем ее, чтобы уменьшить. Если она в итоге становится меньше нуля, то либо кладем символ в начало ключа шифра, либо в самый конец, в зависимости от того текущая итерация перебора соли четная или нет
+			if ($newPosition >= count($cipherKeySymbArr)) {
+				$newPosition = $saltKey - $сipherSymbKey - $saltNumbers[$saltNumbersCount];
+			}
+			if ($newPosition < 0) {
+				$newPosition = ($saltKey % 2 !== 0 ? 0 : count($cipherKeySymbArr) - 1);
+			}
+			$replaceSymbol = $cipherKeySymbArr[$newPosition];
+			$cipherKeySymbArr[$newPosition] = $saltSymb;
+			$cipherKeySymbArr[$сipherSymbKey] = $replaceSymbol;
+			$saltNumbersCount++;
+			if ($saltNumbersCount == count($saltNumbers)) {
+				$saltNumbersCount = 0;
 			}
 		}
 		$newCipherKey = implode('', $cipherKeySymbArr);
 
 		return $newCipherKey;
 	}
+
+	#Гаврилов
+	//В ВЕРСИИ БЫЛ СВОБОДНЫЙ СЛОТ ПОД ПОЛЕЗНУЮ НАГРУЗКУ. ПОПРОБОВАТЬ ВСЕ ТАКИ ВЕРСИЮ СДЕЛАТЬ ТРЕХЗНАЧНОЙ А СВОБОДНЫЙ СЛОТ ПОТРАТИТЬ И ЗАШИТЬ ТУДА ПОРЯДКОВЫЙ НОМЕР ИСПОЛЬЗУЕМОГО КЛЮЧА ШИФРА?
 
 
 	/**
@@ -504,6 +527,7 @@ class SimpleCipher
 		$upperLatinLetters = array_map(function($el){return strtoupper($el);}, array_flip($this->latinLetters));
 		//Формируем сумму цифр и символов (ключей элементов массива [n => 2, H => 3, s => 4 ...]) соли
 		$cipherSaltArr = array_map(function($el) use($upperLatinLetters) {return preg_match('/[^0-9]/', $el) ? array_flip(array_flip($this->latinLetters) + array_merge($upperLatinLetters, []))[$el] : (int)$el;}, $cipherSaltArr);
+		//var_dump($cipherSaltArr);
 		$saltSymbSum = array_sum($cipherSaltArr);
 		//Первую цифру из суммы символов соли добавляем к размеру окна захвата символов для преобразования первого ключа (если их сумма не больше 55, в противном случае - вычитаем). Последнюю цифру из суммы, соответственно, добавляем к размеру окна захвата для преобразования второго ключа
 		$shiftWindowSize_first = substr($saltSymbSum, 0, 1);
@@ -1595,78 +1619,67 @@ class SimpleCipher
 //TODO
 //ПЕРЕНЕСИ ВЕРСИЮ В КОНЕЦ ШИФРА, ЧТОБЫ ВО ВСЕХ ВЕРСИЯХ ОНА ГАРАНТИРОВАННО БРАЛАСЬ ИЗ ОДНОГО И ТОГО ЖЕ МЕСТА
 
-#Гаврилов
-//НЕ СРАВНИВАЮТСЯ ОТРЕЗКИ ХЭША ФЕЙКОВОЙ ДЛИНЫ
-
-//TODO
-//ЕСЛИ ДЛИННАЯ СТРОКА (БОЛЬШЕ ФЕЙКОВОГО КОЛИЧЕСТВА) - ШИФР ЛОМАЕТСЯ
-//ЕСЛИ ПЕРЕДАТЬ КУЧУ ПОВТОРЯЮЩИХСЯ СИМВОЛОВ "МАМАМАМАМ" - ШИФР ЛОМАЕТСЯ
 
 
-#Гаврилов
-//ЕСЛИ ИСПОЛЬЗОВАТЬ СОЛЬ - ЛОМАЕТСЯ ПРИ ДЕШИФРОВКЕ
-// $cipherText = 'мама мыла раму';
-// //$cipherText = '1111111111111111111111111';
-// $salt = null;
-// $salt = 'NTI0M2FmNWEwOGU3NDY2YTc5MDFiMTEyOTdlNmY1NTQzY2Q4MzYzMmJkMTNiODRjOGI2YjY4NjEwYjNmM2NjZGJhOWY1NjRiYmU3OTEzZjdhZmIzNDExM2QwZTgwMjhkZDE1OTIwMDlhY2YxZjIxMDljNDA4MTllZjc3MmEzOTI';
-// $n = 1;
-// // while ($n <= 500) {
-// 	$testCipher = (new SimpleCipher($cipherText, $salt))->encryptText(67);
-// 	// if (mb_strstr($testCipher, '11111') !== false) {
-// 	// 	var_dump('АШИБКА');
-// 	// }
-// 	echo '<pre>'; var_dump($testCipher); echo'</pre>';
+$cipherText = 'мама мыла раму';
+// $cipherText = '1111111111111111111111111';
+$salt = null;
+$salt = 'NTI0M2FmNWEwOGU3NDY2YTc5MDFiMTEyOTdlNmY1NTQzY2Q4MzYzMmJkMTNiODRjOGI2YjY4NjEwYjNmM2NjZGJhOWY1NjRiYmU3OTEzZjdhZmIzNDExM2QwZTgwMjhkZDE1OTIwMDlhY2YxZjIxMDljNDA4MTllZjc3MmEzOTI';
+$n = 1;
+// while ($n <= 100) {
+	// $testCipher = (new SimpleCipher($cipherText, $salt))->encryptText(67);
+	// echo '<pre>'; var_dump($testCipher); echo'</pre>';
+	// $decryptText = (new SimpleCipher($testCipher, $salt))->decryptText();
 // 	// #Гаврилов
 // 	// //если заменить первую букву в соли - ничего не поменяется, хотя должно
 // 	// //ДОБАВЬ УЧЕТ БУКВ К ПЕРЕСЧЕТУ ПАРАМЕТРОВ ТРАНСФОРМАЦИИ МАТРИЦЫ. МАССИВ БУКВ ТРАНСФОРМИРУЕТСЯ В МАССИВ ЧИСЕЛ ПО КЛЮЧАМ ИЗ КЛЮЧА ШИФРА (НЕ ИЗ МАССИВА LETTERSARR) ДОБАВЛЯЕМ К КОЛИЧЕСТВУ ИТЕРАЦИЙ, ТАК КАК СУММА БУДЕТ БОЛЬШАЯ
-// 	$decryptText = (new SimpleCipher($testCipher, $salt))->decryptText();
+ 	
 
+// // 	$symbArr = ['а'=>0, 'б'=>1, 'в'=>2, 'г'=>3, 'д'=>4, 'е'=>5, 'ё'=>6, 'ж'=>7, 'з'=>8, 'и'=>9, 'й'=>10, 'к'=>11, 'л'=>12, 'м'=>13, 'н'=>14, 'о'=>15, 'п'=>16, 'р'=>17, 'с'=>18, 'т'=>19, 'у'=>20, 'ф'=>21, 'х'=>22, 'ц'=>23, 'ч'=>24, 'ш'=>25, 'щ'=>26, 'ъ'=>27, 'ы'=>28, 'ь'=>29, 'э'=>30, 'ю'=>31, 'я'=>32, 'z'=>58, 'y'=>57, 'x'=>56, 'w'=>55, 'v'=>54, 'u'=>53, 't'=>52, 's'=>51, 'r'=>50, 'p'=>49, 'q'=>48, 'o'=>47, 'n'=>46, 'm'=>45, 'l'=>44, 'k'=>43, 'j'=>42, 'i'=>41,'h'=>40, 'g'=>39, 'f'=>38, 'e'=>37, 'd'=>36, 'c'=>35, 'b'=>34, 'a'=>33];
+// // 	$symbArr = array_flip($symbArr);
+// // 	foreach ($symbArr as $key => $value){
+// // 		$symbArr[] = mb_strtoupper($value);
+// // 	}
+// // 	$symbArr[] = 0;
+// // 	$symbArr[] = 1;
+// // 	$symbArr[] = 2;
+// // 	$symbArr[] = 3;
+// // 	$symbArr[] = 4;
+// // 	$symbArr[] = 5;
+// // 	$symbArr[] = 6;
+// // 	$symbArr[] = 7;
+// // 	$symbArr[] = 8;
+// // 	$symbArr[] = 9;
 
-// 	$symbArr = ['а'=>0, 'б'=>1, 'в'=>2, 'г'=>3, 'д'=>4, 'е'=>5, 'ё'=>6, 'ж'=>7, 'з'=>8, 'и'=>9, 'й'=>10, 'к'=>11, 'л'=>12, 'м'=>13, 'н'=>14, 'о'=>15, 'п'=>16, 'р'=>17, 'с'=>18, 'т'=>19, 'у'=>20, 'ф'=>21, 'х'=>22, 'ц'=>23, 'ч'=>24, 'ш'=>25, 'щ'=>26, 'ъ'=>27, 'ы'=>28, 'ь'=>29, 'э'=>30, 'ю'=>31, 'я'=>32, 'z'=>58, 'y'=>57, 'x'=>56, 'w'=>55, 'v'=>54, 'u'=>53, 't'=>52, 's'=>51, 'r'=>50, 'p'=>49, 'q'=>48, 'o'=>47, 'n'=>46, 'm'=>45, 'l'=>44, 'k'=>43, 'j'=>42, 'i'=>41,'h'=>40, 'g'=>39, 'f'=>38, 'e'=>37, 'd'=>36, 'c'=>35, 'b'=>34, 'a'=>33];
-// 	$symbArr = array_flip($symbArr);
-// 	foreach ($symbArr as $key => $value){
-// 		$symbArr[] = mb_strtoupper($value);
-// 	}
-// 	$symbArr[] = 0;
-// 	$symbArr[] = 1;
-// 	$symbArr[] = 2;
-// 	$symbArr[] = 3;
-// 	$symbArr[] = 4;
-// 	$symbArr[] = 5;
-// 	$symbArr[] = 6;
-// 	$symbArr[] = 7;
-// 	$symbArr[] = 8;
-// 	$symbArr[] = 9;
+// // 	$newSaltArr = preg_split('//u', $salt, -1, PREG_SPLIT_NO_EMPTY);
+// // 	$s = 0;
+// // 	while ($s < count($newSaltArr)) {
+// // 		$newSaltArr_transform = $newSaltArr;
+// // 		$a = 0;
+// // 		while ($a < count($symbArr)) {
+// // 			$newSaltStr = implode('', $newSaltArr);
+// // 			$newSaltArr_transform[$s] = $symbArr[$a];
+// // 			$newSaltStr = implode('', $newSaltArr_transform);
 
-// 	$newSaltArr = preg_split('//u', $salt, -1, PREG_SPLIT_NO_EMPTY);
-// 	$s = 0;
-// 	while ($s < count($newSaltArr)) {
-// 		$newSaltArr_transform = $newSaltArr;
-// 		$a = 0;
-// 		while ($a < count($symbArr)) {
-// 			$newSaltStr = implode('', $newSaltArr);
-// 			$newSaltArr_transform[$s] = $symbArr[$a];
-// 			$newSaltStr = implode('', $newSaltArr_transform);
+// // 			$newDecryptText = (new SimpleCipher($testCipher, $newSaltStr))->decryptText();
 
-// 			$newDecryptText = (new SimpleCipher($testCipher, $newSaltStr))->decryptText();
+// // 			if ($newDecryptText == $cipherText && $newSaltStr !== $salt) {
+// // 				var_dump('Жаль');
+// // 				var_dump($newSaltStr);
+// // 				var_dump(count($newSaltArr) * $s + $a);
+// // 			}
 
-// 			if ($newDecryptText == $cipherText && $newSaltStr !== $salt) {
-// 				var_dump('Жаль');
-// 				var_dump($newSaltStr);
-// 				var_dump(count($newSaltArr) * $s + $a);
-// 			}
+// // 			// var_dump($newSaltStr);
+// // 			$a++;
+// // 		}
 
-// 			// var_dump($newSaltStr);
-// 			$a++;
-// 		}
+// // 		$s++;
+// // 	}
 
-// 		$s++;
-// 	}
-
-// 	echo '<pre>'; var_dump($decryptText); echo'</pre>';
-// 	if ($decryptText !== $cipherText) {
-// 		var_dump('ОШИПКА!');
-// 	}
+	// echo '<pre>'; var_dump($decryptText); echo'</pre>';
+	// if ($decryptText !== $cipherText) {
+	// 	var_dump('ОШИПКА!');
+	// }
 //  	$n++;
 // }
 
@@ -1675,11 +1688,7 @@ class SimpleCipher
 //НА ВЫХОДЕ (ПЕРЕД ЗАПОЛНЕНИЕМ ФЕЙКОВЫМИ СИМВОЛАМИ) В промежуточном результате БРАТЬ ИЗ соли БУКВЫ И ЦИФРЫ И ИХ В ШИФРЕ/ДЕШИФРЕ МЕНЯТЬ МЕСТАМИ, ПЕРЕНОСИТЬ В КОНЕЦ? КАКИМ ТО ОБРАЗОМ ИХ ИСПОЛЬЗОВАТЬ ДЛЯ ПЕРЕМЕШИВАНИЯ
 
 #Гаврилов
-//НУЖНО ДОБИТЬСЯ КОЛИЧЕСТВА КОЛИЗИЙ ПРИ ИСПОЛЬЗОВАНИИ СОЛИ (ПЕРЕБОР СИМВОЛОВ В СОЛИ) В 
-
-#Гаврилов
-//ОДИН ИЗ ВАРИАНТОВ ТЕКСТА 0000000000000000000000000 ЗАШИФРОВАЛСЯ В OTA78b103ы0ы29l+2(959f000000000000000000000000Lab6306b15cf9#194[MjM
-//ТО ЕСТЬ НЕ ЗАШИФРОВАЛСЯ....КАК ТАК ?
+//НУЖНО ДОБИТЬСЯ КОЛИЧЕСТВА КОЛИЗИЙ ПРИ ИСПОЛЬЗОВАНИИ СОЛИ текущее состояние 0.002
 
 
 
