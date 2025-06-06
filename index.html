@@ -7,41 +7,65 @@
     <link rel="stylesheet" href="./index.css">
 </head>
 <body>
+    <div id="page-background"></div>
+    <nav id="page__navigation">
+        <div class="navigation__block">
+            <div class="navigation__block__title">Секретный ключ</div>
+            <div class="navigation__block__content">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Labore ab esse aperiam necessitatibus, aut ipsum, laudantium sed minima, nobis assumenda laboriosam. Explicabo totam fugiat, sint officia corporis eum quas laboriosam.</div>
+        </div>
+        <div class="navigation__block">
+            <div class="navigation__block__title">API</div>
+            <div class="navigation__block__content">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Labore ab esse aperiam necessitatibus, aut ipsum, laudantium sed minima, nobis assumenda laboriosam. Explicabo totam fugiat, sint officia corporis eum quas laboriosam.</div>
+        </div>
+        <div class="navigation__block">
+            <div class="navigation__block__title">Почему Simple Cipher</div>
+            <div class="navigation__block__content">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Labore ab esse aperiam necessitatibus, aut ipsum, laudantium sed minima, nobis assumenda laboriosam. Explicabo totam fugiat, sint officia corporis eum quas laboriosam.</div>
+        </div>
+    </nav>
     <!--ГАВРИЛОВ
     ПЕРЕДЕЛАЙ СЛЕДУЮЩИМ ОБРАЗОМ ВЕРСТКУ: 
     1) ВЕРХНЯЯ СТРОКА - 2 БЛОКА (ЗАШИФРОВКА, РАСШИФРОВКА)
         СТРОКА POSITION STICKY
     2) СЛЕДУЮЩАЯ СТРОКА - ЦЕЛИКОМ БЛОК НА ВСЮ ШИРИНУ ГДЕ БУДУТ РЕЗУЛЬТАТЫ ШИФРОВАНИЯ-->
     <!--Добавь при подключении css и js ver=?-->
+    <!--Нужен ли тег форм, если запрос отправляется ajax?-->
     <div id="cipher-content">
-        <div id="cipher-content__encrypt-block" class="cipher-content__block">
-            <div id="content__encrypt-block__input" class="content__input-block">
-                <label for="encryptText">Текст для шифрования</label>
-                <input type="text" placeholder="Введите текст" id="encryptText" required>
-                <label for="cipherLength">Желамая длина шифра</label>
-                <!--подсказка: если шифруемый текст меньше длины шифра - фейковая длина не будет достигнута-->
-                <input type="number" placeholder="минимум 50 символов" id="cipherLength" min="50" max="100" required>
-                <label for="cipherCount">Кол-во итоговых шифров</label>
-                <input type="number" placeholder="Минимум 1" id="cipherCount" min="0" max="100" value="1" required>
-                <label for="cipherSalt">Соль для шифра</label>
-                <input type="text" placeholder="Введите текст" id="cipherSalt">
-                <button type="button" id="content__encrypt-block__input__encrypt">Зашифровать</button>
+        <div id="cipher-content__input-block">
+            <div id="cipher-content__encrypt-block" class="cipher-content__block">
+                <div id="content__encrypt-block__input" class="content__input-block">
+                    <label for="encryptText">Текст для шифрования</label>
+                    <input type="text" placeholder="Введите текст" id="encryptText" required>
+                    <label for="cipherLength">Желамая длина шифра</label>
+                    <!--подсказка: если шифруемый текст меньше длины шифра - фейковая длина не будет достигнута-->
+                    <input type="number" placeholder="минимум 50 символов" id="cipherLength" min="50" max="100" required>
+                    <label for="cipherCount">Кол-во итоговых шифров</label>
+                    <input type="number" placeholder="Минимум 1" id="cipherCount" min="0" max="100" value="1" required>
+                    <label for="cipherSalt">Соль для шифра</label>
+                    <input type="text" placeholder="Введите текст" id="cipherSalt">
+                    <button type="button" id="content__encrypt-block__input__encrypt">Зашифровать</button>
+                </div>
             </div>
-            <div id="content__encrypt-block__result">
-                
+            <div id="cipher-content__decrypt-block" class="cipher-content__block">
+                <div id="content__decrypt-block__input" class="content__input-block">
+                    <label for="decryptText">Текст для расшифровки</label>
+                    <input type="text" placeholder="Введите текст" id="decryptText">
+                    <label for="cipherSalt_decrypt">Соль для шифра</label>
+                    <input type="text" placeholder="Введите текст" id="cipherSalt_decrypt">
+                    <button type="button" id="content__decrypt-block__input__decrypt">Расшифровать</button>
+                    <button type="button" id="getSalt">Получить соль</button>
+                    <div id="GetCipherSalt"></div>
+                </div>
+                <div id="content__decrypt-block__result">  
+                </div>
             </div>
         </div>
-        <div id="cipher-content__decrypt-block" class="cipher-content__block">
-            <div id="content__decrypt-block__input" class="content__input-block">
-                <label for="decryptText">Текст для расшифровки</label>
-                <input type="text" placeholder="Введите текст" id="decryptText">
-                <button type="button" id="content__decrypt-block__input__decrypt">Расшифровать</button>
-            </div>
-            <div id="content__decrypt-block__result">
-                
-            </div>
+        <div id="content__encrypt-block__result">   
         </div>
     </div>
+    <footer>
+        <div>форма обратной связи. Тут будет инпут для для ввода сообщения, текст, что можно оставить отзыв или сообщить о проблеме. наверное можно в виде круглой иконки это оформить</div>
+    </footer>
+
     <script src="./index.js" type="text/javascript"></script>
 </body>
 </html>
