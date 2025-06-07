@@ -51,7 +51,7 @@ document.getElementById('getSalt').addEventListener('click', async function () {
     let cipherSaltRqst = await response.json()
         cipherSalt = cipherSaltRqst.cipherSalt
 
-    document.getElementById('GetCipherSalt').innerHTML = 'Ваш секретный ключ - ' + cipherSalt + '. <br>Обязательно сохраните его. Каждая строка, зашифрованная с помощью этого ключа может быть расшифрована только с помощью этого же ключа!'
+    document.getElementById('GetCipherSalt').innerHTML = 'Ваш секретный ключ - ' + cipherSalt
 })
 
 

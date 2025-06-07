@@ -11,7 +11,17 @@
     <nav id="page__navigation">
         <div class="navigation__block">
             <div class="navigation__block__title">Секретный ключ</div>
-            <div class="navigation__block__content">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Labore ab esse aperiam necessitatibus, aut ipsum, laudantium sed minima, nobis assumenda laboriosam. Explicabo totam fugiat, sint officia corporis eum quas laboriosam.</div>
+            <div class="navigation__block__content">
+                <div class="navigation__content__section">
+                    <div class="navigation__content__section__title"><h3>Зачем нужен секретный ключ?</h3></div>
+                    <div class="navigation__content__section__description">Секретный ключ - это твоя персональная "приправа" для алгоритма. Шифр, полученный с использованием такого ключа получится расшифровать <u>только</u> передав этот же ключ при расшифровке. <br>Эта мера гарантирует, что даже если злоумышленник заполучит твои шифры, без секретного ключа у него не получится расшифровать их!
+                    <p>Обязательно сохрани этот ключ. Каждое значение, зашифрованное с помощью секретного ключа может быть расшифрована только с помощью него же!</p></div>
+                </div>
+                <div class="navigation__content__section">
+                    <button type="button" id="getSalt">Получить секретный ключ</button>
+                    <div id="GetCipherSalt"></div>
+                </div>
+            </div>
         </div>
         <div class="navigation__block">
             <div class="navigation__block__title">API</div>
@@ -52,8 +62,6 @@
                     <label for="cipherSalt_decrypt">Соль для шифра</label>
                     <input type="text" placeholder="Введите текст" id="cipherSalt_decrypt">
                     <button type="button" id="content__decrypt-block__input__decrypt">Расшифровать</button>
-                    <button type="button" id="getSalt">Получить соль</button>
-                    <div id="GetCipherSalt"></div>
                 </div>
                 <div id="content__decrypt-block__result">  
                 </div>
