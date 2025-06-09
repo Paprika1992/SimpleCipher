@@ -41,7 +41,7 @@ class CipherController
      */
     public function createCipherSalt()
     {
-        $cipherSalt = base64_encode(hash('whirlpool', $_SERVER['REMOTE_ADDR'] . time()));
+        $cipherSalt = base64_encode(hash('whirlpool', time(), $_SERVER['REMOTE_ADDR']));
         $cipherSalt = str_replace('=', '', $cipherSalt);
 
         return $cipherSalt;

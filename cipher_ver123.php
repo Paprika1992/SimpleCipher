@@ -167,8 +167,8 @@ class SimpleCipher
 	 * @var array массив с позициями символов соли в массиве [0=>a, 1=>b, 2=>c ...], на основе которого будет происходит запутывание алгоритма при передаче соли
 	 */
 	private $saltNumberSegments;
-	//Массив с результатами многократного преобразования символов соли, чтобы гарантировать в итоге уникальное значение
-	// private $saltHashSArr;
+	//Хэш суммы всех символов соли
+	private $saltHashSum = null;
 
 	public function __construct(string $text, ?string $salt = null)
 	{
@@ -180,11 +180,64 @@ class SimpleCipher
 		$this->matrixDepth = sqrt(mb_strlen($this->cipherKeyStorage[0]));
 		$this->saltNumberSegments = $this->getSaltNumbersArr();
 
-		//var_dump($this->saltNumberSegments);
+		// var_dump($this->saltNumberSegments);
+		// die();
 
 		// $this->setSaltHash();
 		// die();
 	}
+
+
+	/**
+	 * Метод формирует хэш на сумму всех символов соли
+	 *
+	 * @param [type] $args
+	 * @return void
+	 */
+	private function getHashSaltSum()
+	{
+		$cipherKeyNumbers = array_merge([], array_map(function($el){return (int)$el;}, array_filter($this->getStrArr($this->cipherKey), function($el){return preg_match('/[0-9]/', $el);})));
+		//Определенным образом дополняем массив числами 10, 11, 12. Так как итоговый массив должен содержать 13 элементов. Столько же, сколько в одном сегменте массива $this->saltNumberSegments. Если элементов будет меньше - мы не будем задействовать один из элементов в сегментах $this->saltNumberSegments. Если элементов будет больше - мы не найдем нужный элемент в сегменте $this->saltNumberSegment, будет ошибка
+		foreach (array_reverse($cipherKeyNumbers) as $key => $value){
+			if (in_array($value, [0, 1, 2]) !== false){
+				$newPos = ($key == 9 ? 0 : $key);
+				$transformNumb = $cipherKeyNumbers[$newPos];
+				$cipherKeyNumbers[$newPos] = 10 + $value;
+				if ($key % 2 !== 0) {
+					$cipherKeyNumbers[] = $transformNumb;
+				} else {
+					array_unshift($cipherKeyNumbers, $transformNumb);
+				}
+			}
+		}
+		//Этот метод позволяет суммировать вложенные массивы
+		$getSaltSum = function (array $arr) use (&$getSaltSum) : float {
+			$sum = array_sum($arr);
+			foreach($arr as $child) {
+				$sum += is_array($child) ? $getSaltSum($child) : 0;
+			}
+			return $sum;
+		};
+		//Общая сумма всех индексов всех символов соли
+		$generalSaltSum = $getSaltSum($this->saltNumberSegments);
+		//Умножаем, чтобы не уйти в отрицательные значения при дальнейших операциях
+		$generalSaltSum = $generalSaltSum * 3.14;
+		foreach ($cipherKeyNumbers as $cipherNumKey => $cipherKeySymb){
+			//Складываем и умножаем (либо вычитаем и делим в зависимости от четной или нечетной позиции) индексы элементов соли между собой.
+			if ($cipherNumKey % 2 !== 0) {
+				$generalSaltSum += array_sum($this->saltNumberSegments[$cipherKeySymb]);
+				$generalSaltSum = $generalSaltSum * ($cipherKeySymb == 0 ? 1 : $cipherKeySymb);
+			} else {
+				$generalSaltSum -= array_sum($this->saltNumberSegments[$cipherKeySymb]);
+				//умножаем на 0.123, чтобы при делении гарантированно избавиться от периода (например, 0.11111111)
+				$generalSaltSum = $generalSaltSum / ($cipherKeySymb == 0 ? 1 : $cipherKeySymb) * 0.123;
+			}
+		}
+		$generalSaltSum = str_replace('.', '', (string)$generalSaltSum);
+
+		return $generalSaltSum;
+	}
+
 
 
 
@@ -200,17 +253,32 @@ class SimpleCipher
 		$fakeLength = $fakeLength < 50 ? 50 : $fakeLength;
 		$this->encrypt = true;
 		//Максимальное значение - примерно половина от длины ключа шифра
-		// var_dump(count($this->getStrArr($this->cipherKeyStorage[0]))));
 		$this->windowSizeFirst = $this->getRandNum(floor(count($this->getStrArr($this->cipherKeyStorage[0])) / 2), 12);
 		$this->shiftCountFirst = $this->getRandNum(999, 99);
 		/**
 		 * @var string Флаг реверса ключа шифра, который используется для формирования первой матрицы. Ключ для второй матрицы всегда имеет противоположное значение
 		 */
 		$reverseCipherKey = ($this->getRandNum(3, 1) == 1 ? 0 : 1);
+		//Индекс ключа шифрования на основании которого будет формироваться 1я матрица
+		//cipherKeyIndex_fake - фейковый ключ шифра, который помещается в полезную нагрузку шифра. При передаче соли реальный ключ шифра преобразуется в соответствии с солью. При шифровании используется реальный ключ шифра, но в полезную нагрузку кладется фейковый ключ шифра. Таким образом, расшифровка БЕЗ передачи соли не сформирует действительный ключ шифра, использующийся при шифровании и расшифровка не будет успешной
+		$cipherKeyIndex = $cipherKeyIndex_fake = $this->getRandNum(10);
+		//Если передается соль, используем ее для определения ключа шифра
+		if ($this->salt) {
+			$cipherKeyIndex = $this->getRealCipherKey($cipherKeyIndex);
+		}
+		$this->cipherKey = $this->cipherKeyStorage[$cipherKeyIndex];
+		//Ключ второго шифра для формирования второй матрицы строится на основании другого ключа из массива $this->cipherKeyStorage (следующего ключ после ключа первой матрицы, либо первый ключ массива, если ключ для первый матрицы оказался последним в массиве)
+		$this->cipherKey_second = $this->cipherKeyStorage[$cipherKeyIndex == (count($this->cipherKeyStorage) - 1) ? 0 : $cipherKeyIndex + 1];
+		//Если передается соль, формируем из нее хэш на сумму всех символов соли, которая будет использоваться для запутывания ключей шифра и для определения паттерном формирования матриц. 
+		//Формируем ПОСЛЕ определения ключа шифра, так как он используется при формировании хэша 
+		if ($this->salt) {
+			$this->saltHashSum = $this->getHashSaltSum();
+		}
+		// die();
 		/**
 		 * @var string версия приложения в зашифрованном виде
 		 */
-		$encryptVersion = $this->setVersion();
+		$encryptVersion = $this->setVersion($this->salt ? $cipherKeyIndex_fake : $cipherKeyIndex);
 		$this->windowSizeSecond = $this->getRandNum(floor(count($this->getStrArr($this->cipherKeyStorage[0])) / 2), 12);
 		$this->shiftCountSecond = $this->shiftCountFirst + $this->getRandNum(1999, 99);
 		//Заполняем массив с параметрами преобразования матриц (пока что данными для преобразования первой матрицы)
@@ -353,6 +421,22 @@ class SimpleCipher
 
 
 	/**
+	 * Метод преобразует ключ шифра, используя данные соли
+	 *
+	 * @param int $cipherKeyIndex текущий "фейковый" ключ шифра
+	 * @return int
+	 */
+	private function getRealCipherKey(int $cipherKeyIndex): int
+	{
+		$cipherKeyIndex += $this->saltNumberSegments[$cipherKeyIndex][$cipherKeyIndex] ?? 1;
+		//Так как ключей шифра 10, если значение больше 10, приводим его в допустимый диапазон
+		$cipherKeyIndex = $cipherKeyIndex > 9 ? ($cipherKeyIndex == 10 ? 0 : floor($cipherKeyIndex/10)) : $cipherKeyIndex;
+
+		return $cipherKeyIndex;
+	}
+
+
+	/**
 	 * Метод дешифровки текста
 	 *
 	 * @return string
@@ -412,12 +496,20 @@ class SimpleCipher
 		$cipherVersion = mb_substr($this->text, mb_strlen($this->text) - (9 + mb_strlen($lengthSecondMatches[1])));
 		//var_dump($this->text);
 		// var_dump($lengthSecondMatches);
-		// var_dump($cipherVersion);
 		//Теперь очищаем от полезной нагрузки, связанной с версией алгоритма, 2й частью указателя на длину исходной строки и вторым вектором инициализации
 		$clearCipherText = mb_substr($clearCipherText, 0, (0 - mb_strlen($cipherVersion)));
 		//Получаем чистую версию алгоритма из зашифрованного отрезка, удаляя в строке два последних символа (вектор горизонтальной инициализации) и заменяя на пустоту сегмент, содержащий 2ю часть фейковой длины шифра ($lengthSecondMatches[1])
 		//$cipherVersion = $this->getVersion(mb_substr(str_replace($lengthSecondMatches[1], '', $cipherVersion), 0, -2));
 		$cipherVersion = $this->getVersion(mb_substr(str_replace($lengthSecondMatches[1], '', $cipherVersion), 0, -3));
+		$cipherKeyIndex = substr($cipherVersion, -1);
+		if ($this->salt) {
+			$cipherKeyIndex = $this->getRealCipherKey($cipherKeyIndex);
+		}
+		$this->cipherKey = $this->cipherKeyStorage[$cipherKeyIndex];
+		$this->cipherKey_second = $this->cipherKeyStorage[$cipherKeyIndex == (count($this->cipherKeyStorage) - 1) ? 0 : $cipherKeyIndex + 1];
+		if ($this->salt) {
+			$this->saltHashSum = $this->getHashSaltSum();
+		}
 		//Здесь дополнительно преобразуем ключ шифрования, так как только в методе setVersion происходит формирование ключа
 		$this->windowSizeFirst = $matrixParamArr[0];
 		$this->shiftCountFirst = $matrixParamArr[1];
@@ -556,10 +648,12 @@ class SimpleCipher
 	 */
 	private function getSaltNumbersArr(): array
 	{
-		$cipherSaltArr = $this->getStrArr($this->salt);
+		$cipherSaltArr = str_split($this->salt);
+		// var_dump($cipherSaltArr);
 		//Массив с латинскими буквами в верхнем регистре, который мы ниже объединим с массивом латинских букв в нижнем регистре и на его основе [n => 2, H => 3, s => 4 ...] будем считать сумму ключей символов в соли
 		$upperLatinLetters = array_map(function($el){return strtoupper($el);}, array_flip($this->latinLetters));
 		$cipherSaltArr = array_map(function($el) use($upperLatinLetters) {return preg_match('/[^0-9]/', $el) ? array_flip(array_flip($this->latinLetters) + array_merge($upperLatinLetters, []))[$el] : (int)$el;}, $cipherSaltArr);
+		// var_dump($cipherSaltArr);
 		$saltNumberSegments = [];
 		//Размер одного сегмента символов
 		$numberSegmentSize = (int)floor(sqrt(count($cipherSaltArr)));
@@ -592,51 +686,52 @@ class SimpleCipher
 	{
 		$transformedMatrixParam = $matrixParam;
 		//Получаем цифры из ключа шифра. Получится случайный массив, наполненный цифрами от 0 до 9
-		$cipherKeyNumbers = array_merge([], array_map(function($el){return (int)$el;}, array_filter($this->getStrArr($this->cipherKey), function($el){return preg_match('/[0-9]/', $el);})));
-		//Определенным образом дополняем массив числами 10, 11, 12. Так как итоговый массив должен содержать 13 элементов. Столько же, сколько в одном сегменте массива $this->saltNumberSegments. Если элементов будет меньше - мы не будем задействовать один из элементов в сегментах $this->saltNumberSegments. Если элементов будет больше - мы не найдем нужный элемент в сегменте $this->saltNumberSegment, будет ошибка
-		foreach (array_reverse($cipherKeyNumbers) as $key => $value){
-			if (in_array($value, [0, 1, 2]) !== false){
-				$newPos = ($key == 9 ? 0 : $key);
-				$transformNumb = $cipherKeyNumbers[$newPos];
-				$cipherKeyNumbers[$newPos] = 10 + $value;
-				if ($key % 2 !== 0) {
-					$cipherKeyNumbers[] = $transformNumb;
-				} else {
-					array_unshift($cipherKeyNumbers, $transformNumb);
-				}
-			}
-		}
-		//Этот метод позволяет суммировать вложенные массивы
-		$getSaltSum = function (array $arr) use (&$getSaltSum) : float {
-			$sum = array_sum($arr);
-			foreach($arr as $child) {
-				$sum += is_array($child) ? $getSaltSum($child) : 0;
-			}
-			return $sum;
-		};
-		//Общая сумма всех индексов всех символов соли
-		$generalSaltSum = $getSaltSum($this->saltNumberSegments);
-		//Умножаем, чтобы не уйти в отрицательные значения при дальнейших операциях
-		$generalSaltSum = $generalSaltSum * 3.14;
-		foreach ($cipherKeyNumbers as $cipherNumKey => $cipherKeySymb){
-			//Складываем и умножаем (либо вычитаем и делим в зависимости от четной или нечетной позиции) индексы элементов соли между собой.
-			if ($cipherNumKey % 2 !== 0) {
-				$generalSaltSum += array_sum($this->saltNumberSegments[$cipherKeySymb]);
-				$generalSaltSum = $generalSaltSum * ($cipherKeySymb == 0 ? 1 : $cipherKeySymb);
-			} else {
-				$generalSaltSum -= array_sum($this->saltNumberSegments[$cipherKeySymb]);
-				//умножаем на 0.123, чтобы при делении гарантированно избавиться от периода (например, 0.11111111)
-				$generalSaltSum = $generalSaltSum / ($cipherKeySymb == 0 ? 1 : $cipherKeySymb) * 0.123;
-			}
-		}
-		$generalSaltSum = str_replace('.', '', (string)$generalSaltSum);
+		// $cipherKeyNumbers = array_merge([], array_map(function($el){return (int)$el;}, array_filter($this->getStrArr($this->cipherKey), function($el){return preg_match('/[0-9]/', $el);})));
+		// //Определенным образом дополняем массив числами 10, 11, 12. Так как итоговый массив должен содержать 13 элементов. Столько же, сколько в одном сегменте массива $this->saltNumberSegments. Если элементов будет меньше - мы не будем задействовать один из элементов в сегментах $this->saltNumberSegments. Если элементов будет больше - мы не найдем нужный элемент в сегменте $this->saltNumberSegment, будет ошибка
+		// foreach (array_reverse($cipherKeyNumbers) as $key => $value){
+		// 	if (in_array($value, [0, 1, 2]) !== false){
+		// 		$newPos = ($key == 9 ? 0 : $key);
+		// 		$transformNumb = $cipherKeyNumbers[$newPos];
+		// 		$cipherKeyNumbers[$newPos] = 10 + $value;
+		// 		if ($key % 2 !== 0) {
+		// 			$cipherKeyNumbers[] = $transformNumb;
+		// 		} else {
+		// 			array_unshift($cipherKeyNumbers, $transformNumb);
+		// 		}
+		// 	}
+		// }
+		// //Этот метод позволяет суммировать вложенные массивы
+		// $getSaltSum = function (array $arr) use (&$getSaltSum) : float {
+		// 	$sum = array_sum($arr);
+		// 	foreach($arr as $child) {
+		// 		$sum += is_array($child) ? $getSaltSum($child) : 0;
+		// 	}
+		// 	return $sum;
+		// };
+		// //Общая сумма всех индексов всех символов соли
+		// $generalSaltSum = $getSaltSum($this->saltNumberSegments);
+		// //Умножаем, чтобы не уйти в отрицательные значения при дальнейших операциях
+		// $generalSaltSum = $generalSaltSum * 3.14;
+		// foreach ($cipherKeyNumbers as $cipherNumKey => $cipherKeySymb){
+		// 	//Складываем и умножаем (либо вычитаем и делим в зависимости от четной или нечетной позиции) индексы элементов соли между собой.
+		// 	if ($cipherNumKey % 2 !== 0) {
+		// 		$generalSaltSum += array_sum($this->saltNumberSegments[$cipherKeySymb]);
+		// 		$generalSaltSum = $generalSaltSum * ($cipherKeySymb == 0 ? 1 : $cipherKeySymb);
+		// 	} else {
+		// 		$generalSaltSum -= array_sum($this->saltNumberSegments[$cipherKeySymb]);
+		// 		//умножаем на 0.123, чтобы при делении гарантированно избавиться от периода (например, 0.11111111)
+		// 		$generalSaltSum = $generalSaltSum / ($cipherKeySymb == 0 ? 1 : $cipherKeySymb) * 0.123;
+		// 	}
+		// }
+		// $generalSaltSum = str_replace('.', '', (string)$generalSaltSum);
+		// var_dump($this->saltHashSum);
 		$transformedMatrixParam = $matrixParam;
 		//Для формирования новых параметров преобразования матриц используем цифры суммы позиций символов соли (начиная с конца, так как в начале числа могут быть более близкими от соли к соли)
-		$shiftWindowSize_first = substr($generalSaltSum, -1);
-		$shiftWindowSize_second = substr($generalSaltSum, -2, 1);
+		$shiftWindowSize_first = (int)substr($this->saltHashSum, -1);
+		$shiftWindowSize_second = (int)substr($this->saltHashSum, -2, 1);
 		//Двузначное число из начала суммы символов добавляем к количеству итераций сдвига первого ключа, двузначное число из конца суммы, соответственно, к количеству итераций второго ключа
-		$shiftIteration_first = substr($generalSaltSum, -4, 2);
-		$shiftIteration_second = substr($generalSaltSum, -6, 2);
+		$shiftIteration_first = (int)substr($this->saltHashSum, -4, 2);
+		$shiftIteration_second = (int)substr($this->saltHashSum, -6, 2);
 		//Трансформируем массив с параметрами сдвига ключа шифра. Если новые значений окна захвата символов больше примерно половины от ключа шифра - через вычитание делаем окно захвата меньше исходного, а не больше
 		$transformedMatrixParam[0] = ($transformedMatrixParam[0] + $shiftWindowSize_first >= floor(count($this->getStrArr($this->cipherKeyStorage[0])) / 2)) ? $transformedMatrixParam[0] - $shiftWindowSize_first : $transformedMatrixParam[0] - $shiftWindowSize_first;
 		$transformedMatrixParam[1] = $transformedMatrixParam[1] + $shiftIteration_first;
@@ -686,7 +781,7 @@ class SimpleCipher
 
 		// // var_dump($transformedMatrixParam);
 
-		return $transformedMatrixParam;
+		//return $transformedMatrixParam;
 	}
 
 
@@ -1200,8 +1295,8 @@ class SimpleCipher
 				break;
 		}
 		//Определяем ключ конкретного шифра, беря последнюю цифру из версии алгоритма
-		$this->cipherKey = $this->cipherKeyStorage[substr($version, -1)];
-		$this->cipherKey_second = $this->cipherKeyStorage[substr($version, -1) == (count($this->cipherKeyStorage) - 1) ? 0 : substr($version, -1) + 1];
+		// $this->cipherKey = $this->cipherKeyStorage[substr($version, -1)];
+		// $this->cipherKey_second = $this->cipherKeyStorage[substr($version, -1) == (count($this->cipherKeyStorage) - 1) ? 0 : substr($version, -1) + 1];
 
 		return (int)$version;
 	}
@@ -1214,7 +1309,7 @@ class SimpleCipher
 	 *
 	 * @return string
 	 */
-	private function setVersion(): string
+	private function setVersion(int $cipherKeyIndex): string
 	{
 		$lettersArr = $this->cyrilicLetters + $this->latinLetters;
 		/*Паттерн преобразования цифр версии в буквы. Цифры версии будут преобразованы в буквы, ориентируясь на массив [a=>0, b=>1...]. Версия всегда состоит из 3х символов: 2 первых - версия, 3 - индекс используемого ключа из массива $this->cipherKeyStorage. 
@@ -1223,18 +1318,17 @@ class SimpleCipher
 		№2 - 12(л)_3(г)_rand
 		№3 - 1(б)_23(ц)_rand
 		№4 - rand_12(л)_3(г)
-		№5 - rand_1(б)_23(ц)
-		*/
+		№5 - rand_1(б)_23(ц)*/
 		$pattern = $this->getRandNum(6);
 		//Индекс ключа шифрования на основании которого будет формироваться 1я матрица
-		$cipherKeyIndex = $this->getRandNum(10);
+		//$cipherKeyIndex = $this->getRandNum(10);
 		//Версия алгоритма + индекс рандомного ключа
 		$cipherVersion = $this->version . $cipherKeyIndex;
 		#Гаврилов
 		//ВЫНЕСИ ФОРМИРОВАНИЕ КЛЮЧА ШИФРОВАНИЯ ЗА ПРЕДЕЛЫ ДАННОГО МЕТОДА
-		$this->cipherKey = $this->cipherKeyStorage[$cipherKeyIndex];
-		//Ключ второго шифра для формирования второй матрицы строится на основании другого ключа из массива $this->cipherKeyStorage (следующего ключ после ключа первой матрицы, либо первый ключ массива, если ключ для первый матрицы оказался последним в массиве)
-		$this->cipherKey_second = $this->cipherKeyStorage[$cipherKeyIndex == (count($this->cipherKeyStorage) - 1) ? 0 : $cipherKeyIndex + 1];
+		// $this->cipherKey = $this->cipherKeyStorage[$cipherKeyIndex];
+		// //Ключ второго шифра для формирования второй матрицы строится на основании другого ключа из массива $this->cipherKeyStorage (следующего ключ после ключа первой матрицы, либо первый ключ массива, если ключ для первый матрицы оказался последним в массиве)
+		// $this->cipherKey_second = $this->cipherKeyStorage[$cipherKeyIndex == (count($this->cipherKeyStorage) - 1) ? 0 : $cipherKeyIndex + 1];
 		//Флаг реверсивности (относится только к формированию версии, к реверсивности других параметров шифра отношения не имеет). Второе число в массиве параметров формирования версии. Если число четное - массив с буквами/цифрами, на основании которого цифры версии преобразуются в буквы, не реверсим, иначе реверсим. Дополнительный фактор запутывания
 		$reverseLettersArr = $this->getRandNum(10);
 		if (!($reverseLettersArr % 2 === 0)) {
@@ -1798,24 +1892,30 @@ $symbArr = ['z'=>58, 'y'=>57, 'x'=>56, 'w'=>55, 'v'=>54, 'u'=>53, 't'=>52, 's'=>
 $cipherText = 'мама мыла раму';
 // $cipherText = '1111111111111111111111111';
 $salt = null;
-$salt = 'NTI0M2FmNWEwOGU3NDY2YTc5MАFiMTEyOTdlNmY1NTQzY2Q4MzYzMmJkMTNiODRjOGI2YjY4NjEwYjNmM2NjZGJhOWY1NjRiYmU3OTEzZjdhZmIzNDExM2QwZTgwMjhkZDE1OTIwMDlhY2YxZjIxMDljNDA4MTllZjc3MmEzOTI';
+$salt = 'NTI0M2FmNWEwOGU3NDY2YTc5MAFiMTEyOTdlNmY1NTQzY2Q4MzYzMmJkMTNiODRjOGI2YjY4NjEwYjNmM2NjZGJhOWY1NjRiYmU3OTEzZjdhZmIzNDExM2QwZTgwMjhkZDE1OTIwMDlhY2YxZjIxMDljNDA4MTllZjc3MmEzOTI';
+$testCipher = (new SimpleCipher($cipherText, $salt))->encryptText(67);
 $n = 1;
-// while ($n <= 5000) {
-// 	$randomNumb_pos = unpack("N", openssl_random_pseudo_bytes(4))[1] % (170 - 1) + 1;
-// 	$randimNumb_symb = unpack("N", openssl_random_pseudo_bytes(4))[1] % (60 - 1) + 1;
-// 	$saltNew = str_replace($symbArr[$randimNumb_symb], preg_split('//u', $salt, -1, PREG_SPLIT_NO_EMPTY)[$randomNumb_pos], $salt);
-// 	if ($salt !== $saltNew) {
-// 		$testCipher = (new SimpleCipher($cipherText, $salt))->encryptText(67);
-// 		$decryptText = (new SimpleCipher($testCipher, $saltNew))->decryptText();
-// 		if ($decryptText === $cipherText) {
-// 			var_dump($newSalt);
-// 			var_dump('Жаль!');
-// 		}
-// 	}
-// 	var_dump($n);
+$saltNew = $salt;
+while ($n <= 10000) {
+	$randomNumb_pos = unpack("N", openssl_random_pseudo_bytes(4))[1] % (160 - 1) + 1;
+	$randimNumb_symb = unpack("N", openssl_random_pseudo_bytes(4))[1] % (59 - 1) + 1;
+	$saltArr = str_split($saltNew);
+	shuffle($saltArr);
+	$saltNew = implode('', $saltArr);
+	//if ($salt !== $saltNew) {
+		// var_dump('here');
+		$decryptText = (new SimpleCipher($testCipher, $saltNew))->decryptText();
+		if ($decryptText === $cipherText) {
+			var_dump($saltNew);
+			var_dump('Жаль!');
+		}
+	//}
+	var_dump($n);
+
+	// die();
 	// $testCipher = (new SimpleCipher($cipherText, $salt))->encryptText(67);
 	// echo '<pre>'; var_dump($testCipher); echo'</pre>';
-	// $decryptText = (new SimpleCipher($testCipher, 'NTI0M2FmNWEwOGU3NDY2YTc5MфFiMTEyOTdlNmY1NTQzY2Q4MzYzMmJkMTNiODRjOGI2YjY4NjEwYjNmM2NjZGJhOWY1NjRiYmU3OTEzZjdhZmIzNDExM2QwZTgwMjhkZDE1OTIwMDlhY2YxZjIxMDljNDA4MTllZjc3MmEzOTI'))->decryptText();
+	// $decryptText = (new SimpleCipher($testCipher, $salt))->decryptText();
 
 	// // #Гаврилов
 	// // //если заменить первую букву в соли - ничего не поменяется, хотя должно
@@ -1830,9 +1930,7 @@ $n = 1;
 	// 		$newSaltStr = implode('', $newSaltArr);
 	// 		$newSaltArr_transform[$s] = $symbArr[$a];
 	// 		$newSaltStr = implode('', $newSaltArr_transform);
-
 	// 		$newDecryptText = (new SimpleCipher($testCipher, $newSaltStr))->decryptText();
-
 	// 		if ($newDecryptText == $cipherText && $newSaltStr !== $salt) {
 	// 			var_dump('Жаль');
 	// 			var_dump($newSaltStr);
@@ -1840,16 +1938,15 @@ $n = 1;
 	// 		}
 	// 		$a++;
 	// 	}
-
 	// 	$s++;
 	// }
 
-	// echo '<pre>'; var_dump($decryptText); echo'</pre>';
+	//echo '<pre>'; var_dump($decryptText); echo'</pre>';
 	// if ($decryptText !== $cipherText) {
 	// 	var_dump('ОШИПКА!');
 	// }
-//  	$n++;
-// }
+ 	$n++;
+}
 
 #Гаврилов
 //ПЕРЕПИСАТЬ ИСПОЛЬЗОВАНИЯ КЛЮЧА СЛЕДУЮЩИМ ОБРАЗОМ. БРАТЬ НЕ СУММУ ВСЕХ ЧИСЕЛ И ИЗ НЕЕ ВЫЧЛЕНЯТЬ ЦИФРЫ, А ГЕНЕРИТЬ СУММЫ ПО ОТРЕЗКАМ: СУММА ПЕРВЫХ ПЯТИ СИМВОЛОВ, СУММА ВТОРЫХ ПЯТИ СИМВОЛОВ И ТАК СКОЛЬКО НАДО
