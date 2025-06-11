@@ -274,7 +274,6 @@ class SimpleCipher
 		if ($this->salt) {
 			$this->saltHashSum = $this->getHashSaltSum();
 		}
-		// die();
 		/**
 		 * @var string версия приложения в зашифрованном виде
 		 */
@@ -368,7 +367,7 @@ class SimpleCipher
 	 * Метод получает реальную длину исходной строки из указателя + параметры преобразования матрицы
 	 *
 	 * @param string $transformMatrixParam параметры преобразования матриц
-	 * @param int $transformMatrixParam указатель на реальную длину исходной строки
+	 * @param int $realLengthPointer указатель на реальную длину исходной строки
 	 * @return int
 	 */
 	private function getRealStringLength($transformMatrixParam, $realLengthPointer)
@@ -446,18 +445,18 @@ class SimpleCipher
 		//var_dump('##__РАСШИФРОВКА__##');
 		$this->encrypt = false;
 		//Начинаем очищать шифр от полезной нагрузки, чтобы получить зашифрованную строку
-		//Сначала удаляем начальный вектор иницилазиации
+		//Сначала удаляем первый вектор иницилазиации
 		//$clearCipherText = mb_substr($this->text, 2);
-		$clearCipherText = mb_substr($this->text, 3);
+		$clearCipherText = mb_substr($this->text, $this->vectorLength);
 		//Получаем 2 вектора инициализации с начала и конца строки
 		//$vectorVert = mb_substr($this->text, 0, 2);
-		$vectorVert = mb_substr($this->text, 0, 3);
-		//var_dump("вертикальный вектор $vectorVert");
+		$vectorVert = mb_substr($this->text, 0, $this->vectorLength);
+		//var_dump("первый вектор - $vectorVert");
 		//$vectorHor = mb_substr($this->text, -2);
-		$vectorHor = mb_substr($this->text, -3);
+		//$vectorHor = mb_substr($this->text, -$this->vectorLength);
 		//var_dump("горизонтальный вектор $vectorHor");
 		$this->initializationVectorFirst = $this->getVector($vectorVert, 'vert');
-		$this->initializationVectorSecond = $this->getVector($vectorHor, 'hor');
+		// $this->initializationVectorSecond = $this->getVector($vectorHor, 'hor');
 		//Получаем строку, содержащую информацию с параметрами преобразования матриц + первая часть версии алгоритма
 		//Отрезок с параметрами преобразования матриц изначально состоит из 5 сегментов ([цифра]+[буква]{1}, например, 123d). Однако, в этот отрезок на рандомную позицию вставляется сегмент с первой частью вверсии алгоритма ([какой-то символ]{1}[цифра]+[какой-то символ]{1}), например, (|23!). Итоговый вариант отрезка с параметрами преобразования матрицы - 20e89№19%0о0e22г1169w.
 		//Получаем отрезок с параметрами преобразования матриц + первая часть указателя на длину исходной строки - 20e89№19%0о0e22г1169w
@@ -465,42 +464,51 @@ class SimpleCipher
 		#Гаврилов
 		//ЗДЕСЬ И ДАЛЕЕ ЗАМЕНЯЙ ЦИФРУ 3 НА ДЛИНУ ВЕКТОРА ИНИЦИАЛИЗАЦИИ (ЛЮБОГО), А НЕ ХАРДКОРЬ
 		preg_match('/([^a-zа-ё]+[a-zа-ё]{1}){5}/ui', mb_substr($this->text, 3), $lengthFirstMatches);
-		//var_dump($lengthFirstMatches);
 		//Теперь очищаем от полезной нагрузки с параметрами формирования матриц
 		$clearCipherText = mb_substr($clearCipherText, mb_strlen($lengthFirstMatches[0]));
 		//Здесь вычленяем сегмент с 1й частью указателя на длину исходной строки - №19%
 		preg_match('/[^a-zа-ё0-9]{1}[0-9]+[^a-zа-ё0-9]{1}/ui', $lengthFirstMatches[0], $versionMatch);
-		//var_dump($versionMatch);
 		//Получаем массив параметров преобразования матриц (уже без 1й части фейковой длины) - 20e890о0e22г1169w => [20],[890],[0],[22],[1169]
 		//Сначала в виде строки, затем преобразовываем в массив чистых параметров преобразования матрицы
 		$transformMatrixString = str_replace($versionMatch[0], '', $lengthFirstMatches[0]);
-		//var_dump($transformMatrixString);
 		$matrixParamArr = preg_split('/[^0-9]{1}/', str_replace($versionMatch[0], '', $lengthFirstMatches[0]), 0, PREG_SPLIT_NO_EMPTY);
 		$matrixParamArr = array_map(function($el){return (int)$el;}, $matrixParamArr);
 		//Очищаем сегмент с 1й частью указателя на длину исходной строки от спецсимволов - №19% => 19
-		//var_dump("параметры матрицы " . implode('', $transformMatrixArr));
 		$fakeLengthFirst = mb_substr($versionMatch[0], 1, mb_strlen($versionMatch[0]) - 2);
 		//Получаем сегмент со 2й частью указателя на длину исходной строки
 		// preg_match('/([^0-9a-zа-ё]{1}[0-9]*[^0-9a-zа-ё]{1})([0-9a-zа-ё]{0,6}[0-9a-zа-ё]{2})$/ui', $this->text, $lengthSecondMatches);
-		//var_dump("первая часть длины $fakeLengthFirst");
-		preg_match('/([^0-9a-zа-ё]{1}[0-9]*[^0-9a-zа-ё]{1})([0-9a-zа-ё]{0,6}[0-9a-zа-ё]{3})$/ui', $this->text, $lengthSecondMatches);
-		//var_dump($lengthSecondMatches);
-		//var_dump($lengthSecondMatches);
+		//var_dump("первая часть длины - $fakeLengthFirst");
+		//preg_match('/([^0-9a-zа-ё]?[0-9]*[^0-9a-zа-ё]{1})([0-9a-zа-ё]{0,6}[0-9a-zа-ё]{3})$/ui', $this->text, $lengthSecondMatches);
+		preg_match('/([a-zа-ё0-9]{0,' . $this->vectorLength . '})([^a-zа-ё0-9]{1}[0-9]*[^a-zа-ё0-9]{1})([a-zа-ё0-9]{0,' . $this->vectorLength . '})([a-zа-ё0-9]{6})$/ui', $this->text, $lengthSecondMatches);
+		// var_dump($lengthSecondMatches);
 		//Очищаем сегмент со 2й частью указателя на длину исходной строки
 		//$fakeLengthSecond = mb_substr($lengthSecondMatches[1], 1, mb_strlen($lengthSecondMatches[1]) - 2);
-		$fakeLengthSecond = mb_substr($lengthSecondMatches[1], 1, mb_strlen($lengthSecondMatches[1]) - 2);
-		//var_dump("вторая часть длины $fakeLengthSecond");
+		$fakeLengthSecond = mb_substr($lengthSecondMatches[2], 1, mb_strlen($lengthSecondMatches[2]) - 2);
 		//Получаем отрезок, содержаший: версию алгоритма (6 символов), 2ю часть указателя на длину исходной строки (длина $lengthSecondMatches[1]), вектор горизонтальной инициализации (2 символа)
 		#Гаврилов
 		//ПОЧЕМУ ЗДЕСЬ 9? РАНЬШЕ БЫЛО 8 И ЭТО ВСЕ ЛОМАЛО. ИСПОЛЬЗУЙ ОПРЕДЕЛИТЕЛЬ ДЛИНЫ ПЕРЕМЕННЫХ, А НЕ КОНКРЕТНЫЕ ЦИФРЫ
-		$cipherVersion = mb_substr($this->text, mb_strlen($this->text) - (9 + mb_strlen($lengthSecondMatches[1])));
+		//$cipherVersion = mb_substr($this->text, mb_strlen($this->text) - (9 + mb_strlen($lengthSecondMatches[1])));
+		$cipherVersion =  array_pop($lengthSecondMatches);
+		// var_dump($cipherVersion);
 		//var_dump($this->text);
 		// var_dump($lengthSecondMatches);
+
+		$vectorHor = mb_substr($lengthSecondMatches[1] . $lengthSecondMatches[3], -$this->vectorLength);
+		$this->initializationVectorSecond = $this->getVector($vectorHor, 'hor');
+		//var_dump("второй вектор - $vectorHor");
+
 		//Теперь очищаем от полезной нагрузки, связанной с версией алгоритма, 2й частью указателя на длину исходной строки и вторым вектором инициализации
-		$clearCipherText = mb_substr($clearCipherText, 0, (0 - mb_strlen($cipherVersion)));
+		//$clearCipherText = mb_substr($clearCipherText, 0, (0 - mb_strlen($cipherVersion)));
+		$clearCipherText = mb_substr($clearCipherText, 0, (0 - mb_strlen($vectorHor) - mb_strlen($fakeLengthSecond) - 2 - mb_strlen($cipherVersion)));
+		// var_dump(mb_strlen($vectorHor));
+		// var_dump($fakeLengthSecond);
+		// var_dump(mb_strlen($fakeLengthSecond));
+		// var_dump(mb_strlen($cipherVersion));
+		// var_dump(0 - mb_strlen($vectorHor) - mb_strlen($fakeLengthSecond) + 2 - mb_strlen($cipherVersion));
+		// var_dump("шифр - $clearCipherText");
 		//Получаем чистую версию алгоритма из зашифрованного отрезка, удаляя в строке два последних символа (вектор горизонтальной инициализации) и заменяя на пустоту сегмент, содержащий 2ю часть фейковой длины шифра ($lengthSecondMatches[1])
 		//$cipherVersion = $this->getVersion(mb_substr(str_replace($lengthSecondMatches[1], '', $cipherVersion), 0, -2));
-		$cipherVersion = $this->getVersion(mb_substr(str_replace($lengthSecondMatches[1], '', $cipherVersion), 0, -3));
+		$cipherVersion = $this->getVersion($cipherVersion);
 		$cipherKeyIndex = substr($cipherVersion, -1);
 		if ($this->salt) {
 			$cipherKeyIndex = $this->getRealCipherKey($cipherKeyIndex);
@@ -535,6 +543,8 @@ class SimpleCipher
 		$this->matrixTwo = $this->fillMatrix($mixedCipherTwo, (int)substr(array_sum($this->salt ? $transformedMatrixParamArr : $matrixParamArr) + 1, -1, 1));
 		$this->transformedMatrixArr[1] = $this->shiftMatrix($this->matrixOne, 1, $this->initializationVectorFirst, $this->initializationVectorSecond);
 		$this->transformedMatrixArr[2] = $this->shiftMatrix($this->matrixTwo, 0, $this->initializationVectorFirst, $this->initializationVectorSecond);
+		// var_dump($versionMatch);
+		// var_dump($lengthFirstMatches);
 		$realStringLength = $this->getRealStringLength(str_replace($versionMatch[0], '', $lengthFirstMatches[0]), $fakeLengthFirst . $fakeLengthSecond);
 		#Гаврилов
 		//ИСПОЛЬЗОВАТЬ ДЛЯ ВТОРОЙ МАТРИЦЫ ПРЕОБРАЗОВАННУЮ ОТРЕВЕРШЕННУЮ ПАРУ ИЗ 10 ВЕРСИЙ КЛЮЧЕЙ ШИФРА, ВМЕСТО ПОПЫТОК ПРЕОБРАЗОВАТЬ ПЕРВЫЙ КЛЮЧ ШИФРА
@@ -1109,19 +1119,32 @@ class SimpleCipher
 	 * @param string $cipherText зашифрованный текст
 	 * @return string
 	 */
-	private function constructCipherText($vectorVert, $vectorHor, $cipherText, $matrixParams, $cipherVersion, $fakeLenFirst, $fakeLenSecond)
+	private function constructCipherText($vectorFirst, $vectorSecond, $cipherText, $matrixParams, $cipherVersion, $fakeLenFirst, $fakeLenSecond)
 	{
+		// var_dump("первый векто - $vectorFirst");
+		// var_dump("второй вектор - $vectorSecond");
+		// var_dump("шифр - $cipherText");
+		// var_dump("параметры матрицы - $matrixParams");
+		// var_dump("версия шифра - $cipherVersion");
+		// var_dump("длина сообщения 1 - $fakeLenFirst");
+		// var_dump("длина сообщения 2 - $fakeLenSecond");
 		//Позиция разделения строки с параметрами матриц после которогой будет вставлена первая часть фейковой длины. Например, параметры преобразования матрицы - 20e890о0e22г1169w, первая часть версии - №1%, позиция разделения - 5. Итоговый сегмент с параметрами преобразования матрицы + первой частью версии алгоритма - 20e89№1%0о0e22г1169w
 		//По аналогии работает шифрование второй части фейковой длины с версией алгоритма ниже в этом методе
 		//Максимальная позиция  куда вставляется отрезок с первой частью указателя на длину исходной строки ( №1% ) должна быть равна длине сегмента с параметрами матрицы ( 20e890о0e22г1169w ) минус 1, так как если позиция будет равна длине сегмента, отрезок вставится в самый конец сегмента ( 20e890о0e22г1169w№1% ) и при расшифровке будет проблема
 		$matrixParamsDelimeter = $this->getRandNum(mb_strlen($matrixParams));
 		$transformMatrixParams = mb_substr($matrixParams, 0, $matrixParamsDelimeter) . $fakeLenFirst . mb_substr($matrixParams, $matrixParamsDelimeter);
 		//Место разделения строки с параметрами матриц после которогой будет вставлена первая часть фейковой длины
-		$cipherVerDelimeter = $this->getRandNum(mb_strlen($cipherVersion) + 1);
-		$transformСipherVer = mb_substr($cipherVersion, 0, $cipherVerDelimeter) . $fakeLenSecond . mb_substr($cipherVersion, $cipherVerDelimeter);
-		$resultCipherText = $vectorVert . $transformMatrixParams . $cipherText . $transformСipherVer . $vectorHor;
+		$cipherVerDelimeter = $this->getRandNum(mb_strlen($vectorSecond) + 1);
+		$transformСipherVer = mb_substr($vectorSecond, 0, $cipherVerDelimeter) . $fakeLenSecond . mb_substr($vectorSecond, $cipherVerDelimeter);
+		//var_dump("Вторая часть нагрузки - $transformСipherVer$cipherVersion");
+		$resultCipherText = $vectorFirst . $transformMatrixParams . $cipherText . $transformСipherVer . $cipherVersion;
+
+		#Гаврилов
+		//ПОЛЬЗОВАТЕЛЬ МОЖЕТ ТАК СЛОМАТЬ СТРОКУ, ЧТО РЕГУЛЯРКА ПРИ РАСШИФРОВКЕ НЕ ОБРАБОТАЕТСЯ (НАПРИМЕР, ОЖИДАЕТСЯ 6 СИМВОЛОВ В КОНЦЕ, А ОНА ЗАСУНЕТ 7). ТОГДА TRYCATCH И ВОЗВРАЩЕНИЕ РАНДОМНЫХ ЗНАЧЕНИЙ. ПОТЕСТИ
 
 		return $resultCipherText;
+
+		//([a-zа-ё0-9]{0,3})([^a-zа-ё0-9]{1}[0-9]*[^a-zа-ё0-9]{1})([a-zа-ё0-9]{0,3})([a-zа-ё0-9]{6})$
 	}
 
 
@@ -1889,37 +1912,39 @@ $symbArr = ['z'=>58, 'y'=>57, 'x'=>56, 'w'=>55, 'v'=>54, 'u'=>53, 't'=>52, 's'=>
 #Гаврилов
 //СОЛЬ ДОЛЖНА состоять только из латинских символов нижнего и верхнего регистра плюс цифры от 0 до 9. если соль не при передаче не соответствует формату - возвращаем ошибку
 
+//19000
+
 $cipherText = 'мама мыла раму';
 // $cipherText = '1111111111111111111111111';
 $salt = null;
 $salt = 'NTI0M2FmNWEwOGU3NDY2YTc5MAFiMTEyOTdlNmY1NTQzY2Q4MzYzMmJkMTNiODRjOGI2YjY4NjEwYjNmM2NjZGJhOWY1NjRiYmU3OTEzZjdhZmIzNDExM2QwZTgwMjhkZDE1OTIwMDlhY2YxZjIxMDljNDA4MTllZjc3MmEzOTI';
-$testCipher = (new SimpleCipher($cipherText, $salt))->encryptText(67);
+//$testCipher = (new SimpleCipher($cipherText, $salt))->encryptText(67);
 $n = 1;
 $saltNew = $salt;
-while ($n <= 10000) {
-	$randomNumb_pos = unpack("N", openssl_random_pseudo_bytes(4))[1] % (160 - 1) + 1;
-	$randimNumb_symb = unpack("N", openssl_random_pseudo_bytes(4))[1] % (59 - 1) + 1;
-	$saltArr = str_split($saltNew);
-	shuffle($saltArr);
-	$saltNew = implode('', $saltArr);
-	//if ($salt !== $saltNew) {
-		// var_dump('here');
-		$decryptText = (new SimpleCipher($testCipher, $saltNew))->decryptText();
-		if ($decryptText === $cipherText) {
-			var_dump($saltNew);
-			var_dump('Жаль!');
-		}
-	//}
-	var_dump($n);
+while ($n <= 500) {
+// 	$randomNumb_pos = unpack("N", openssl_random_pseudo_bytes(4))[1] % (160 - 1) + 1;
+// 	$randimNumb_symb = unpack("N", openssl_random_pseudo_bytes(4))[1] % (59 - 1) + 1;
+// 	$saltArr = str_split($saltNew);
+// 	shuffle($saltArr);
+// 	$saltNew = implode('', $saltArr);
+// 	//if ($salt !== $saltNew) {
+// 		// var_dump('here');
+// 		$decryptText = (new SimpleCipher($testCipher, $saltNew))->decryptText();
+// 		if ($decryptText === $cipherText) {
+// 			var_dump($saltNew);
+// 			var_dump('Жаль!');
+// 		}
+// 	//}
+// 	var_dump($n);
+
+#Гаврилов
+//СЕЙЧАС ВТОРОЙ УКАЗАТЕЛЬ НА РЕАЛЬНУЮ ДЛИНУ ИСХОДНОЙ СТРОКИ КЛАДЕТСЯ ВО ВТОРОЙ ВЕКТОР ИНИЦИАЛИЗАЦИИ. ЛУЧШЕ КЛАСТЬ В ВЕРСИЮ? В ПОЛЕДНИЕ 6 СИМВОЛОВ?
+//НАДО ПОНЯТЬ КАКОВА ВЕРОЯТНОСТЬ ПОЛУЧИТЬ 2 ОДИНАКОВЫЕ ВЕРСИИ И КАКОВА ВЕРОЯТНОСТЬ ПОЛУЧИТЬ 2 ОДИНАКОВЫХ ВЕКТОРА. С ДРУГОЙ СТОРОНЫ, ВЕТОРЫ КОРОЧЕ ПО ДЛИНЕЮ МЕНЕЕ ПРИМЕЧАТЕЛЬНЫ.
 
 	// die();
-	// $testCipher = (new SimpleCipher($cipherText, $salt))->encryptText(67);
-	// echo '<pre>'; var_dump($testCipher); echo'</pre>';
-	// $decryptText = (new SimpleCipher($testCipher, $salt))->decryptText();
-
-	// // #Гаврилов
-	// // //если заменить первую букву в соли - ничего не поменяется, хотя должно
-	// // //ДОБАВЬ УЧЕТ БУКВ К ПЕРЕСЧЕТУ ПАРАМЕТРОВ ТРАНСФОРМАЦИИ МАТРИЦЫ. МАССИВ БУКВ ТРАНСФОРМИРУЕТСЯ В МАССИВ ЧИСЕЛ ПО КЛЮЧАМ ИЗ КЛЮЧА ШИФРА (НЕ ИЗ МАССИВА LETTERSARR) ДОБАВЛЯЕМ К КОЛИЧЕСТВУ ИТЕРАЦИЙ, ТАК КАК СУММА БУДЕТ БОЛЬШАЯ
+	$testCipher = (new SimpleCipher($cipherText, $salt))->encryptText(67);
+	echo '<pre>'; var_dump($testCipher); echo'</pre>';
+	$decryptText = (new SimpleCipher($testCipher, $salt))->decryptText();
  	
 	// $newSaltArr = preg_split('//u', $salt, -1, PREG_SPLIT_NO_EMPTY);
 	// $s = 0;
@@ -1941,10 +1966,10 @@ while ($n <= 10000) {
 	// 	$s++;
 	// }
 
-	//echo '<pre>'; var_dump($decryptText); echo'</pre>';
-	// if ($decryptText !== $cipherText) {
-	// 	var_dump('ОШИПКА!');
-	// }
+	echo '<pre>'; var_dump($decryptText); echo'</pre>';
+	if ($decryptText !== $cipherText) {
+		var_dump('ОШИПКА!');
+	}
  	$n++;
 }
 
