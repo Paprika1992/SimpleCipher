@@ -249,6 +249,7 @@ class SimpleCipher
 	 */
 	public function encryptText(int $fakeLength = 50): string
 	{
+
 		//Фейковая длина не может быть меньше 50 символов
 		$fakeLength = $fakeLength < 50 ? 50 : $fakeLength;
 		$this->encrypt = true;
@@ -272,7 +273,13 @@ class SimpleCipher
 		//Если передается соль, формируем из нее хэш на сумму всех символов соли, которая будет использоваться для запутывания ключей шифра и для определения паттерном формирования матриц. 
 		//Формируем ПОСЛЕ определения ключа шифра, так как он используется при формировании хэша 
 		if ($this->salt) {
-			$this->saltHashSum = $this->getHashSaltSum();
+			try {
+
+				$this->saltHashSum = $this->getHashSaltSum();
+			} catch (\Throwable $th) {
+				
+			}
+			
 		}
 		/**
 		 * @var string версия приложения в зашифрованном виде
@@ -1912,16 +1919,16 @@ $symbArr = ['z'=>58, 'y'=>57, 'x'=>56, 'w'=>55, 'v'=>54, 'u'=>53, 't'=>52, 's'=>
 #Гаврилов
 //СОЛЬ ДОЛЖНА состоять только из латинских символов нижнего и верхнего регистра плюс цифры от 0 до 9. если соль не при передаче не соответствует формату - возвращаем ошибку
 
-//19000
+//34000
 
 $cipherText = 'мама мыла раму';
 // $cipherText = '1111111111111111111111111';
 $salt = null;
 $salt = 'NTI0M2FmNWEwOGU3NDY2YTc5MAFiMTEyOTdlNmY1NTQzY2Q4MzYzMmJkMTNiODRjOGI2YjY4NjEwYjNmM2NjZGJhOWY1NjRiYmU3OTEzZjdhZmIzNDExM2QwZTgwMjhkZDE1OTIwMDlhY2YxZjIxMDljNDA4MTllZjc3MmEzOTI';
-//$testCipher = (new SimpleCipher($cipherText, $salt))->encryptText(67);
+$testCipher = (new SimpleCipher($cipherText, $salt))->encryptText(67);
 $n = 1;
 $saltNew = $salt;
-while ($n <= 500) {
+// while ($n <= 500) {
 // 	$randomNumb_pos = unpack("N", openssl_random_pseudo_bytes(4))[1] % (160 - 1) + 1;
 // 	$randimNumb_symb = unpack("N", openssl_random_pseudo_bytes(4))[1] % (59 - 1) + 1;
 // 	$saltArr = str_split($saltNew);
@@ -1941,10 +1948,14 @@ while ($n <= 500) {
 //СЕЙЧАС ВТОРОЙ УКАЗАТЕЛЬ НА РЕАЛЬНУЮ ДЛИНУ ИСХОДНОЙ СТРОКИ КЛАДЕТСЯ ВО ВТОРОЙ ВЕКТОР ИНИЦИАЛИЗАЦИИ. ЛУЧШЕ КЛАСТЬ В ВЕРСИЮ? В ПОЛЕДНИЕ 6 СИМВОЛОВ?
 //НАДО ПОНЯТЬ КАКОВА ВЕРОЯТНОСТЬ ПОЛУЧИТЬ 2 ОДИНАКОВЫЕ ВЕРСИИ И КАКОВА ВЕРОЯТНОСТЬ ПОЛУЧИТЬ 2 ОДИНАКОВЫХ ВЕКТОРА. С ДРУГОЙ СТОРОНЫ, ВЕТОРЫ КОРОЧЕ ПО ДЛИНЕЮ МЕНЕЕ ПРИМЕЧАТЕЛЬНЫ.
 
+#Гаврилов
+//НЕ ШИФРОВАТЬ СООБЩЕНИЕ, СОСТОЯЩЕЕ ТОЛЬКО ИЗ ПРОБЕЛОВ. ЕСЛИ ПРИ ВАЛИДАЦИИ ПОСЛЕ TRIM() ОСТАЕТСЯ ПУСТОТА - ВЫВОДИТЬ СООБЩЕНИЕ ОБ ОШИБКЕЫ
+
+
 	// die();
-	$testCipher = (new SimpleCipher($cipherText, $salt))->encryptText(67);
-	echo '<pre>'; var_dump($testCipher); echo'</pre>';
-	$decryptText = (new SimpleCipher($testCipher, $salt))->decryptText();
+	// $testCipher = (new SimpleCipher($cipherText, $salt))->encryptText(67);
+	// echo '<pre>'; var_dump($testCipher); echo'</pre>';
+	// $decryptText = (new SimpleCipher($testCipher, $salt))->decryptText();
  	
 	// $newSaltArr = preg_split('//u', $salt, -1, PREG_SPLIT_NO_EMPTY);
 	// $s = 0;
@@ -1966,12 +1977,12 @@ while ($n <= 500) {
 	// 	$s++;
 	// }
 
-	echo '<pre>'; var_dump($decryptText); echo'</pre>';
-	if ($decryptText !== $cipherText) {
-		var_dump('ОШИПКА!');
-	}
- 	$n++;
-}
+// 	echo '<pre>'; var_dump($decryptText); echo'</pre>';
+// 	if ($decryptText !== $cipherText) {
+// 		var_dump('ОШИПКА!');
+// 	}
+//  	$n++;
+// }
 
 #Гаврилов
 //ПЕРЕПИСАТЬ ИСПОЛЬЗОВАНИЯ КЛЮЧА СЛЕДУЮЩИМ ОБРАЗОМ. БРАТЬ НЕ СУММУ ВСЕХ ЧИСЕЛ И ИЗ НЕЕ ВЫЧЛЕНЯТЬ ЦИФРЫ, А ГЕНЕРИТЬ СУММЫ ПО ОТРЕЗКАМ: СУММА ПЕРВЫХ ПЯТИ СИМВОЛОВ, СУММА ВТОРЫХ ПЯТИ СИМВОЛОВ И ТАК СКОЛЬКО НАДО
@@ -1996,4 +2007,6 @@ while ($n <= 500) {
 //тестовый текст для шифрования mama 157$#
 //но текст чk2hю3 22|22ь1t13n847пoлЬЧШГЛуЬпЛбЬЧ?QQnгТвj 0ЗСUРоoъcъcMDdц$#б1вв4?48|1ъц тоже расшифровывается как надо ПОЧЕМУ?
 //ОН не расшифровывается, но возвращает ошибку, пока не хватает обработки ошибок . Удаляй при шифровании и расшифровке предыдущие результаты работы шифра не после возворащения шифра, а сразу при нажатии на кнопкуч
+
+
 

@@ -119,9 +119,26 @@ input{
 
 #cipher-content{
     background: red;
-    /* height: 100vh; */
-    
-      /* justify-content: center; */
+
+    & .result-text-block{
+      transition: 0.3s;
+      margin: 5px 5px 15px 5px;
+      opacity: 1;
+      animation-name: showResults;
+      animation-duration: 1s;
+      animation-fill-mode: forwards;
+
+      &.hide{
+        animation-name: hideResults;
+      }
+
+      &>.content__block__result__text{
+        word-break: break-word;
+        background: brown;
+        padding: 5px;
+        border-radius: 5px;
+      }
+    }
 
     &>#cipher-content__input-block{
       display: flex;
@@ -184,14 +201,14 @@ input{
       display: flex;
         gap: 15px;
         align-items: center;
-      transition: 0.3s;
+      /* transition: 0.3s;
       margin: 5px 5px 15px 5px;
       opacity: 1;
       animation-name: showResults;
       animation-duration: 1s;
-      animation-fill-mode: forwards;
+      animation-fill-mode: forwards; */
       
-      &.hide{
+      /* &.hide{
         animation-name: hideResults;
       }
 
@@ -200,7 +217,7 @@ input{
         background: brown;
         padding: 5px;
         border-radius: 5px;
-      }
+      } */
     }
   }
 }
