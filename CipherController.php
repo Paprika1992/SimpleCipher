@@ -10,6 +10,18 @@ class CipherController
      * @var string соль для шифрования
      */
     private $cipherSalt;
+    /**
+     * @var string шифрование/дешифрование
+     */
+    private $action;
+    /**
+     * @var string текст для шифрования
+     */
+    private $encryptText;
+    /**
+     * @var string текст для дешифрования
+     */
+    private $decryptText;
     
     
     /**
@@ -20,9 +32,10 @@ class CipherController
      * @param integer $fakeLength Желаемая длина шифра
      * @param string $decryptText Текст для расшифрования
      */
-    public function __construct(?string $cipherSalt = null)
+    public function __construct(string $action, ?string $cipherSalt = null)
     {
         $this->cipherSalt = $cipherSalt;
+        $this->action = $action;
 
         require_once ("./CipherVersion.php");
         //$this->cipherVer = $decryptText ? CipherVersion::getCipherVersion($decryptText) : $this->cipherVer;
@@ -31,6 +44,8 @@ class CipherController
         //require_once ("./cipher_ver" . $this->cipherVer . ".php");
 
         //$encryptText = $this->getEncryptText();
+
+        set_error_handler([$this, "myErrorHandler"]);
     }
 
 
@@ -41,10 +56,13 @@ class CipherController
      */
     public function createCipherSalt()
     {
-        $cipherSalt = base64_encode(hash('whirlpool', $_SERVER['REMOTE_ADDR'] . time()));
+        $cipherSalt = base64_encode(hash('whirlpool', time() . $_SERVER['REMOTE_ADDR']));
         $cipherSalt = str_replace('=', '', $cipherSalt);
 
-        return $cipherSalt;
+        $this->returnText([
+            'cipherSalt' => $cipherSalt]
+        );
+        //return $cipherSalt;
     }
 
 
@@ -58,15 +76,27 @@ class CipherController
     /**
      * Метод получения зашифрованного сообщения
      *
-     * @return string
+     * @return array
      */
-    public function getEncryptText(string $encryptText, int $fakeLength = 50): string
+    public function getEncryptText(string $encryptText, int $fakeLength = 50, int $cipherCount = 0): void
     {
-        $this->cipherVer = $this->cipherVer;
+        $this->encryptText = $encryptText;
         require_once ("./cipher_ver" . $this->cipherVer . ".php");
-        $testCipher = (new SimpleCipher($encryptText, $this->cipherSalt))->encryptText($fakeLength);
+        // $this->cipherVer = $this->cipherVer;
+        $resultCipherArr = [];
+        $n = 1;
+        while ($n <= $cipherCount) {
+            // $resultCipherArr[] = (new CipherController($rqstParams->action, $rqstParams->cipherSalt))->getEncryptText($rqstParams->encryptText, $rqstParams->fakeLength);
+            $resultCipherArr[] = (new SimpleCipher($encryptText, $this->cipherSalt))->encryptText($fakeLength);
+            $n++;
+            // var_dump($resultCipherArr);
+        }
+        
+        $this->returnText([
+            'cipherArr' => $resultCipherArr,
+        ]);
 
-        return $testCipher;
+        //return $$resultCipherArr;
     }
 
 
@@ -75,14 +105,77 @@ class CipherController
      *
      * @return string
      */
-    public function getDecryptText(string $decryptText): string
+    public function getDecryptText(string $decryptText): void
     {
+        $this->decryptText = $decryptText;
         $this->cipherVer = CipherVersion::getCipherVersion($decryptText);
         require_once ("./cipher_ver" . $this->cipherVer . ".php");
         $testCipher = (new SimpleCipher($decryptText, $this->cipherSalt))->decryptText();
 
-        return $testCipher;
+        $this->returnText([
+            'decryptText' => $testCipher,
+        ]);
     }
+
+
+    public function myErrorHandler($errno, $errstr, $errfile, $errline)
+{
+    $errArr = [
+        1 => 'E_ERROR',
+        2 => 'E_WARNING',
+        4 => 'E_PARSE',
+        8 => 'E_NOTICE',
+        16 => 'E_CORE_ERROR',
+        32 => 'E_CORE_WARNING',
+        64 => 'E_COMPILE_ERROR',
+        128 => 'E_COMPILE_WARNING',
+        256 => 'E_USER_ERROR',
+        512 => 'E_USER_WARNING',
+        1024 => 'E_USER_NOTICE',
+        2048 => 'E_STRICT',
+    ];
+
+    $errorLogMsg = "Ошибка ошибка: " . $errArr[$errno] . " $errstr в файле $errfile на $errline<br />";
+
+    if ($this->action == 'decrypt') {
+        $this->returnText([
+            'decryptText' => $this->getRandomText($this->decryptText),
+            'errorMsg' => $errorLogMsg
+        ], 200);
+        
+    } else {
+        #Гаврилов
+        //ЧТО ВОЗВРАЩАТЬ ЕСЛИ ПРИ ШИФРОВАНИИ ОШИБКИ? ПРОСТО ТЕКСТ ОШИБКИ И КОД
+    }
+    exit(1);
+
+    /* Не запускаем внутренний обработчик ошибок PHP */
+    return true;
+}
+
+    private function returnText($responseObj, $code = 200)
+    {
+        //var_dump($responseObj);
+        header('Content-Type: application/json');
+        http_response_code($code);
+        echo json_encode($responseObj);
+    }
+
+    /**
+     * Метод перемешивает полученные текст и возвращает его запутанную версию
+     *
+     * @param string $text текст для перемешивания
+     * @return string
+     */
+    private function getRandomText($text)
+    {
+        $fakeText = preg_split('//u', $text, -1, PREG_SPLIT_NO_EMPTY);
+        shuffle($fakeText);
+
+        return implode('', $fakeText);
+    }
+
+
 }
 
 #Гаврилов
@@ -94,55 +187,14 @@ class CipherController
 //ПРОВЕРКА ПЕРЕДАНЫ ЛИ НУЖНЫЕ ПАРАМЕТРЫ И ИХ ВАЛИДАЦИЯ (ДЛИНА, ТИП)
 $rqstParams = json_decode(file_get_contents('php://input'));
 
-//echo json_encode($rqstParams);
-
-if ($rqstParams->action == 'encrypt') {
-    //echo json_encode($rqstParams);
-    $resultCipherArr = [];
-    $n = 1;
-    while ($n <= $rqstParams->cipherCount) {
-        $resultCipherArr[] = (new CipherController($rqstParams->cipherSalt))->getEncryptText($rqstParams->encryptText, $rqstParams->fakeLength);
-        $n++;
-    }
-    //echo json_encode($resultCipherArr);
-    $resultCipherObj = [
-        'cipherArr' => $resultCipherArr,
-        #Гаврилов
-        //КОД ОТВЕТА?
-        'encryptMsg' => 'Все ок',
-    ];
-
-   echo json_encode($resultCipherObj);
-} else if ($rqstParams->action == 'decrypt') {
-    $resultDecryptText = (new CipherController($rqstParams->cipherSalt))->getDecryptText($rqstParams->decryptText);
-    $resultCipherObj = [
-        'decryptText' => $resultDecryptText,
-        #Гаврилов
-        //КОД ОТВЕТА?
-        'decryptMsg' => 'Все ок',
-    ];
-
-    echo json_encode($resultCipherObj);
-} else if ($rqstParams->action == 'getSalt') {
-    $resultSalt = (new CipherController(null))->createCipherSalt();
-    $resultSaltObj = [
-        'cipherSalt' => $resultSalt,
-        #Гаврилов
-        //КОД ОТВЕТА?
-        'saltMsg' => 'Все ок',
-    ];
-    echo json_encode($resultSaltObj);
-    #Гаврилов
-    //ПЕРЕДЕЛАТЬ БЕСКОНЕЧНЫЕ ELSEIF НА SWITCH CASE
+switch ($rqstParams->action) {
+    case 'encrypt':
+        (new CipherController($rqstParams->action, $rqstParams->cipherSalt))->getEncryptText($rqstParams->encryptText, $rqstParams->fakeLength, $rqstParams->cipherCount);
+        break;
+    case 'decrypt':
+        (new CipherController($rqstParams->action, $rqstParams->cipherSalt))->getDecryptText($rqstParams->decryptText);
+        break;
+    case 'getSalt':
+        (new CipherController($rqstParams->action))->createCipherSalt();
+        break;
 }
-
-
-
-
-
-
-
-//NTI0M2FmNWEwOGU3NDY2YTc5MDFiMTEyOTdlNmY1NTQzY2Q4MzYzMmJkMTNiODRjOGI2YjY4NjEwYjNmM2NjZGJhOWY1NjRiYmU3OTEzZjdhZmIzNDExM2QwZTgwMjhkZDE1OTIwMDlhY2YxZjIxMDljNDA4MTllZjc3MmEzOTI
-/*YTVhYmU2NjY0YmJlNjQzOWNiZWFhNGM3NmMxYTE5YTc5ZmI1OWFhZWQ1YTA5YzM2ZDI1NTQzMzc2M2RlZTI2NGRhMmJkYjkwYTc2MjI0NjJiYjRhNzU2YTM0YzdlYTdjN2VjMWU3MzA1Zjg5NmNlMmNmODgyZmIwMzliOTg2ZjY
-MWY3NmUyNDU5MTA1ZGI2YmU0OTgwNTJmMDQ1OTI4MjY0NTI4ZTZmNjBlZmJlYWViNDI5Y2Y4NjZiY2Y2MmNhNzI1YjJiMzk3YWEwN2JlMzYwY2I1YzlhZDUwY2YyMjUxNDBlY2RkNzc1NTE2MjE2ZjA4MDQwY2E0ZDRkYmNhYWM
-*/
