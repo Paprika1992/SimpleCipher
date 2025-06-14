@@ -1919,30 +1919,29 @@ $symbArr = ['z'=>58, 'y'=>57, 'x'=>56, 'w'=>55, 'v'=>54, 'u'=>53, 't'=>52, 's'=>
 #Гаврилов
 //СОЛЬ ДОЛЖНА состоять только из латинских символов нижнего и верхнего регистра плюс цифры от 0 до 9. если соль не при передаче не соответствует формату - возвращаем ошибку
 
-//40000
+//60700
 
 $cipherText = 'мама мыла раму';
 // $cipherText = '1111111111111111111111111';
 $salt = null;
 $salt = 'NTI0M2FmNWEwOGU3NDY2YTc5MAFiMTEyOTdlNmY1NTQzY2Q4MzYzMmJkMTNiODRjOGI2YjY4NjEwYjNmM2NjZGJhOWY1NjRiYmU3OTEzZjdhZmIzNDExM2QwZTgwMjhkZDE1OTIwMDlhY2YxZjIxMDljNDA4MTllZjc3MmEzOTI';
-$testCipher = (new SimpleCipher($cipherText, $salt))->encryptText(67);
+//$testCipher = (new SimpleCipher($cipherText, $salt))->encryptText(67);
 $n = 1;
 $saltNew = $salt;
-// while ($n <= 10000) {
-	// $randomNumb_pos = unpack("N", openssl_random_pseudo_bytes(4))[1] % (160 - 1) + 1;
-	// $randimNumb_symb = unpack("N", openssl_random_pseudo_bytes(4))[1] % (59 - 1) + 1;
-	// $saltArr = str_split($saltNew);
-	// shuffle($saltArr);
-	// $saltNew = implode('', $saltArr);
-	// //if ($salt !== $saltNew) {
-	// 	// var_dump('here');
-	// 	$decryptText = (new SimpleCipher($testCipher, $saltNew))->decryptText();
-	// 	if ($decryptText === $cipherText) {
-	// 		var_dump($saltNew);
-	// 		var_dump('Жаль!');
-	// 	}
-	// //}
-	// var_dump($n);
+while ($n <= 10000) {
+	$randomNumb_pos = unpack("N", openssl_random_pseudo_bytes(4))[1] % (160 - 1) + 1;
+	$randimNumb_symb = unpack("N", openssl_random_pseudo_bytes(4))[1] % (59 - 1) + 1;
+	$saltArr = str_split($saltNew);
+	shuffle($saltArr);
+	$saltNew = implode('', $saltArr);
+	// var_dump($saltNew);
+	//$saltNew = $salt;
+		$decryptText = (new SimpleCipher('YTh70q693d1d29y269%449_1чэ5)3ЦdпaU0?3t3Й8ш93cЁcfbF3х231ZD`8×ka5mb35', $saltNew))->decryptText();
+		if ($decryptText === $cipherText) {
+			var_dump($saltNew);
+			var_dump('Жаль!');
+		}
+	var_dump($n);
 
 #Гаврилов
 //СЕЙЧАС ВТОРОЙ УКАЗАТЕЛЬ НА РЕАЛЬНУЮ ДЛИНУ ИСХОДНОЙ СТРОКИ КЛАДЕТСЯ ВО ВТОРОЙ ВЕКТОР ИНИЦИАЛИЗАЦИИ. ЛУЧШЕ КЛАСТЬ В ВЕРСИЮ? В ПОЛЕДНИЕ 6 СИМВОЛОВ?
@@ -1951,11 +1950,11 @@ $saltNew = $salt;
 #Гаврилов
 //НЕ ШИФРОВАТЬ СООБЩЕНИЕ, СОСТОЯЩЕЕ ТОЛЬКО ИЗ ПРОБЕЛОВ. ЕСЛИ ПРИ ВАЛИДАЦИИ ПОСЛЕ TRIM() ОСТАЕТСЯ ПУСТОТА - ВЫВОДИТЬ СООБЩЕНИЕ ОБ ОШИБКЕЫ
 
+
 	// die();
-	$testCipher = (new SimpleCipher($cipherText, $salt))->encryptText(67);
-	echo '<pre>'; var_dump($testCipher); echo'</pre>';
-	$decryptText = (new SimpleCipher($testCipher, $salt))->decryptText();
- 	
+	// $testCipher = (new SimpleCipher($cipherText, $salt))->encryptText(67);
+	// echo '<pre>'; var_dump($testCipher); echo'</pre>';
+	// $decryptText = (new SimpleCipher('YTh70q693d1d29y269%449_1чэ5)3ЦdпaU0?3t3Й8ш93cЁcfbF3х231ZD`8×ka5mb35', $salt))->decryptText();
 	// $newSaltArr = preg_split('//u', $salt, -1, PREG_SPLIT_NO_EMPTY);
 	// $s = 0;
 	// while ($s < count($newSaltArr)) {
@@ -1965,7 +1964,7 @@ $saltNew = $salt;
 	// 		$newSaltStr = implode('', $newSaltArr);
 	// 		$newSaltArr_transform[$s] = $symbArr[$a];
 	// 		$newSaltStr = implode('', $newSaltArr_transform);
-	// 		$newDecryptText = (new SimpleCipher($testCipher, $newSaltStr))->decryptText();
+	// 		$newDecryptText = (new SimpleCipher('YTh70q693d1d29y269%449_1чэ5)3ЦdпaU0?3t3Й8ш93cЁcfbF3х231ZD`8×ka5mb35', $newSaltStr))->decryptText();
 	// 		if ($newDecryptText == $cipherText && $newSaltStr !== $salt) {
 	// 			var_dump('Жаль');
 	// 			var_dump($newSaltStr);
@@ -1976,12 +1975,12 @@ $saltNew = $salt;
 	// 	$s++;
 	// }
 
-	echo '<pre>'; var_dump($decryptText); echo'</pre>';
-	if ($decryptText !== $cipherText) {
-		var_dump('ОШИПКА!');
-	}
-//  	$n++;
-// }
+	// echo '<pre>'; var_dump($decryptText); echo'</pre>';
+	// if ($decryptText !== $cipherText) {
+	// 	var_dump('ОШИПКА!');
+	// }
+ 	$n++;
+}
 
 #Гаврилов
 //ПЕРЕПИСАТЬ ИСПОЛЬЗОВАНИЯ КЛЮЧА СЛЕДУЮЩИМ ОБРАЗОМ. БРАТЬ НЕ СУММУ ВСЕХ ЧИСЕЛ И ИЗ НЕЕ ВЫЧЛЕНЯТЬ ЦИФРЫ, А ГЕНЕРИТЬ СУММЫ ПО ОТРЕЗКАМ: СУММА ПЕРВЫХ ПЯТИ СИМВОЛОВ, СУММА ВТОРЫХ ПЯТИ СИМВОЛОВ И ТАК СКОЛЬКО НАДО

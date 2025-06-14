@@ -1,3 +1,5 @@
-<IfModule dir_module>
-    DirectoryIndex cipher.php
-</IfModule>
+RewriteEngine On
+RewriteBase /
+
+# Перенаправляем все запросы /api/* на ControllerMain.php
+RewriteRule ^api/(.*)$ CipherController.php?endpoint=$1 [L]
