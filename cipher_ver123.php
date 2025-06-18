@@ -1921,14 +1921,14 @@ $symbArr = ['z'=>58, 'y'=>57, 'x'=>56, 'w'=>55, 'v'=>54, 'u'=>53, 't'=>52, 's'=>
 
 //40000
 
-$cipherText = 'мама мыла раму';
+$cipherText = 'мама мыла раму raz dvatri &^%';
 // $cipherText = '1111111111111111111111111';
 $salt = null;
 $salt = 'NTI0M2FmNWEwOGU3NDY2YTc5MAFiMTEyOTdlNmY1NTQzY2Q4MzYzMmJkMTNiODRjOGI2YjY4NjEwYjNmM2NjZGJhOWY1NjRiYmU3OTEzZjdhZmIzNDExM2QwZTgwMjhkZDE1OTIwMDlhY2YxZjIxMDljNDA4MTllZjc3MmEzOTI';
-$testCipher = (new SimpleCipher($cipherText, $salt))->encryptText(67);
+$testCipher = (new SimpleCipher($cipherText, $salt))->encryptText(40);
 $n = 1;
 $saltNew = $salt;
-// while ($n <= 10000) {
+while ($n <= 3400) {
 	// $randomNumb_pos = unpack("N", openssl_random_pseudo_bytes(4))[1] % (160 - 1) + 1;
 	// $randimNumb_symb = unpack("N", openssl_random_pseudo_bytes(4))[1] % (59 - 1) + 1;
 	// $saltArr = str_split($saltNew);
@@ -1952,7 +1952,7 @@ $saltNew = $salt;
 //НЕ ШИФРОВАТЬ СООБЩЕНИЕ, СОСТОЯЩЕЕ ТОЛЬКО ИЗ ПРОБЕЛОВ. ЕСЛИ ПРИ ВАЛИДАЦИИ ПОСЛЕ TRIM() ОСТАЕТСЯ ПУСТОТА - ВЫВОДИТЬ СООБЩЕНИЕ ОБ ОШИБКЕЫ
 
 	// die();
-	$testCipher = (new SimpleCipher($cipherText, $salt))->encryptText(67);
+	$testCipher = (new SimpleCipher($cipherText, $salt))->encryptText(40);
 	echo '<pre>'; var_dump($testCipher); echo'</pre>';
 	$decryptText = (new SimpleCipher($testCipher, $salt))->decryptText();
  	
@@ -1976,12 +1976,14 @@ $saltNew = $salt;
 	// 	$s++;
 	// }
 
-	echo '<pre>'; var_dump($decryptText); echo'</pre>';
+	// echo '<pre>'; var_dump($decryptText); echo'</pre>';
 	if ($decryptText !== $cipherText) {
 		var_dump('ОШИПКА!');
 	}
-//  	$n++;
-// }
+ 	$n++;
+}
+
+//ODd34л1?23$36й0д83z1104й3ЬС LsKпES\щ!Р≠.}\бuT\мёqЙh7}NT^86$Iлбо324
 
 #Гаврилов
 //ПЕРЕПИСАТЬ ИСПОЛЬЗОВАНИЯ КЛЮЧА СЛЕДУЮЩИМ ОБРАЗОМ. БРАТЬ НЕ СУММУ ВСЕХ ЧИСЕЛ И ИЗ НЕЕ ВЫЧЛЕНЯТЬ ЦИФРЫ, А ГЕНЕРИТЬ СУММЫ ПО ОТРЕЗКАМ: СУММА ПЕРВЫХ ПЯТИ СИМВОЛОВ, СУММА ВТОРЫХ ПЯТИ СИМВОЛОВ И ТАК СКОЛЬКО НАДО

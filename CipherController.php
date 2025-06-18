@@ -9,7 +9,7 @@ class CipherController
     /**
      * @var string соль для шифрования
      */
-    private $cipherSalt;
+    private $cipherSalt = null;
     /**
      * @var string шифрование/дешифрование
      */
@@ -80,8 +80,8 @@ class CipherController
     public function __construct(string $action)
     {
         $this->action = $action;
-        $this->rqstParams = json_decode(file_get_contents('php://input'), true);
-        $this->cipherSalt = array_key_exists('cipherSalt', $this->rqstParams) ? $this->rqstParams['cipherSalt'] : null;
+        $this->rqstParams = json_decode(file_get_contents('php://input'), true) ?? [];
+        $this->cipherSalt = array_key_exists('cipherSalt', $this->rqstParams) !== false ? $this->rqstParams['cipherSalt'] : null;
 
         $checkEndpoint = $this->checkRoute($this->action);
         if (!$checkEndpoint['result']) {
@@ -93,7 +93,6 @@ class CipherController
             call_user_func(array($this, $this->action), $this->rqstParams['encryptText'], (array_key_exists('fakeLength', $this->rqstParams) !== false ? $this->rqstParams['fakeLength'] : 0));
         }
 
-        var_dump('here');
         die();
 
 
@@ -334,18 +333,19 @@ new CipherController($_GET['endpoint']);
 // var_dump(json_decode(file_get_contents('php://input')));
 die();
 
-#Гаврилов
-//ПРОВЕРКА ПЕРЕДАНЫ ЛИ НУЖНЫЕ ПАРАМЕТРЫ И ИХ ВАЛИДАЦИЯ (ДЛИНА, ТИП)
-$rqstParams = json_decode(file_get_contents('php://input'));
+// #Гаврилов
+// //ПРОВЕРКА ПЕРЕДАНЫ ЛИ НУЖНЫЕ ПАРАМЕТРЫ И ИХ ВАЛИДАЦИЯ (ДЛИНА, ТИП)
+// $rqstParams = json_decode(file_get_contents('php://input'));
 
-switch ($rqstParams->action) {
-    case 'encrypt':
-        (new CipherController($_GET['endpoint'], $rqstParams->cipherSalt))->getEncryptText($rqstParams->encryptText, $rqstParams->fakeLength, $rqstParams->cipherCount);
-        break;
-    case 'decrypt':
-        (new CipherController($_GET['endpoint'], $rqstParams->cipherSalt))->getDecryptText($rqstParams->decryptText);
-        break;
-    case 'getSalt':
-        (new CipherController($_GET['endpoint']))->createCipherSalt();
-        break;
-}
+
+// switch ($rqstParams->action) {
+//     case 'encrypt':
+//         (new CipherController($_GET['endpoint'], $rqstParams->cipherSalt))->getEncryptText($rqstParams->encryptText, $rqstParams->fakeLength);
+//         break;
+//     case 'decrypt':
+//         (new CipherController($_GET['endpoint'], $rqstParams->cipherSalt))->getDecryptText($rqstParams->decryptText);
+//         break;
+//     case 'getSalt':
+//         (new CipherController($_GET['endpoint']))->createCipherSalt();
+//         break;
+// }

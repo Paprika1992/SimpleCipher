@@ -48,22 +48,53 @@ document.getElementById('content__decrypt-block__input__decrypt').addEventListen
 
 
 //Получение соли к шифру
-document.getElementById('getSalt').addEventListener('click', async function () {
-    let cipherSalt = null;
-
-    let response = await fetch('./CipherController.php', {
-        method: "POST",
-        body: JSON.stringify({
-            action: 'getSalt'
-        }),
+document.getElementById('getSalt').addEventListener('click', async function (event) {
+    if (event.target.classList.contains('getSalt')) {
+        return;
+    }
+    let cipherSalt = null,
+        response = await fetch('./api/createCipherSalt', {
+        method: "GET",
+        // body: JSON.stringify({
+        //     action: 'getSalt'
+        // }),
         headers: {
             'content-type': 'application/json'
         }
     });
     let cipherSaltRqst = await response.json()
         cipherSalt = cipherSaltRqst.cipherSalt
+    
+    if (response.status !== 200) {
+        alert('ОШИБКА');
+        //ГАВРИЛОВ
+        //ОТПРАВЛЯЙ ЕНДПОИНТ НА ЛОГИРОВАНИЕ ИНФОРМАЦИИ ОБ ОШИБКЕ
+        return;
+    }
+
+    event.target.classList.add('getSalt');
+
+    //Счетчик удаление соли к шифру
+    let cipherSaltCount = 5;
 
     document.getElementById('GetCipherSalt').innerHTML = 'Ваш секретный ключ - ' + cipherSalt
+    document.getElementById('salt-timer-block__text').innerHTML = 'Секретный ключ будет удален через ' + cipherSaltCount;
+    document.getElementById('salt-timer-block__timer').classList.add('saltCounterStart')
+
+    let cipherSaltInterval = setInterval(function(){
+        cipherSaltCount--;
+        document.getElementById('salt-timer-block__text').innerHTML = 'Секретный ключ будет удален через ' + cipherSaltCount;
+    }, 1000)
+    //ГАВРИЛОВ
+    //ПОКА ИДЕТ ОТСЧЕТ ПО УДАЛЕНИЮ СГЕНЕРИРОВАННОГО СЕКРЕТНОГО КЛЮЧА НАЖАТИЕ ПО КНОПКИ "ПОЛУЧИТЬ КЛЮЧ" НИ К ЧЕМУ НЕ ПРИВОДИТ
+
+    setTimeout(function(){
+        document.getElementById('GetCipherSalt').innerHTML = "";
+        document.getElementById('salt-timer-block__text').innerHTML = "";
+        event.target.classList.remove('getSalt');
+        document.getElementById('salt-timer-block__timer').classList.remove('saltCounterStart')
+        clearInterval(cipherSaltInterval);
+    }, 5000)
 })
 
 
@@ -125,21 +156,31 @@ document.getElementById('content__encrypt-block__input__encrypt').addEventListen
         return;
     }
     
-    let response = await fetch('./CipherController.php', {
-        method: "POST",
-        body: JSON.stringify({
-            encryptText: encryptText,
-            fakeLength: encryptFakeLength,
-            cipherCount: resultCipherCount,
-            cipherSalt: encryptSalt,
-            action: 'encrypt'
-        }),
-        headers: {
-            'content-type': 'application/json'
+    let encryptResponseArr = [];
+    for (let index = 0; index < array.length; index++) {
+        let response = await fetch('./CipherController.php', {
+            method: "POST",
+            body: JSON.stringify({
+                encryptText: encryptText,
+                fakeLength: encryptFakeLength,
+                cipherSalt: encryptSalt,
+                action: 'encrypt'
+            }),
+            headers: {
+                'content-type': 'application/json'
+            }
+        });
+        //Гаврилов. Что если по ОДНОМУ ИЗ ответов проблема?
+        let encryptResponse = await response.json()
+        if (response.ok) {
+            encryptResponseArr.push(encryptResponse);
         }
-    });
-    let encryptResponse = await response.json(),
-        encryptResultBlock = document.getElementById('content__encrypt-block__result')
+        
+    }
+
+    
+    
+    let encryptResultBlock = document.getElementById('content__encrypt-block__result')
     if (response.ok) {
         setTimeout(() => {
             console.log(encryptResponse)

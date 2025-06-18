@@ -51,7 +51,7 @@ input{
 #page__navigation{
   /* background: yellow; */
   display: flex;
-    gap: 10px;
+    /* gap: 10px; */
     justify-content: space-around;
   width: 50%;
   margin: auto;
@@ -60,7 +60,8 @@ input{
   position: relative;
 
   &>.navigation__block{
-    flex-basis: 33%;
+    flex: 1;
+    /* flex-basis: 33%; */
     /* position: relative; */
 
     &:not(:first-of-type){
@@ -221,6 +222,34 @@ input{
     }
   }
 }
+
+#сipher-salt-timer-block{
+  position: relative;
+
+  &>#salt-timer-block__timer{
+    top: 0;
+    height: 100%;
+    width: 100%;
+    background: rgb(255 255 0 / 38%);
+    position: absolute;
+    transition: 0.3s;
+
+    &.saltCounterStart{
+      animation-name: cipherSaltCounter;
+      animation-duration: 5s;
+      animation-timing-function: linear;
+    }
+  }
+}
+
+  @keyframes cipherSaltCounter{
+        from {
+          width: 100%;
+        }
+        to {
+          width: 0;
+        }
+      }
 
 @keyframes showResults{
         from {
