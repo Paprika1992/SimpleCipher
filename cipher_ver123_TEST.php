@@ -1919,7 +1919,7 @@ $symbArr = ['z'=>58, 'y'=>57, 'x'=>56, 'w'=>55, 'v'=>54, 'u'=>53, 't'=>52, 's'=>
 #Гаврилов
 //СОЛЬ ДОЛЖНА состоять только из латинских символов нижнего и верхнего регистра плюс цифры от 0 до 9. если соль не при передаче не соответствует формату - возвращаем ошибку
 
-//92300
+//105700
 
 $cipherText = 'мама мыла раму';
 // $cipherText = '1111111111111111111111111';
@@ -1935,7 +1935,7 @@ while ($n <= 10000) {
 	shuffle($saltArr);
 	$saltNew = implode('', $saltArr);
 	// var_dump($saltNew);
-	//$saltNew = $salt;
+	$saltNew = $salt;
 		$decryptText = (new SimpleCipher('YTh70q693d1d29y269%449_1чэ5)3ЦdпaU0?3t3Й8ш93cЁcfbF3х231ZD`8×ka5mb35', $saltNew))->decryptText();
 		if ($decryptText === $cipherText) {
 			var_dump($saltNew);

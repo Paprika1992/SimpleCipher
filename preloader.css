@@ -1,166 +1,151 @@
- body {
-            margin: 0;
-            padding: 20px;
-            font-family: Arial, sans-serif;
-            background: #f9f9f9;
-        }
-        
-        .container {
-            text-align: center;
-            padding: 20px;
-        }
-        
-        h1 {
-            color: #333;
-            margin-bottom: 30px;
-        }
-        
-        .diamond {
-            position: relative;
-            height: 259.8px; /* 86.6 * 3 */
-            width: 300px;
-            margin: 0 auto;
-        }
-        
-        
+:root{
+    --main_size: 50;
+}
 
-        /* Основные 5 треугольников в верхнем ряду */
-        .upper-row {
+#preloader-container {
+    text-align: center;
+    padding: 20px;
+
+    &>#container__sapphire {
+        position: relative;
+        /* height: 259.8px; */
+        width: calc(var(--main_size) * 6px);
+        margin: 0 auto;
+
+        &>#sapphire__upper-triangles-block {
             position: absolute;
             top: 0;
             left: 50%;
             transform: translateX(-50%);
-            width: 250px;
-            height: 86.6px;
+            width: calc(var(--main_size) * 5px);
+            /* height: 86.6px; */
             z-index: 5;
         }
-        
-        .triangle {
+
+        & .triangle {
             position: absolute;
             width: 0;
             height: 0;
-            border-left: 50px solid transparent;
-            border-right: 50px solid transparent;
-        }
-        
-        .triangle-up {
-            border-bottom: 86.6px solid lightblue;
+            filter: drop-shadow(0 0 2px grey);
+            transition: 0.5s;
+            transition-duration: 1s;
 
-            &>.triangle-colored-text{
-                bottom: -60px;
-                left: -5px;
-            }   
-        }
-        
-        .triangle-down {
-            border-top: 86.6px solid lightblue;
+            &.triangle--small {
+                border-left: calc(var(--main_size) * 1px) solid transparent;
+                border-right: calc(var(--main_size) * 1px) solid transparent;
 
-            &>.triangle-colored-text{
-                bottom: 50px;
-                left: -5px;
-            } 
-        }
-        
-        /* Позиционирование верхних треугольников */
-        .triangle:nth-child(1) { left: 0; }
-        .triangle:nth-child(2) { left: 50px; }
-        .triangle:nth-child(3) { left: 100px; }
-        .triangle:nth-child(4) { left: 150px; }
-        .triangle:nth-child(5) { left: 200px; }
-        
+                &.triangle-up {
+                    border-bottom: 86.6px solid lightblue;
 
-        /* Центральный большой треугольник */
-        .center-large {
-            position: absolute;
-            width: 0;
-            height: 0;
+                    &>.triangle-text {
+                        bottom: -60px;
+                        left: -5px;
+                    }
+                }
+
+                &.triangle-down {
+                    border-top: 86.6px solid lightblue;
+
+                    &>.triangle-text {
+                        bottom: calc(var(--main_size) * 1px);
+                        left: -5px;
+                    }
+                }
+            }
+
+            &>.triangle-text {
+                visibility: hidden;
+                transition: 0.3s;
+                font-size: 1.7rem;
+                position: absolute;
+                text-indent: -2px;
+                color: grey;
+
+                &.visible {
+                    animation: letterToBottom;
+                    animation-duration: 2s;
+                    animation-iteration-count: infinite;
+                    visibility: visible;
+                }
+            }
+            &.triangle-colored {
+                filter: drop-shadow(0px 0px 3px rgb(55, 114, 133));
+                border-top-color: rgb(207, 227, 232);
+                border-bottom-color: rgb(207, 227, 232);
+            }
+        }
+
+        & .triangle-big--center {
             border-left: 75px solid transparent;
             border-right: 75px solid transparent;
-            border-top: 200px solid lightblue;
-            left: 100px;
+            border-top: calc(var(--main_size) * 4px) solid lightblue;
+            left: calc(var(--main_size) * 2px);
             top: 86.6px;
-            z-index:4;
-            isolation: isolate;
+            z-index: 4;
 
-            &>.triangle-colored-text{
+            &>.triangle-text {
                 top: -125px;
                 left: -5px;
             }
         }
 
-        
-      .center-large-one-more {
-            position: absolute;
-            width: 0;
-            height: 0;
-            border-left: 150px solid transparent;
+        & .triangle-big--left {
+            border-left: calc(var(--main_size) * 3px) solid transparent;
             border-right: 0px solid transparent;
-            border-top: 200px solid lightblue;
+            border-top: calc(var(--main_size) * 4px) solid lightblue;
             left: 25px;
             top: 86.6px;
-            z-index:1;
+            z-index: 1;
 
-            &>.triangle-colored-text{
+            &>.triangle-text {
                 top: -155px;
                 left: -85px;
             }
-
         }
-        .center-large-two-more {
-            position: absolute;
-            /* width: 20px; */
-            height: 0;
+
+        & .triangle-big--right {
             border-left: 0px solid transparent;
-            border-right: 150px solid transparent;
-            border-top: 200px solid lightblue;
+            border-right: calc(var(--main_size) * 3px) solid transparent;
+            border-top: calc(var(--main_size) * 4px) solid lightblue;
             left: 175px;
             top: 86.6px;
             z-index: 2;
 
-            &>.triangle-colored-text{
+            &>.triangle-text {
                 top: -150px;
                 left: 75px;
             }
         }
+    }
+}
 
-        .triangle-block{
-            filter: drop-shadow(0 0 2px grey);
-            transition: 0.5s;
-            transition-duration: 1s;
-            /* transition-delay: 0.3s; */
-        }
 
-        .triangle-colored-text{
-            visibility: hidden;
-            transition: 0.3s;
-            /* transition-duration: 3s; */
-            font-size: 1.7rem;
-            position: absolute;
-            text-indent: -5px;
-            
-            color: grey;
+/* Позиционирование верхних треугольников */
+.triangle--small:nth-child(1) {
+    left: 0;
+}
+.triangle--small:nth-child(2) {
+    left: calc(var(--main_size) * 1px);
+}
+.triangle--small:nth-child(3) {
+    left: calc(var(--main_size) * 2px);
+}
+.triangle--small:nth-child(4) {
+    left: calc(var(--main_size) * 3px);
+}
+.triangle--small:nth-child(5) {
+    left: calc(var(--main_size) * 4px);
+}
 
-            &.visible{
-                animation: letterToBottom;
-                animation-duration: 3s;
-                animation-iteration-count: infinite;
-                visibility: visible;
-            }
-        }
 
-        .triangle-colored{
-            filter: drop-shadow(0px 0px 3px rgb(55, 114, 133)); /* Граница-тень */
-            border-top-color: rgb(207, 227, 232);
-            border-bottom-color: rgb(207, 227, 232);
-        }
-        
-        @keyframes letterToBottom {
-            from{
-                transform: translateY(-10px);
-                opacity: 1;
-            }
-            to {
-                transform: translateY(10px);
-                opacity: 0;
-            }
-        }
+@keyframes letterToBottom {
+    from {
+        /* transform: translateY(-10px); */
+        opacity: 0.7;
+    }
+
+    to {
+        /* transform: translateY(10px); */
+        opacity: 0;
+    }
+}
