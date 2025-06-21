@@ -32,6 +32,8 @@ class CipherController
      * ЗДЕСЬ ТАК ЖЕ ДОЛЖНЫ БЫТЬ ПРОПИСАНЫ ОБЯЗАТЕЛЬНЫЕ И НЕ ОБЯЗАТЕЛЬНЫЕ ПЕРЕДАВАЕМЫЕ POST АРГУМЕНТЫ И ПАРАМЕТРЫ ИХ ВАЛИДАЦИИ
      */
     private $routes = [
+        //TODO
+        //ПЕРЕИМЕНУЙ НА ENCRYPTTEXT
         'getEncryptText' => [
             // 'methodName' => 'getEncryptText',
             'method' => 'POST',
@@ -52,6 +54,8 @@ class CipherController
                 ],
             ]
         ],
+        //TODO
+        //ПЕРЕИМЕНУЙ НА DECRYPTTEXT
         'getDecryptText' => [
             //'methodName' => 'getDecryptText',
             'method' => 'POST',
@@ -61,6 +65,8 @@ class CipherController
                 ],
             ]
         ],
+        //TODO
+        //ПЕРЕИМЕНУЙ НА GETCIPHERSALT
         'createCipherSalt' => [
             //'methodName' => 'createCipherSalt',
             'method' => 'GET',

@@ -58,13 +58,15 @@ document.getElementById('getSalt').addEventListener('click', async function (eve
         // body: JSON.stringify({
         //     action: 'getSalt'
         // }),
-        headers: {
-            'content-type': 'application/json'
-        }
+        // headers: {
+        //     'content-type': 'application/json'
+        // }
     });
     let cipherSaltRqst = await response.json()
         cipherSalt = cipherSaltRqst.cipherSalt
     
+    console.log(cipherSaltRqst)
+
     if (response.status !== 200) {
         alert('ОШИБКА');
         //ГАВРИЛОВ
@@ -114,11 +116,7 @@ document.addEventListener('click', function(event) {
         clearDecryptText();
 
   }
-
-   
     //prevResulst = document.querySelector('.content__decrypt-block__result__parent');
-    
-    
 });
 
 
@@ -140,7 +138,7 @@ function clearDecryptText()
 document.getElementById('content__encrypt-block__input__encrypt').addEventListener('click', async function () {
     let encryptText = document.getElementById('encryptText').value,
         encryptFakeLength = document.getElementById('cipherLength').value,
-        resultCipherCount = document.getElementById('cipherCount').value,
+        resultCipherCount = document.getElementById('cipherCount').value ?? 1,
         encryptSalt = document.getElementById('cipherSalt').value ?? null,
         prevResulst = document.querySelectorAll('.content__encrypt-block__result__parent');
 
@@ -155,32 +153,96 @@ document.getElementById('content__encrypt-block__input__encrypt').addEventListen
         alert('пусто')
         return;
     }
-    
-    let encryptResponseArr = [];
-    for (let index = 0; index < array.length; index++) {
-        let response = await fetch('./CipherController.php', {
-            method: "POST",
-            body: JSON.stringify({
-                encryptText: encryptText,
-                fakeLength: encryptFakeLength,
-                cipherSalt: encryptSalt,
-                action: 'encrypt'
-            }),
-            headers: {
-                'content-type': 'application/json'
-            }
-        });
-        //Гаврилов. Что если по ОДНОМУ ИЗ ответов проблема?
-        let encryptResponse = await response.json()
-        if (response.ok) {
-            encryptResponseArr.push(encryptResponse);
-        }
-        
-    }
 
-    
-    
+    let encryptResponseArr = [];
+    let response;
+
+    // new Promise(function(resolve, reject){
+        for (let index = 1; index <= resultCipherCount; index++) {
+            encryptResponseArr.push(fetch('./api/getEncryptText', {
+                method: "POST",
+                body: JSON.stringify({
+                    encryptText: encryptText,
+                    fakeLength: encryptFakeLength,
+                    cipherSalt: encryptSalt,
+                    //action: 'encrypt'
+                }),
+                headers: {
+                    'content-type': 'application/json'
+                }
+            }))
+        }
+    // }) 
+
+    let encryptPromisesArr = [];
+    let encryptErrArr = [];
+    encryptPromisesArr = await Promise.allSettled(encryptResponseArr).then(encryptPromises => {
+        let interimArr = [];
+        encryptPromises.forEach(function(encryptPromise) {
+            //Ошибка получения данных по результатам работы fetch
+            if (encryptPromise.status == 'fulfilled') {
+                //Проверяем код ответа
+                if (encryptPromise.value.ok) {
+                        let jsonResponse = encryptPromise.value.json()
+                        .then(encryptResult => {
+                            return encryptResult
+                        })
+                        //Ловим ошибки парсинга JSON
+                        .catch(jsonErr => {
+                            encryptErrArr.push('Ошибка парсинга: ' + jsonErr)
+
+                            return null;
+                        })
+                        interimArr.push(jsonResponse)
+                } else {
+                    encryptErrArr.push('Код ошибки: ' + encryptPromise.value.status)
+                }
+            } else if (encryptPromise.status == 'rejected') {
+                encryptErrArr.push('Ошибка получения данных: ' + encryptPromise.reason)
+            }
+        })
+        return Promise.all(interimArr).then(resultes => {return resultes;})
+    })
+
+    //ЕСЛИ МАССИВ С ОШИБКАМИ НЕ ПУСТОЙ ВЫВОДИ СООБЩЕНИЕ ПОЛЬЗОВАТЕЛЮ, А ТАКЖЕ ОБРАЙЩАЙСЯ К ЕНДПОИНТУ С ЗАПИСЬЮ ИНФОРМАЦИИ ОБ ОШИБКЕ
     let encryptResultBlock = document.getElementById('content__encrypt-block__result')
+    // encryptPromisesArr.forEach(elem => {
+        setTimeout(() => {
+            // console.log(encryptResponse)
+            // console.log(encryptResponse.cipherArr);
+            encryptResultBlock.textContent = '';
+            encryptPromisesArr.forEach((encryptText, index) => {
+                //console.log(encryptText)
+                let childEncryptBlock = document.createElement('div'),
+                    encryptTextBlock = document.createElement('div'),
+                    callDecryptButton = document.createElement('button');
+                childEncryptBlock.classList.add('content__encrypt-block__result__parent', 'result-text-block')
+                // childEncryptBlock.classList.add('result-text-field')
+                encryptTextBlock.classList.add('content__block__result__text')
+                callDecryptButton.classList.add('content__encrypt-block__result__parent__call-decrypt')
+                callDecryptButton.setAttribute('type', 'button');
+                encryptTextBlock.textContent = encryptText.cipherArr
+                callDecryptButton.textContent = "Расшифровать"
+                childEncryptBlock.appendChild(callDecryptButton);
+                childEncryptBlock.appendChild(encryptTextBlock);
+                
+                //console.log(childEncryptBlock)
+                
+                setTimeout(() => {
+                    encryptResultBlock.appendChild(childEncryptBlock)
+                }, 100 * index);
+            });
+        }, 500);
+    // })
+
+        console.log(encryptErrArr)
+        console.log(encryptPromisesArr)
+
+        return;
+
+    return;
+
+    //let encryptResultBlock = document.getElementById('content__encrypt-block__result')
     if (response.ok) {
         setTimeout(() => {
             console.log(encryptResponse)

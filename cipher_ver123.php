@@ -1928,7 +1928,7 @@ $salt = 'NTI0M2FmNWEwOGU3NDY2YTc5MAFiMTEyOTdlNmY1NTQzY2Q4MzYzMmJkMTNiODRjOGI2YjY
 $testCipher = (new SimpleCipher($cipherText, $salt))->encryptText(40);
 $n = 1;
 $saltNew = $salt;
-while ($n <= 3400) {
+// while ($n <= 3400) {
 	// $randomNumb_pos = unpack("N", openssl_random_pseudo_bytes(4))[1] % (160 - 1) + 1;
 	// $randimNumb_symb = unpack("N", openssl_random_pseudo_bytes(4))[1] % (59 - 1) + 1;
 	// $saltArr = str_split($saltNew);
@@ -1952,9 +1952,9 @@ while ($n <= 3400) {
 //НЕ ШИФРОВАТЬ СООБЩЕНИЕ, СОСТОЯЩЕЕ ТОЛЬКО ИЗ ПРОБЕЛОВ. ЕСЛИ ПРИ ВАЛИДАЦИИ ПОСЛЕ TRIM() ОСТАЕТСЯ ПУСТОТА - ВЫВОДИТЬ СООБЩЕНИЕ ОБ ОШИБКЕЫ
 
 	// die();
-	$testCipher = (new SimpleCipher($cipherText, $salt))->encryptText(40);
-	echo '<pre>'; var_dump($testCipher); echo'</pre>';
-	$decryptText = (new SimpleCipher($testCipher, $salt))->decryptText();
+	// $testCipher = (new SimpleCipher($cipherText, $salt))->encryptText(40);
+	// echo '<pre>'; var_dump($testCipher); echo'</pre>';
+	// $decryptText = (new SimpleCipher($testCipher, $salt))->decryptText();
  	
 	// $newSaltArr = preg_split('//u', $salt, -1, PREG_SPLIT_NO_EMPTY);
 	// $s = 0;
@@ -1977,11 +1977,11 @@ while ($n <= 3400) {
 	// }
 
 	// echo '<pre>'; var_dump($decryptText); echo'</pre>';
-	if ($decryptText !== $cipherText) {
-		var_dump('ОШИПКА!');
-	}
- 	$n++;
-}
+// 	if ($decryptText !== $cipherText) {
+// 		var_dump('ОШИПКА!');
+// 	}
+//  	$n++;
+// }
 
 //ODd34л1?23$36й0д83z1104й3ЬС LsKпES\щ!Р≠.}\бuT\мёqЙh7}NT^86$Iлбо324
 
