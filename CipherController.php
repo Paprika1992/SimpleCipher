@@ -38,7 +38,7 @@ class CipherController
             // 'methodName' => 'getEncryptText',
             'method' => 'POST',
             'methodParams' => [
-                'encryptText' => [
+                'text' => [
                     'important' => true,
                     'validation' => [
                         'validationRegular' => null,
@@ -52,16 +52,29 @@ class CipherController
                         'validationMethod' => 'encryptTextValidation',
                     ]
                 ],
+                'cipherSalt' => [
+                    'important' => true,
+                    'validation' => [
+                        'validationRegular' => '/^[0-9a-zA-Z]{171}$/',
+                    ]
+                ],
             ]
         ],
+        //ODd59g756б0≠39©ш28v2084пXгqqf]ЕydyЧ|YoO 41_TIbc114h
         //TODO
         //ПЕРЕИМЕНУЙ НА DECRYPTTEXT
         'getDecryptText' => [
             //'methodName' => 'getDecryptText',
             'method' => 'POST',
             'methodParams' => [
-                'decryptText' => [
+                'text' => [
                     'important' => true,
+                ],
+                'cipherSalt' => [
+                    'important' => true,
+                    'validation' => [
+                        'validationRegular' => '/^[0-9a-zA-Z]{171}$/',
+                    ]
                 ],
             ]
         ],
@@ -90,19 +103,25 @@ class CipherController
         $this->cipherSalt = array_key_exists('cipherSalt', $this->rqstParams) !== false ? $this->rqstParams['cipherSalt'] : null;
 
         $checkEndpoint = $this->checkRoute($this->action);
+        //$checkEndPointErr = null;
         if (!$checkEndpoint['result']) {
-            $responseObj = [
-                'errorMsg' => $checkEndpoint['errorMsg']
-            ];
-            $this->returnResponse($responseObj, $checkEndpoint['responseCode']);
+            // $responseObj = [
+               // $checkEndPointErr = $checkEndpoint['errorMsg']
+            // ];
+            $this->returnResponse([], $checkEndpoint['responseCode'], $checkEndpoint['errorMsg']);
         } else {
-            call_user_func(array($this, $this->action), $this->rqstParams['encryptText'], (array_key_exists('fakeLength', $this->rqstParams) !== false ? $this->rqstParams['fakeLength'] : 0));
+            require_once ("./CipherVersion.php");
+            call_user_func(
+                array($this, $this->action), 
+                $this->rqstParams['text'], 
+                (array_key_exists('fakeLength', $this->rqstParams) !== false ? $this->rqstParams['fakeLength'] : 0)
+            );
         }
 
         die();
 
 
-        require_once ("./CipherVersion.php");
+        
         //$this->cipherVer = $decryptText ? CipherVersion::getCipherVersion($decryptText) : $this->cipherVer;
         #Гаврилов
         //ПРОВЕРКА СУЩЕСТВУЕТ ЛИ СКРИПТ С ТАКОЙ ВЕРСИЕЙ. еСЛИ НЕТ - СООБЩЕНИЕ ОБ ОШИБКЕ РАЗРАБАМ И СООБЩЕНИЕ БЕЗ УКАЗАНИЯ НА ВЕРСИЮ ДЛЯ ПОЛЬЗОВАТЕЛЕЙ
@@ -112,6 +131,10 @@ class CipherController
 
         set_error_handler([$this, "myErrorHandler"]);
     }
+
+    #Гаврилов
+    //ПЕРЕДАВАТЬ С ШИФРОВАНИЕМ И ДЕШИФРОВКОЙ ЕЩЕ ОДИН ПАРАМЕТР "ДЕМОНСТРАЦИОННАЯ СТРАНИЦА": FALSE\TRUE. ПЕРЕДАВАТЬ ЕГО ТОЛЬКО С ДЕМОНСТРАЦИОННОЙ СТРАНИЦЫ. ЕСЛИ ПЕРЕДАЕТСЯ TRUE - ДЕЛАТЬ ПОЛЕ С СОЛЬЮ НЕОБЯЗАТЕЛЬНЫМ ДЛЯ ПЕРЕДАЧИ. МОЖНО ЛИ КАК-ТО ПРОВЕРЯТЬ ОТКУДА ИДЕТ ЗАПРОС ПО IP НАПРИМЕР?, ЧТОБЫ ПОЛЬЗОВАТЕЛЬ НЕ МОГ ПОДСТАВИТЬ ЭТОТ ЗАГОЛОВОК, ОТПРАВЛЯЯ СВОЙ ЗАПРОС СО СВОЕГО СЕРВЕРА
+    
 
 
     /**
@@ -143,28 +166,37 @@ class CipherController
         if (array_key_exists($routeName, $this->routes) !== false) {
             if ($_SERVER['REQUEST_METHOD'] !== $this->routes[$routeName]['method']) {
                 $checkRouteArr['result'] = false;
-                $checkRouteArr['errorMsg'] = 'Метод не поддерживается для этого ендпоинта';
+                $checkRouteArr['errorMsg'] = 'method not supported for endpoint';
                 $checkRouteArr['responseCode'] = 405;
 
                 return $checkRouteArr;
             } else if (!empty($this->routes[$routeName]['methodParams'])) {
                 foreach ($this->routes[$routeName]['methodParams'] as $paramName => $paramData){
+                    // var_dump($paramName);
+                    // var_dump($this->rqstParams);
                     //Если параметр обязательный
                     if ($paramData['important'] === true) {
                         //Если обязательный параметр отсутствует в запросе
-                        if (array_key_exists($paramName, $this->rqstParams) === false) {
-                            $checkRouteArr['result'] = false;
-                            $checkRouteArr['errorMsg'] = "Обязательный параметр $paramName не найден";
-                            $checkRouteArr['responseCode'] = 400;
+                        if (array_key_exists($paramName, $this->rqstParams) === false || !$this->rqstParams[$paramName]) {
+                            //Если отсутствующее обязательное поле - соль для шифра, она может отсутствовать, если запрос пришел с того же сервера (с демонстрационной страницы)
+                            if ($paramName == 'cipherSalt' && $_SERVER['REMOTE_ADDR'] === $_SERVER['SERVER_ADDR']) {
+                                continue;
+                            } else {
+                                $checkRouteArr['result'] = false;
+                                $checkRouteArr['errorMsg'] = "a required field <$paramName> is missing";
+                                $checkRouteArr['responseCode'] = 400;
 
-                            return $checkRouteArr;
+                                return $checkRouteArr;
+                            }
+                            #Гаврилов
+                            //ПОПРОБУЙ ОТПРАВИТЬ ЕНДПОИНТ С КОМПА, НЕ С СЕРВЕРА БЕЗ СОЛИ. ЗАПРОС НЕ ДОЛЖЕН ПРОЙТИ
                         //Если в запросе предусмотрено конкретное значение для передаеваемого параметра запроса, происходит валидация по регулярному значению 
                         } else if ($paramData['validation']) {
                             //Если для валидации параметра применяется регулярное выражение
                             if ($paramData['validation']['validationRegular']) {
-                                if (preg_match($paramData['validation']['validationRegular'], $this->rqstParams[$paramName]) === false) {
+                                if (preg_match($paramData['validation']['validationRegular'], $this->rqstParams[$paramName]) == false) {
                                     $checkRouteArr['result'] = false;
-                                    $checkRouteArr['errorMsg'] = "Некорректный формат параметра $paramName";
+                                    $checkRouteArr['errorMsg'] = "Invalid field format <$paramName>";
                                     $checkRouteArr['responseCode'] = 400;
 
                                     return $checkRouteArr;
@@ -174,7 +206,7 @@ class CipherController
                                 $validationMethodResult = call_user_func(array($this, $validationMethod), [$this->rqstParams[$paramName]]);
                                 if (!$validationMethodResult) {
                                     $checkRouteArr['result'] = false;
-                                    $checkRouteArr['errorMsg'] = "Некорректный формат параметра $paramName";
+                                    $checkRouteArr['errorMsg'] = "Invalid field format <$paramName>";
                                     $checkRouteArr['responseCode'] = 400;
 
                                     return $checkRouteArr;
@@ -188,7 +220,7 @@ class CipherController
             }
         } else {
             $checkRouteArr['result'] = false;
-            $checkRouteArr['errorMsg'] = 'Ендпоинт не найден';
+            $checkRouteArr['errorMsg'] = 'endpoint not found';
             $checkRouteArr['responseCode'] = 404;
         }
 
@@ -213,6 +245,18 @@ class CipherController
             'cipherSalt' => $cipherSalt]
         );
     }
+
+
+    /**
+     * Метод валидации соли для шифра
+     *
+     * @param string $cipherSalt соль для
+     * @return void
+     */
+    // function validateCipherSalt(string $cipherSalt)
+    // {
+    //     return preg_match('/^[0-9a-zA-Z]{171}$/', $this->cipherSalt);
+    // }
 
 
     /**
@@ -245,7 +289,7 @@ class CipherController
         //}
         
         $this->returnResponse([
-            'cipherArr' => $resultCipher,
+            'encryptText' => $resultCipher,
         ]);
 
         //return $$resultCipherArr;
@@ -289,11 +333,11 @@ class CipherController
 
     $errorLogMsg = "Ошибка ошибка: " . $errArr[$errno] . " $errstr в файле $errfile на $errline<br />";
 
+    //Если ошибка возникает при дешифровке текста - возвращаем ранломный запутанный текст будто все прошло "по плану", но алгоритм не расшифровал кривое сообщение
     if ($this->action == 'decrypt') {
         $this->returnResponse([
-            'decryptText' => $this->getRandomText($this->decryptText),
-            'errorMsg' => $errorLogMsg
-        ], 200);
+            'decryptText' => $this->getRandomText($this->decryptText)
+        ], 200, $errorLogMsg);
         
     } else {
         #Гаврилов
@@ -305,10 +349,14 @@ class CipherController
     return true;
 }
 
-    private function returnResponse($responseObj, $responseCode = 200)
+    private function returnResponse($responseObj, $responseCode = 200, $errMsg = null)
     {
+        header('Content-Type: application/json; charset=utf-8');
         //var_dump($responseObj);
-        header('Content-Type: application/json');
+        if ($errMsg) {
+            header("X-Error-Msg:" . $errMsg);
+        }
+        
         http_response_code($responseCode);
         echo json_encode($responseObj);
     }

@@ -5,8 +5,41 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <link rel="stylesheet" href="./index.css">
+    <link rel="stylesheet" href="./preloader.css">
 </head>
 <body>
+     <div id="preloader-container">
+        <div id="container__sapphire">
+            <div id="sapphire__upper-triangles-block">
+                <div class="triangle triangle--small triangle-up">
+                    <div class='triangle-text'></div>
+                </div>
+                <div class="triangle triangle--small triangle-down">
+                    <div class='triangle-text'></div>
+                </div>
+                <div class="triangle triangle--small triangle-up">
+                    <div class='triangle-text'></div>
+                </div>
+                <div class="triangle triangle--small triangle-down">
+                    <div class='triangle-text'></div>
+                </div>
+                <div class="triangle triangle--small triangle-up">
+                    <div class='triangle-text'></div>
+                </div>
+            </div>
+            <!-- <div id="sapphire__down-triangles-block"> -->
+                <div class="triangle triangle-big--center">
+                    <div class='triangle-text'></div>
+                </div>
+                <div class="triangle triangle-big--left">
+                    <div class='triangle-text'></div>
+                </div>
+                <div class="triangle triangle-big--right">
+                    <div class='triangle-text'></div>
+                </div>
+            <!-- </div> -->
+        </div>
+    </div>
     <div id="page-background"></div>
     <nav id="page__navigation">
         <div class="navigation__block">
@@ -30,7 +63,202 @@
         </div>
         <div class="navigation__block">
             <div class="navigation__block__title">API</div>
-            <div class="navigation__block__content">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Labore ab esse aperiam necessitatibus, aut ipsum, laudantium sed minima, nobis assumenda laboriosam. Explicabo totam fugiat, sint officia corporis eum quas laboriosam.</div>
+            <div class="navigation__block__content">
+                <div id="api_description">
+                    <div id="api_description__block--endpoint" class="api_description__block">
+                        <h3>Ендопинты</h3>
+                        <div class="api_description__endpoint__container">
+                            <div class="endpoint__container__uri">api/getCipherSalt</div>
+                            <div class="endpoint__container__param-block">
+                                <div class="endpoint__container__param__title">
+                                    метод
+                                </div>
+                                <div class="endpoint__container__param__description">
+                                    <span class="endpoint__container__param__method--GET">GET</span>
+                                </div>
+                            </div>
+                            <div class="endpoint__container__param-block">
+                                <div class="endpoint__container__param__title">
+                                    используется для
+                                </div>
+                                <div class="endpoint__container__param__description">
+                                    получение соли для шифра
+                                </div>
+                            </div>
+                            <div class="endpoint__container__param-block">
+                                <div class="endpoint__container__param__title">
+                                    необходимые заголовки
+                                </div>
+                                <div class="endpoint__container__param__description">
+                                    отсутствуют
+                                </div>
+                            </div>
+                            <div class="endpoint__container__param-block">
+                                <div class="endpoint__container__param__title">
+                                    формат ответа
+                                </div>
+                                <div class="endpoint__container__param__description">
+                                    application/json
+                                </div>
+                            </div>
+                            <div class="endpoint__container__param-block">
+                                <div class="endpoint__container__param__title">
+                                    пример ответа
+                                </div>
+                                <div class="endpoint__container__param__description">
+                                    {"cipherSalt":"Y2M3MzMxYjk0MDA2NzVjMDE5MzNjOTViYzE4YjVhZTgxNjAxYjg2MzM1ODcwYjQ3MTZmNTI4Zjg1MzFjNDU1MGYzYWM2NDQ5YmRlYTZmOTg5ZjcyYzI5M2Q4NDEyYzI5NWEzNjEzZTY5OTcxZTQzZWFlMmUxMTY4MzQ0ZjcxNTQ"}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="api_description__endpoint__container">
+                            <div class="endpoint__container__uri">api/encryptText</div>
+                            <div class="endpoint__container__param-block">
+                                <div class="endpoint__container__param__title">
+                                    метод
+                                </div>
+                                <div class="endpoint__container__param__description">
+                                    <span class="endpoint__container__param__method--POST">POST</span>
+                                </div>
+                            </div>
+                            <div class="endpoint__container__param-block">
+                                <div class="endpoint__container__param__title">
+                                    используется для
+                                </div>
+                                <div class="endpoint__container__param__description">
+                                    получение зашифрованного текста
+                                </div>
+                            </div>
+                            <div class="endpoint__container__param-block">
+                                <div class="endpoint__container__param__title">
+                                    передаваемые поля
+                                </div>
+                                <div class="endpoint__container__param__description">
+                                    <table class="endpoint__container__param__description__param-table">
+                                        <tr>
+                                            <th>имя</th>
+                                            <th>обязательное</th>
+                                            <th>тип</th>
+                                            <th>доп. инфа</th>
+                                        </tr>
+                                        <tr>
+                                            <td>text</td>
+                                            <td>true</td>
+                                            <td>string</td>
+                                            <td></td>
+                                        </tr>
+                                        <tr>
+                                            <td>fakeLength</td>
+                                            <td>true</td>
+                                            <td>int</td>
+                                            <td>по умолчанию 50, макс. 975</td>
+                                        </tr>
+                                        <tr>
+                                            <td>cipherSalt</td>
+                                            <td>true</td>
+                                            <td>string</td>
+                                            <td>генерится с помощью ендпоинта api/getCipherSalt</td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="endpoint__container__param-block">
+                                <div class="endpoint__container__param__title">
+                                    обязательные заголовки
+                                </div>
+                                <div class="endpoint__container__param__description">
+                                    'content-type': 'application/json'
+                                </div>
+                            </div>
+                            <div class="endpoint__container__param-block">
+                                <div class="endpoint__container__param__title">
+                                    формат ответа
+                                </div>
+                                <div class="endpoint__container__param__description">
+                                    application/json
+                                </div>
+                            </div>
+                            <div class="endpoint__container__param-block">
+                                <div class="endpoint__container__param__title">
+                                    пример ответа
+                                </div>
+                                <div class="endpoint__container__param__description">
+                                    {encryptText: "OWM65©348_т830й1о60e1515ш3i≠qЗ|Гсy3ОаInNmU≠5?584цлё"}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="api_description__endpoint__container">
+                            <div class="endpoint__container__uri">api/decryptText</div>
+                            <div class="endpoint__container__param-block">
+                                <div class="endpoint__container__param__title">
+                                    метод
+                                </div>
+                                <div class="endpoint__container__param__description">
+                                    <span class="endpoint__container__param__method--POST">POST</span>
+                                </div>
+                            </div>
+                            <div class="endpoint__container__param-block">
+                                <div class="endpoint__container__param__title">
+                                    используется для
+                                </div>
+                                <div class="endpoint__container__param__description">
+                                    получение расшифрованного текста
+                                </div>
+                            </div>
+                            <div class="endpoint__container__param-block">
+                                <div class="endpoint__container__param__title">
+                                    передаваемые поля
+                                </div>
+                                <div class="endpoint__container__param__description">
+                                    <table class="endpoint__container__param__description__param-table">
+                                        <tr>
+                                            <th>имя</th>
+                                            <th>обязательное</th>
+                                            <th>тип</th>
+                                            <th>доп. инфа</th>
+                                        </tr>
+                                        <tr>
+                                            <td>text</td>
+                                            <td>true</td>
+                                            <td>string</td>
+                                            <td></td>
+                                        </tr>
+                                        <tr>
+                                            <td>cipherSalt</td>
+                                            <td>true</td>
+                                            <td>string</td>
+                                            <td>генерится с помощью ендпоинта api/getCipherSalt</td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="endpoint__container__param-block">
+                                <div class="endpoint__container__param__title">
+                                    обязательные заголовки
+                                </div>
+                                <div class="endpoint__container__param__description">
+                                    'content-type': 'application/json'
+                                </div>
+                            </div>
+                            <div class="endpoint__container__param-block">
+                                <div class="endpoint__container__param__title">
+                                    формат ответа
+                                </div>
+                                <div class="endpoint__container__param__description">
+                                    application/json
+                                </div>
+                            </div>
+                            <div class="endpoint__container__param-block">
+                                <div class="endpoint__container__param__title">
+                                    пример ответа
+                                </div>
+                                <div class="endpoint__container__param__description">
+                                    {decryptText: "открытый текст"}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
         <div class="navigation__block">
             <div class="navigation__block__title">Почему Simple Cipher</div>
@@ -48,25 +276,35 @@
         <div id="cipher-content__input-block">
             <div id="cipher-content__encrypt-block" class="cipher-content__block">
                 <div id="content__encrypt-block__input" class="content__input-block">
-                    <label for="encryptText">Текст для шифрования</label>
-                    <input type="text" placeholder="Введите текст" id="encryptText" required>
-                    <label for="cipherLength">Желамая длина шифра</label>
-                    <!--подсказка: если шифруемый текст меньше длины шифра - фейковая длина не будет достигнута-->
-                    <input type="number" placeholder="минимум 50 символов" id="cipherLength" min="50" max="100" required>
-                    <label for="cipherCount">Кол-во итоговых шифров</label>
-                    <input type="number" placeholder="Минимум 1" id="cipherCount" min="0" max="100" value="1" required>
-                    <label for="cipherSalt">Соль для шифра</label>
-                    <input type="text" placeholder="Введите текст" id="cipherSalt">
-                    <button type="button" id="content__encrypt-block__input__encrypt">Зашифровать</button>
+                    <div class="input-block__field-row">
+                        <label for="encryptText">Текст для шифрования</label>
+                        <textarea type="text" placeholder="Введите текст" id="encryptText" required></textarea>
+                    </div>
+                    <div class="input-block__field-row field-row--four-fields">
+                        <label for="cipherLength">Желамая длина шифра</label>
+                        <!--подсказка: если шифруемый текст меньше длины шифра - фейковая длина не будет достигнута-->
+                        <input type="number" placeholder="минимум 50 символов" id="cipherLength" min="50" max="100" required>
+                        <label for="cipherCount">Кол-во шифров</label>
+                        <input type="number" placeholder="Минимум 1" id="cipherCount" min="0" max="100" value="1" required>
+                    </div>
+                    <div class="input-block__field-row">
+                        <label for="cipherSalt">Соль для шифра</label>
+                        <textarea type="text" placeholder="Введите текст" id="cipherSalt"></textarea>
+                    </div>
+                    <button type="button" id="content__encrypt-block__input__encrypt" class="content__input-block__submit-btn">Зашифровать</button>
                 </div>
             </div>
             <div id="cipher-content__decrypt-block" class="cipher-content__block">
                 <div id="content__decrypt-block__input" class="content__input-block">
-                    <label for="decryptText">Текст для расшифровки</label>
-                    <input type="text" placeholder="Введите текст" id="decryptText">
-                    <label for="cipherSalt_decrypt">Соль для шифра</label>
-                    <input type="text" placeholder="Введите текст" id="cipherSalt_decrypt">
-                    <button type="button" id="content__decrypt-block__input__decrypt">Расшифровать</button>
+                    <div class="input-block__field-row">
+                        <label for="decryptText">Текст для расшифровки</label>
+                        <textarea type="text" placeholder="Введите текст" id="decryptText"></textarea>
+                    </div>
+                    <div class="input-block__field-row">
+                        <label for="cipherSalt_decrypt">Соль для шифра</label>
+                        <textarea type="text" placeholder="Введите текст" id="cipherSalt_decrypt"></textarea>
+                    </div>
+                    <button type="button" id="content__decrypt-block__input__decrypt" class="content__input-block__submit-btn">Расшифровать</button>
                 </div>
                 <div id="content__decrypt-block__result">  
                 </div>
@@ -78,7 +316,7 @@
     <footer>
         <div>форма обратной связи. Тут будет инпут для для ввода сообщения, текст, что можно оставить отзыв или сообщить о проблеме. наверное можно в виде круглой иконки это оформить</div>
     </footer>
-
-    <script src="./index.js" type="text/javascript"></script>
+    <script src="./index.js" type="module"></script>
+    <script type="module" src="./preloader.js"></script>
 </body>
 </html>

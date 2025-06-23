@@ -1,5 +1,9 @@
 const backgroundEl = document.getElementById('page-background');
 
+import {preloader__show, preloader__hide} from "./preloader.js";
+
+// preloader__show()
+
 //Дешифровка текста
 document.getElementById('content__decrypt-block__input__decrypt').addEventListener('click', async function () {
     let decryptText = document.getElementById('decryptText').value,
@@ -9,41 +13,97 @@ document.getElementById('content__decrypt-block__input__decrypt').addEventListen
         alert('пусто')
         return;
     }
-
+    setTimeout(() => {
+        preloader__show()
+    }, 300);
+    
     let decryptResultBlock = document.getElementById('content__decrypt-block__result')
     // decryptResultBlock.textContent = '';
 
     clearDecryptText();
 
-    let response = await fetch('./CipherController.php', {
+    let response = await fetch('./api/getDecryptText', {
         method: "POST",
         body: JSON.stringify({
-            decryptText: decryptText,
+            text: decryptText,
             cipherSalt: decryptSalt,
-            action: 'decrypt'
+            // action: 'decrypt'
         }),
         headers: {
             'content-type': 'application/json'
         }
     });
+    // let decryptResponse = await response.json()
+
+    
+    /**
+     * Массив с ошибками запроса дешифрования
+     * @type array
+     */
+    let decryptErrMsgArr = []
     let decryptResponse = await response.json()
+    .then( result => {
+        return result;
+    }).catch( errMsg => {
+        decryptErrMsgArr.push('Ошибка парсинга: ' + errMsg)
+    }).finally( () => {
+        setTimeout( () => {
+            preloader__hide()
+        }, 1000)
+    })
+
+
+    //ОШИБКА РОУТИНГА
+    if (decryptResponse.errorMsg) {
+        decryptErrMsgArr.push('Ошибка обращения к серверу: ' + decryptResponse.errorMsg)
+
+        return; 
+    }
+    //ВОЗВРАЩЕННЫЙ КОД ОШИБКИ
+    if (!response.ok) {
+       
+        
+            //Если код ошибки не успешный, при этом передается кастомный текст ошибки
+            if (encryptPromise.value.headers.get('X-Error-Msg')) {
+                decryptErrMsgArr.push(decryptResponse.value.headers.get('X-Error-Msg'))
+            } else {
+                decryptErrMsgArr.push('Код ошибки: ' + decryptResponse.value.status)
+            }
+            //decryptErrMsgArr.push('Код ошибки: ' + decryptResponse.status)
+
+            return;
+    }
+
+    console.log(decryptErrMsgArr)
+    
+    //#Гаврилов
+    //ПРОВЕРЯЙ ВОЗВРАЩЕНИЕ ТЕКСТА ОШИБКИ ПОСЛЕ КАСТОМНОЙ ПРОВЕКИ НА ШИФРОВАНИИ И НА ДЕШИФРОВАНИИ, ПОКА ЧТО НА ШИФРОВАНИИ ТЫ ПРОВЕРЯЕШЬ ТОЛЬКО СТАТУСЫ 400 500, ОШИБКИ ПАРСИНГА JSON И ОШИБКИ ОБРАЩЕНИЯ К СЕРВЕРУ  
 
     //ГАВРИЛОВ
     //ПОДУМАТЬ НА КАКОЙ КОД ОРИЕНТИРОВАТЬСЯ, ЧТОБЫ ПРОДОЛЖАТЬ ИСПОЛНЕНИЕ СКРИПТА (В ОСТАЛЬНЫХ СЛУЧАЯХ ДОЛЖНЫ ЧТО-ТО ПОКАЗЫВАТЬ,Я ОШИБКУ КАКУЮ-ТО)
-    if (response.status !== 404) {
-        console.log(decryptResponse);
-        let childEncryptBlock = document.createElement('div'),
-                encryptTextBlock = document.createElement('div');
-            childEncryptBlock.classList.add('result-text-block');
-            childEncryptBlock.setAttribute('id', 'content__decrypt-block__result__parent-block');
-            encryptTextBlock.classList.add('content__block__result__text')
-            encryptTextBlock.setAttribute('id', 'decrypt-result-text');
-            encryptTextBlock.textContent = decryptResponse.decryptText
-            childEncryptBlock.appendChild(encryptTextBlock);
-            decryptResultBlock.appendChild(childEncryptBlock);
-    } else {
+    // if (response.status !== 404) {
+        // console.log(decryptResponse);
+        setTimeout( () => {
+            let childEncryptBlock = document.createElement('div'),
+                    encryptTextBlock = document.createElement('div');
+                childEncryptBlock.classList.add('result-text-block');
+                childEncryptBlock.setAttribute('id', 'content__decrypt-block__result__parent-block');
+                encryptTextBlock.classList.add('content__block__result__text')
+                encryptTextBlock.setAttribute('id', 'decrypt-result-text');
+                encryptTextBlock.textContent = decryptResponse.decryptText
+                childEncryptBlock.appendChild(encryptTextBlock);
+                decryptResultBlock.appendChild(childEncryptBlock);
+        }, 1100)
+    //} 
+    // else {
 
-    }
+    // }
+})
+
+
+document.getElementById('page-background').addEventListener('click', function() {
+    this.classList.remove('visible')
+    document.querySelector('.navigation__block.show').classList.remove('show')
 })
 
 
@@ -122,7 +182,7 @@ document.addEventListener('click', function(event) {
 
 function clearDecryptText()
 {
-    decryptTextBlock = document.getElementById('content__decrypt-block__result__parent-block');
+    let decryptTextBlock = document.getElementById('content__decrypt-block__result__parent-block');
      console.log(decryptTextBlock)
     if (decryptTextBlock) {
         decryptTextBlock.classList.add('hide')
@@ -137,7 +197,7 @@ function clearDecryptText()
 //Шифрование текста
 document.getElementById('content__encrypt-block__input__encrypt').addEventListener('click', async function () {
     let encryptText = document.getElementById('encryptText').value,
-        encryptFakeLength = document.getElementById('cipherLength').value,
+        encryptFakeLength = document.getElementById('cipherLength').value ?? 50,
         resultCipherCount = document.getElementById('cipherCount').value ?? 1,
         encryptSalt = document.getElementById('cipherSalt').value ?? null,
         prevResulst = document.querySelectorAll('.content__encrypt-block__result__parent');
@@ -154,6 +214,8 @@ document.getElementById('content__encrypt-block__input__encrypt').addEventListen
         return;
     }
 
+    preloader__show()
+
     let encryptResponseArr = [];
     let response;
 
@@ -162,7 +224,7 @@ document.getElementById('content__encrypt-block__input__encrypt').addEventListen
             encryptResponseArr.push(fetch('./api/getEncryptText', {
                 method: "POST",
                 body: JSON.stringify({
-                    encryptText: encryptText,
+                    text: encryptText,
                     fakeLength: encryptFakeLength,
                     cipherSalt: encryptSalt,
                     //action: 'encrypt'
@@ -195,13 +257,22 @@ document.getElementById('content__encrypt-block__input__encrypt').addEventListen
                         })
                         interimArr.push(jsonResponse)
                 } else {
-                    encryptErrArr.push('Код ошибки: ' + encryptPromise.value.status)
+                    //Если код ошибки не успешный, при этом передается кастомный текст ошибки
+                    if (encryptPromise.value.headers.get('X-Error-Msg')) {
+                        encryptErrArr.push(encryptPromise.value.headers.get('X-Error-Msg'))
+                    } else {
+                        encryptErrArr.push('Код ошибки: ' + encryptPromise.value.status)
+                    }
                 }
             } else if (encryptPromise.status == 'rejected') {
                 encryptErrArr.push('Ошибка получения данных: ' + encryptPromise.reason)
             }
         })
         return Promise.all(interimArr).then(resultes => {return resultes;})
+    }).finally( () => {
+        setTimeout( () => {
+            preloader__hide()
+        }, 500)
     })
 
     //ЕСЛИ МАССИВ С ОШИБКАМИ НЕ ПУСТОЙ ВЫВОДИ СООБЩЕНИЕ ПОЛЬЗОВАТЕЛЮ, А ТАКЖЕ ОБРАЙЩАЙСЯ К ЕНДПОИНТУ С ЗАПИСЬЮ ИНФОРМАЦИИ ОБ ОШИБКЕ
@@ -209,7 +280,7 @@ document.getElementById('content__encrypt-block__input__encrypt').addEventListen
     // encryptPromisesArr.forEach(elem => {
         setTimeout(() => {
             // console.log(encryptResponse)
-            // console.log(encryptResponse.cipherArr);
+            // console.log(encryptResponse.encryptText);
             encryptResultBlock.textContent = '';
             encryptPromisesArr.forEach((encryptText, index) => {
                 //console.log(encryptText)
@@ -221,7 +292,7 @@ document.getElementById('content__encrypt-block__input__encrypt').addEventListen
                 encryptTextBlock.classList.add('content__block__result__text')
                 callDecryptButton.classList.add('content__encrypt-block__result__parent__call-decrypt')
                 callDecryptButton.setAttribute('type', 'button');
-                encryptTextBlock.textContent = encryptText.cipherArr
+                encryptTextBlock.textContent = encryptText.encryptText
                 callDecryptButton.textContent = "Расшифровать"
                 childEncryptBlock.appendChild(callDecryptButton);
                 childEncryptBlock.appendChild(encryptTextBlock);
@@ -235,44 +306,9 @@ document.getElementById('content__encrypt-block__input__encrypt').addEventListen
         }, 500);
     // })
 
+        encryptErrArr = [...new Set(encryptErrArr)];
         console.log(encryptErrArr)
-        console.log(encryptPromisesArr)
-
-        return;
-
-    return;
-
-    //let encryptResultBlock = document.getElementById('content__encrypt-block__result')
-    if (response.ok) {
-        setTimeout(() => {
-            console.log(encryptResponse)
-            console.log(encryptResponse.cipherArr);
-            encryptResultBlock.textContent = '';
-            encryptResponse.cipherArr.forEach((encryptText, index) => {
-                //console.log(encryptText)
-                let childEncryptBlock = document.createElement('div'),
-                    encryptTextBlock = document.createElement('div'),
-                    callDecryptButton = document.createElement('button');
-                childEncryptBlock.classList.add('content__encrypt-block__result__parent', 'result-text-block')
-                // childEncryptBlock.classList.add('result-text-field')
-                encryptTextBlock.classList.add('content__block__result__text')
-                callDecryptButton.classList.add('content__encrypt-block__result__parent__call-decrypt')
-                callDecryptButton.setAttribute('type', 'button');
-                encryptTextBlock.textContent = encryptText
-                callDecryptButton.textContent = "Расшифровать"
-                childEncryptBlock.appendChild(callDecryptButton);
-                childEncryptBlock.appendChild(encryptTextBlock);
-                
-                //console.log(childEncryptBlock)
-                
-                setTimeout(() => {
-                    encryptResultBlock.appendChild(childEncryptBlock)
-                }, 100 * index);
-            });
-        }, 500);
-    } else {
-        alert('ошибка');
-    }
+        // console.log(encryptPromisesArr)
 })
 
 const navigationElem = document.querySelectorAll('.navigation__block__title');
