@@ -1,0 +1,19 @@
+2025-06-24 09:16:45 Ошибка ошибка: E_NOTICE Undefined variable: test в файле C:\upload_files\OSPanel\domains\cipher\CipherController.php на 106<br /> 
+2025-06-24 09:17:27 Ошибка: E_NOTICE Undefined variable: test в файле C:\upload_files\OSPanel\domains\cipher\CipherController.php на 106<br /> 
+2025-06-24 09:22:35 Ошибка: E_NOTICE Undefined variable: test в файле C:\upload_files\OSPanel\domains\cipher\CipherController.php на 106<br /> 
+2025-06-24 09:29:02 Controller: E_NOTICE Undefined variable: test в файле C:\upload_files\OSPanel\domains\cipher\CipherController.php на 106<br /> 
+2025-06-24 09:29:34 Controller: E_NOTICE Undefined index: validation в файле C:\upload_files\OSPanel\domains\cipher\CipherController.php на 208<br /> 
+2025-06-24 09:30:36 Controller: E_NOTICE Undefined offset: 0 в файле C:\upload_files\OSPanel\domains\cipher\cipher_ver123.php на 475<br /> 
+2025-06-24 09:33:35 E_NOTICE Undefined offset: 0 в файле C:\upload_files\OSPanel\domains\cipher\cipher_ver123.php на 475 
+2025-06-24 09:34:19 E_NOTICE Undefined offset: 0 в файле C:\upload_files\OSPanel\domains\cipher\cipher_ver123.php на 475 
+2025-06-24 09:34:41 E_NOTICE Undefined offset: 0 в файле C:\upload_files\OSPanel\domains\cipher\cipher_ver123.php на 475 
+2025-06-24 09:35:35 E_NOTICE Undefined offset: 0 в файле C:\upload_files\OSPanel\domains\cipher\cipher_ver123.php на 475 
+2025-06-24 09:39:46 E_NOTICE Undefined offset: 0 в файле C:\upload_files\OSPanel\domains\cipher\cipher_ver123.php на 475 
+2025-06-24 09:40:07 E_NOTICE Undefined offset: 0 в файле C:\upload_files\OSPanel\domains\cipher\cipher_ver123.php на 475 
+2025-06-24 09:43:00 E_NOTICE Undefined offset: 0 в файле C:\upload_files\OSPanel\domains\cipher\cipher_ver123.php на 475 
+2025-06-24 09:43:30 E_NOTICE Undefined offset: 0 в файле C:\upload_files\OSPanel\domains\cipher\cipher_ver123.php на 475 
+2025-06-24 09:46:02 E_NOTICE Undefined offset: 0 в файле C:\upload_files\OSPanel\domains\cipher\cipher_ver123.php на 475 
+2025-06-24 09:47:23 E_NOTICE Undefined offset: 0 в файле C:\upload_files\OSPanel\domains\cipher\cipher_ver123.php на 475 
+2025-06-24 09:48:04 E_NOTICE Undefined offset: 0 в файле C:\upload_files\OSPanel\domains\cipher\cipher_ver123.php на 475 
+2025-06-24 09:48:21 E_NOTICE Undefined offset: 0 в файле C:\upload_files\OSPanel\domains\cipher\cipher_ver123.php на 475 
+2025-06-24 09:48:43 E_NOTICE Undefined offset: 0 в файле C:\upload_files\OSPanel\domains\cipher\cipher_ver123.php на 475 

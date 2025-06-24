@@ -98,9 +98,12 @@ class CipherController
      */
     public function __construct(string $action)
     {
+        set_error_handler([$this, "myErrorHandler"]);
         $this->action = $action;
         $this->rqstParams = json_decode(file_get_contents('php://input'), true) ?? [];
         $this->cipherSalt = array_key_exists('cipherSalt', $this->rqstParams) !== false ? $this->rqstParams['cipherSalt'] : null;
+
+        // var_dump($test);
 
         $checkEndpoint = $this->checkRoute($this->action);
         //$checkEndPointErr = null;
@@ -111,11 +114,22 @@ class CipherController
             $this->returnResponse([], $checkEndpoint['responseCode'], $checkEndpoint['errorMsg']);
         } else {
             require_once ("./CipherVersion.php");
-            call_user_func(
-                array($this, $this->action), 
-                $this->rqstParams['text'], 
-                (array_key_exists('fakeLength', $this->rqstParams) !== false ? $this->rqstParams['fakeLength'] : 0)
-            );
+            switch ($this->action) {
+                case 'getEncryptText':
+                    $this->getEncryptText($this->rqstParams['text'], (array_key_exists('fakeLength', $this->rqstParams) !== false ? $this->rqstParams['fakeLength'] : 50));
+                    break;
+                case 'getDecryptText':
+                    $this->getDecryptText($this->rqstParams['text']);
+                    break;
+                case 'createCipherSalt':
+                    $this->createCipherSalt();
+                    break;
+            }
+            // call_user_func(
+            //     array($this, $this->action), 
+            //     $this->rqstParams['text'], 
+            //     (array_key_exists('fakeLength', $this->rqstParams) !== false ? $this->rqstParams['fakeLength'] : 0)
+            // );
         }
 
         die();
@@ -129,7 +143,7 @@ class CipherController
 
         //$encryptText = $this->getEncryptText();
 
-        set_error_handler([$this, "myErrorHandler"]);
+        
     }
 
     #Гаврилов
@@ -191,7 +205,7 @@ class CipherController
                             #Гаврилов
                             //ПОПРОБУЙ ОТПРАВИТЬ ЕНДПОИНТ С КОМПА, НЕ С СЕРВЕРА БЕЗ СОЛИ. ЗАПРОС НЕ ДОЛЖЕН ПРОЙТИ
                         //Если в запросе предусмотрено конкретное значение для передаеваемого параметра запроса, происходит валидация по регулярному значению 
-                        } else if ($paramData['validation']) {
+                        } else if (array_key_exists('validation', $paramData) !== false) {
                             //Если для валидации параметра применяется регулярное выражение
                             if ($paramData['validation']['validationRegular']) {
                                 if (preg_match($paramData['validation']['validationRegular'], $this->rqstParams[$paramName]) == false) {
@@ -315,7 +329,7 @@ class CipherController
 
 
     public function myErrorHandler($errno, $errstr, $errfile, $errline)
-{
+    {
     $errArr = [
         1 => 'E_ERROR',
         2 => 'E_WARNING',
@@ -331,18 +345,28 @@ class CipherController
         2048 => 'E_STRICT',
     ];
 
-    $errorLogMsg = "Ошибка ошибка: " . $errArr[$errno] . " $errstr в файле $errfile на $errline<br />";
+    #Гаврилов
+    //КОГДА ПЕРЕДЕЛАЕШЬ СТРУКТУРУ НА ПАПКИ/ФАЙЛ ВЕРСИИ, А НЕ КАК СЕЙЧАС ФАЙЛ_ВЕРСИЯ.PHP, ПОСМОТРИ БУДЕТ ЛИ КОРРЕКТНО В ЛОГ ЗАПИСЫВАТЬСЯ НАЗВАНИЕ ФАЙЛА, ЧТОБЫ ПОНИМАТЬ В КАКОМ СКРИПТЕ ПРОИЗОШЛА ОШИБКА
+    $errorLogMsg = $errArr[$errno] . " $errstr в файле $errfile на $errline";
 
     //Если ошибка возникает при дешифровке текста - возвращаем ранломный запутанный текст будто все прошло "по плану", но алгоритм не расшифровал кривое сообщение
     if ($this->action == 'decrypt') {
         $this->returnResponse([
             'decryptText' => $this->getRandomText($this->decryptText)
         ], 200, $errorLogMsg);
-        
+        #Гаврилов
+        //если ошибка некритичная - не останавливай рабоут скрипта, не выкидывай 500 ошибку
     } else {
+        $this->returnResponse([
+            'errMsg' => 'Возникла непредвиденная ошибка, попробуйте еще раз'
+        ], 500, $errorLogMsg);
         #Гаврилов
         //ЧТО ВОЗВРАЩАТЬ ЕСЛИ ПРИ ШИФРОВАНИИ ОШИБКИ? ПРОСТО ТЕКСТ ОШИБКИ И КОД
     }
+
+    $logErrMsg = (new DateTime())->format('Y-m-d h:i:s') . " $errorLogMsg \n";
+    file_put_contents("./log/err.log", $logErrMsg, FILE_APPEND);
+
     exit(1);
 
     /* Не запускаем внутренний обработчик ошибок PHP */
@@ -354,6 +378,8 @@ class CipherController
         header('Content-Type: application/json; charset=utf-8');
         //var_dump($responseObj);
         if ($errMsg) {
+            #Гаврилов
+            //НУЖНО ПЕРЕПИСАТЬ ВСЮ ОБРАБОТКУ ОШИБОК НА ЧТЕНИЕ ЗАГОЛОВКА X-ERROR-MSG, А НЕ КЛЮЧ ОБЪЕКТА ERR.MSG. В js скрипте тоже понадобится скорректировать логику
             header("X-Error-Msg:" . $errMsg);
         }
         

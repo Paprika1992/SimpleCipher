@@ -49,7 +49,7 @@
             position: absolute;
             width: 0;
             height: 0;
-            filter: drop-shadow(0 0 2px grey);
+            filter: drop-shadow(0px 0px 3px #eac18a);
             transition: 0.5s;
             transition-duration: 1s;
 
@@ -100,7 +100,7 @@
                 font-size: 1.2rem;
                 position: absolute;
                 text-indent: -2px;
-                color: white;
+                color: #eac18a;
 
                 &.visible {
                     animation: shineLetter;
@@ -189,7 +189,7 @@
 @keyframes shineLetter {
     from {
         /* transform: translateY(-10px); */
-        opacity: 0.5;
+        opacity: 1;
     }
 
     to {

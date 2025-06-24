@@ -53,10 +53,13 @@
                 <div class="navigation__content__section">
                     <button type="button" id="getSalt">Получить секретный ключ</button>
                     <!--TODO идентификато ниже не должен быть с заглавной буквы-->
-                    <div id="GetCipherSalt"></div>
+                    <div id="GetCipherSalt">
+                        <div>Ваша соль:</div>
+                        <div id="cipher-salt__text-block"></div>
+                    </div>
                     <div id="сipher-salt-timer-block">
-                        <div id="salt-timer-block__text"></div>
                         <div id="salt-timer-block__timer"></div>
+                        <div id="salt-timer-block__text"></div>
                     </div>
                 </div>
             </div>
@@ -280,16 +283,16 @@
                         <label for="encryptText">Текст для шифрования</label>
                         <textarea type="text" placeholder="Введите текст" id="encryptText" required></textarea>
                     </div>
+                    <div class="input-block__field-row">
+                        <label for="cipherSalt">Соль для шифра</label>
+                        <textarea type="text" placeholder="Введите текст" id="cipherSalt"></textarea>
+                    </div>
                     <div class="input-block__field-row field-row--four-fields">
                         <label for="cipherLength">Желамая длина шифра</label>
                         <!--подсказка: если шифруемый текст меньше длины шифра - фейковая длина не будет достигнута-->
                         <input type="number" placeholder="минимум 50 символов" id="cipherLength" min="50" max="100" required>
                         <label for="cipherCount">Кол-во шифров</label>
                         <input type="number" placeholder="Минимум 1" id="cipherCount" min="0" max="100" value="1" required>
-                    </div>
-                    <div class="input-block__field-row">
-                        <label for="cipherSalt">Соль для шифра</label>
-                        <textarea type="text" placeholder="Введите текст" id="cipherSalt"></textarea>
                     </div>
                     <button type="button" id="content__encrypt-block__input__encrypt" class="content__input-block__submit-btn">Зашифровать</button>
                 </div>

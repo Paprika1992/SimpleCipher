@@ -2,7 +2,11 @@ const backgroundEl = document.getElementById('page-background');
 
 import {preloader__show, preloader__hide} from "./preloader.js";
 
-// preloader__show()
+preloader__show()
+
+setTimeout(function() {
+    preloader__hide()
+}, 500)
 
 //Дешифровка текста
 document.getElementById('content__decrypt-block__input__decrypt').addEventListener('click', async function () {
@@ -51,8 +55,7 @@ document.getElementById('content__decrypt-block__input__decrypt').addEventListen
             preloader__hide()
         }, 1000)
     })
-
-
+    
     //ОШИБКА РОУТИНГА
     if (decryptResponse.errorMsg) {
         decryptErrMsgArr.push('Ошибка обращения к серверу: ' + decryptResponse.errorMsg)
@@ -61,15 +64,19 @@ document.getElementById('content__decrypt-block__input__decrypt').addEventListen
     }
     //ВОЗВРАЩЕННЫЙ КОД ОШИБКИ
     if (!response.ok) {
-       
-        
+        // if (decryptResponse.errMsg) {
+        //     decryptErrMsgArr.push(decryptResponse.errMsg)
+        // } else {
             //Если код ошибки не успешный, при этом передается кастомный текст ошибки
-            if (encryptPromise.value.headers.get('X-Error-Msg')) {
-                decryptErrMsgArr.push(decryptResponse.value.headers.get('X-Error-Msg'))
+            if (response.headers.get('X-Error-Msg')) {
+                decryptErrMsgArr.push(response.headers.get('X-Error-Msg'))
             } else {
-                decryptErrMsgArr.push('Код ошибки: ' + decryptResponse.value.status)
+                decryptErrMsgArr.push('Код ошибки: ' + decryptResponse.status)
             }
+        //}
+            
             //decryptErrMsgArr.push('Код ошибки: ' + decryptResponse.status)
+            console.log(decryptErrMsgArr)
 
             return;
     }
@@ -122,13 +129,20 @@ document.getElementById('getSalt').addEventListener('click', async function (eve
         //     'content-type': 'application/json'
         // }
     });
-    let cipherSaltRqst = await response.json()
+    let cipherSaltRqst = await response.json().catch(function(err){
+        console.log(err)
+    })
         cipherSalt = cipherSaltRqst.cipherSalt
     
     console.log(cipherSaltRqst)
 
     if (response.status !== 200) {
-        alert('ОШИБКА');
+        if (cipherSaltRqst.errMsg) {
+            alert(cipherSaltRqst.errMsg)
+        } else {
+            alert('Непредвиденная ошибка');
+        }
+        
         //ГАВРИЛОВ
         //ОТПРАВЛЯЙ ЕНДПОИНТ НА ЛОГИРОВАНИЕ ИНФОРМАЦИИ ОБ ОШИБКЕ
         return;
@@ -139,19 +153,23 @@ document.getElementById('getSalt').addEventListener('click', async function (eve
     //Счетчик удаление соли к шифру
     let cipherSaltCount = 5;
 
-    document.getElementById('GetCipherSalt').innerHTML = 'Ваш секретный ключ - ' + cipherSalt
-    document.getElementById('salt-timer-block__text').innerHTML = 'Секретный ключ будет удален через ' + cipherSaltCount;
+    // document.getElementById('GetCipherSalt').innerHTML = 'Ваш секретный ключ - ' + cipherSalt
+    document.getElementById('GetCipherSalt').classList.add('visible')
+    document.getElementById('cipher-salt__text-block').innerHTML = cipherSalt;
+    document.getElementById('salt-timer-block__text').innerHTML = 'Секретный ключ будет удален через <span>' + cipherSaltCount + '<span>';
     document.getElementById('salt-timer-block__timer').classList.add('saltCounterStart')
 
     let cipherSaltInterval = setInterval(function(){
         cipherSaltCount--;
-        document.getElementById('salt-timer-block__text').innerHTML = 'Секретный ключ будет удален через ' + cipherSaltCount;
+        document.getElementById('salt-timer-block__text').innerHTML = 'Секретный ключ будет удален через <span>' + cipherSaltCount + '</span>';
     }, 1000)
-    //ГАВРИЛОВ
+    //ГАВРИЛОВ  
     //ПОКА ИДЕТ ОТСЧЕТ ПО УДАЛЕНИЮ СГЕНЕРИРОВАННОГО СЕКРЕТНОГО КЛЮЧА НАЖАТИЕ ПО КНОПКИ "ПОЛУЧИТЬ КЛЮЧ" НИ К ЧЕМУ НЕ ПРИВОДИТ
 
     setTimeout(function(){
-        document.getElementById('GetCipherSalt').innerHTML = "";
+        // document.getElementById('GetCipherSalt').innerHTML = "";
+        document.getElementById('GetCipherSalt').classList.remove('visible');
+        document.getElementById('cipher-salt__text-block').innerHTML = "";
         document.getElementById('salt-timer-block__text').innerHTML = "";
         event.target.classList.remove('getSalt');
         document.getElementById('salt-timer-block__timer').classList.remove('saltCounterStart')
@@ -183,7 +201,6 @@ document.addEventListener('click', function(event) {
 function clearDecryptText()
 {
     let decryptTextBlock = document.getElementById('content__decrypt-block__result__parent-block');
-     console.log(decryptTextBlock)
     if (decryptTextBlock) {
         decryptTextBlock.classList.add('hide')
     
@@ -331,4 +348,8 @@ navigationElem.forEach((elem) => {
         //elem.parentElement.previousElementSibling.classList.remove('click')
         
     })
+})
+
+document.getElementById('decryptText').addEventListener('input', function(el){
+    clearDecryptText()
 })

@@ -1,5 +1,5 @@
 //УБЕРИ ШИРОКИЕ СИМВОЛЫ И БУКВЫ И ЗАМЕНИ ИХ УЗКИМИ И ТТОГДА НЕ ПОНАДОБИТСЯ СДВИГАТЬ БУКВЫ ОТНОСИТЕЛЬНО ЦЕНТРА ЭЛЕМЕНТА
-let symbolsArr = '§rzC?I~К)чМSyJiТО<}÷g€мP0НbNУ≠x9#ц^Ёn?AЦfRj`и]©ql№D+в1еаубsПvi-ЛF%HЭ3X_K>ha&тфоГ:π$сЗL!С5kVd(*EQWY'.split('');
+let symbolsArr = '§rzC?I~К)чМSyJiТО<}÷g€мP0НbNУ≠x9#ц^Ёn?AЦfRj`и]©qlD+в1еаубsПvi-ЛF%HЭ3X_K>ha&тфоГ:π$сЗL!С5kVd(*EQWY'.split('');
 
 //sapphire
 //cipher
