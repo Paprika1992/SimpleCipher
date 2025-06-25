@@ -14,10 +14,10 @@ class CipherController
      * @var string шифрование/дешифрование
      */
     private $action;
-    /**
-     * @var string текст для шифрования
-     */
-    private $encryptText;
+    // /**
+    //  * @var string текст для шифрования
+    //  */
+    // private $encryptText;
     /**
      * @var string текст для дешифрования
      */
@@ -26,6 +26,10 @@ class CipherController
      * @var array массив параметров запроса
      */
     private $rqstParams;
+    /**
+     * @var object экземпляр класса шифровальщика;
+     */
+    private $cipherObj;
     /**
      * @var array $routes списки доступных роутов api
      * TODO
@@ -98,6 +102,7 @@ class CipherController
      */
     public function __construct(string $action)
     {
+        
         set_error_handler([$this, "myErrorHandler"]);
         $this->action = $action;
         $this->rqstParams = json_decode(file_get_contents('php://input'), true) ?? [];
@@ -288,16 +293,18 @@ class CipherController
      *
      * @return array
      */
-    public function getEncryptText(string $encryptText, int $fakeLength = 50): void
+    public function getEncryptText(string $encryptText, int $fakeLength): void
     {
-        $this->encryptText = $encryptText;
+        
+        //$this->encryptText = $encryptText;
         require_once ("./cipher_ver" . $this->cipherVer . ".php");
         // $this->cipherVer = $this->cipherVer;
         $resultCipher = null;
+        $this->cipherObj = new SimpleCipher($encryptText, $this->cipherSalt);
         //$n = 1;
         //while ($n <= $cipherCount) {
             // $resultCipherArr[] = (new CipherController($rqstParams->action, $rqstParams->cipherSalt))->getEncryptText($rqstParams->encryptText, $rqstParams->fakeLength);
-            $resultCipher = (new SimpleCipher($encryptText, $this->cipherSalt))->encryptText($this->rqstParams['fakeLength']);
+            $resultCipher = $this->cipherObj->encryptText($fakeLength);
             //$n++;
             // var_dump($resultCipherArr);
         //}
@@ -318,13 +325,18 @@ class CipherController
     public function getDecryptText(string $decryptText): void
     {
         $this->decryptText = $decryptText;
-        $this->cipherVer = CipherVersion::getCipherVersion($decryptText);
+        
+        $this->cipherVer = CipherVersion::getVersion($this->decryptText)['cipherVersion'];
+        #Гаврилов
+        //ПРОВЕРКА СУЩЕСТВУЕТ ЛИ ФАЙЛЫ
         require_once ("./cipher_ver" . $this->cipherVer . ".php");
-        $testCipher = (new SimpleCipher($decryptText, $this->cipherSalt))->decryptText();
+        $this->cipherObj = new SimpleCipher($this->decryptText, $this->cipherSalt);
+        $testCipher =  $this->cipherObj->decryptText();
 
         $this->returnResponse([
             'decryptText' => $testCipher,
         ]);
+
     }
 
 
@@ -350,15 +362,15 @@ class CipherController
     $errorLogMsg = $errArr[$errno] . " $errstr в файле $errfile на $errline";
 
     //Если ошибка возникает при дешифровке текста - возвращаем ранломный запутанный текст будто все прошло "по плану", но алгоритм не расшифровал кривое сообщение
-    if ($this->action == 'decrypt') {
+    if ($this->action == 'getDecryptText') {
         $this->returnResponse([
             'decryptText' => $this->getRandomText($this->decryptText)
-        ], 200, $errorLogMsg);
+        ], 200);
         #Гаврилов
         //если ошибка некритичная - не останавливай рабоут скрипта, не выкидывай 500 ошибку
     } else {
         $this->returnResponse([
-            'errMsg' => 'Возникла непредвиденная ошибка, попробуйте еще раз'
+            // 'errMsg' => 'Возникла непредвиденная ошибкаA, попробуйте еще раз'
         ], 500, $errorLogMsg);
         #Гаврилов
         //ЧТО ВОЗВРАЩАТЬ ЕСЛИ ПРИ ШИФРОВАНИИ ОШИБКИ? ПРОСТО ТЕКСТ ОШИБКИ И КОД

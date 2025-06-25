@@ -57,11 +57,11 @@ document.getElementById('content__decrypt-block__input__decrypt').addEventListen
     })
     
     //ОШИБКА РОУТИНГА
-    if (decryptResponse.errorMsg) {
-        decryptErrMsgArr.push('Ошибка обращения к серверу: ' + decryptResponse.errorMsg)
+    // if (decryptResponse.errorMsg) {
+    //     decryptErrMsgArr.push('Ошибка обращения к серверу: ' + decryptResponse.errorMsg)
 
-        return; 
-    }
+    //     return; 
+    // }
     //ВОЗВРАЩЕННЫЙ КОД ОШИБКИ
     if (!response.ok) {
         // if (decryptResponse.errMsg) {
@@ -79,6 +79,10 @@ document.getElementById('content__decrypt-block__input__decrypt').addEventListen
             console.log(decryptErrMsgArr)
 
             return;
+    } else {
+       if (response.headers.get('X-Error-Msg')) {
+            decryptErrMsgArr.push(response.headers.get('X-Error-Msg'))
+        } 
     }
 
     console.log(decryptErrMsgArr)
