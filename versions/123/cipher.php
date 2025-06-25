@@ -167,6 +167,10 @@ class SimpleCipher
 	 * @var array массив с позициями символов соли в массиве [0=>a, 1=>b, 2=>c ...], на основе которого будет происходит запутывание алгоритма при передаче соли
 	 */
 	private $saltNumberSegments;
+	/**
+	 * @var mixed фейковый ключ шифра данной версии, который формируется на основании одного из реальных шифров
+	 */
+	public $fakeCipherKey;
 	//Хэш суммы всех символов соли
 	private $saltHashSum = null;
 	/**
@@ -195,7 +199,12 @@ class SimpleCipher
 		//ПОПРОБУЙ В СОЛЬ ПЕРЕДАТЬ КИТАЙСКИЙ СИМВОЛ ИЛИ РУССКИЙ, ОНИ ДОЛЖНЫ УДАЛЯТЬСЯ ТУТ. В СОЛИ МОЖЕТ БЫТЬ ТОЛЬКО ЛАТИНСКИЕ СИМВОЛЫ И ЦИФРЫ
 		//ОНИ НИ В КОЕМ СЛУЧАЕ НЕ ДОЛЖНЫ УДАЛЯТЬСЯ ТУТ. СОЛЬ ДОЛЖНА ВАЛИДИРОВАТЬСЯ НА КАКОМ-ТО ЭТАПЕ. ЕСЛИ ВАЛИДАЦИЯ НЕ ПРОШЛА - ВОЗВРАЩАЕМ ОШИБКУ И СООБЩАЕМ ПОЛЬЗОВАТЕЛЮ О КРИВОЙ СОЛИ
 		$this->salt = preg_replace('/[^a-zA-Z0-9]+/', '', $salt);
-		$this->matrixDepth = sqrt(mb_strlen(file_get_contents($this->keyFilesPath . "cipherKey_0.txt")));
+		$this->fakeCipherKey = file_get_contents($this->keyFilesPath . "cipherKey_0.txt");
+		$this->fakeCipherKey = $this->getStrArr($this->fakeCipherKey);
+		shuffle($this->fakeCipherKey);
+		$this->fakeCipherKey = implode('', $this->fakeCipherKey);
+		$this->matrixDepth = sqrt(mb_strlen($this->fakeCipherKey));
+		
 		$this->saltNumberSegments = $this->getSaltNumbersArr();
 
 	}
@@ -252,6 +261,15 @@ class SimpleCipher
 	}
 
 
+	// /**
+	//  * Метод возвращает фейковый ключ, формируя его на основе одног из реальных ключей шифра даннной версии
+	//  *
+	//  * @return string
+	//  */
+	// public function getFakeKey()
+	// {
+	// 	$realKey = file_get_contents($this->keyFilesPath . "cipherKey_0.txt");
+	// }
 
 
 	/**

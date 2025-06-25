@@ -271,22 +271,8 @@ class CipherController
 
 
     /**
-     * Метод валидации соли для шифра
-     *
-     * @param string $cipherSalt соль для
-     * @return void
-     */
-    // function validateCipherSalt(string $cipherSalt)
-    // {
-    //     return preg_match('/^[0-9a-zA-Z]{171}$/', $this->cipherSalt);
-    // }
-
-
-    /**
      * 
-     * REQUEST_TIME_FLOAT
-     * REMOTE_ADDR
-     * time()
+
      */
 
     //TODO
@@ -299,25 +285,44 @@ class CipherController
      */
     public function getEncryptText(string $encryptText, int $fakeLength): void
     {
-        
-        //$this->encryptText = $encryptText;
         require_once ("./versions/" . $this->cipherVer . "/cipher.php");
-        // $this->cipherVer = $this->cipherVer;
         $resultCipher = null;
+        #Гаврилов
+        //ВЫНЕСТИ СОЗДАНИЕ ЭКЗЕМЛПРЯА КЛАССА ШИФРОВАНИЯ В КОНСТРУКТОР ВСЕ ТАКИ
         $this->cipherObj = new SimpleCipher($encryptText, $this->cipherSalt);
-        //$n = 1;
-        //while ($n <= $cipherCount) {
-            // $resultCipherArr[] = (new CipherController($rqstParams->action, $rqstParams->cipherSalt))->getEncryptText($rqstParams->encryptText, $rqstParams->fakeLength);
-            $resultCipher = $this->cipherObj->encryptText($fakeLength);
-            //$n++;
-            // var_dump($resultCipherArr);
-        //}
+
+        if (!$this->validateEncrypText($encryptText, $this->cipherObj->fakeCipherKey)) {
+            $this->returnResponse([
+                'encryptText' => null,
+            ], 400, 'The text contains invalid characters');
+
+            return;
+        }
+
+        $resultCipher = $this->cipherObj->encryptText($fakeLength);
         
         $this->returnResponse([
             'encryptText' => $resultCipher,
         ]);
+    }
 
-        //return $$resultCipherArr;
+
+    #Гаврилов
+    //НА ДЕМОНСТРАЦИОННОЙ СТРАНИЦЕ ДОЛЖЕН БЫТЬ АЛЕРТ ЕСЛИ ВАЛИДАЦИЯ НЕ ПРОШЛА
+    /**
+     * Метод валидирует шифруемый текст на наличие нешифруемых символов, проводя поиск по ним в одном из ключей шифра текущей версии
+     *
+     * @param string $encryptText шифруемый текст
+     * @param string $fakeCipherKey фейковый ключ актуальной версии шифра, сформированный на основе одного из реальных ключей шифра
+     * @return bool
+     */
+    private function validateEncrypText(string $encryptText, string $fakeCipherKey)
+    {
+        $cipherValidSymbArr = preg_split('//u', $fakeCipherKey, -1, PREG_SPLIT_NO_EMPTY);
+        $encryptUniqueSymbArr = array_unique(preg_split('//u', $encryptText, -1, PREG_SPLIT_NO_EMPTY));
+        $getInvalidSymbols = empty(array_diff($encryptUniqueSymbArr, $cipherValidSymbArr));
+
+        return $getInvalidSymbols;
     }
 
 
