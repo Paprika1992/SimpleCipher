@@ -31,6 +31,10 @@ class CipherController
      */
     private $cipherObj;
     /**
+     * @var string фейковый ключ для валидации шифруемой строки на наличие неподходящих символов ЗАПРАШИВАТЬ ПЕРВЫЙ КЛЮЧ ИЗ АКТУАЛЬНОЙ ВЕРСИИ ШИФРА, ПЕРЕМЕШИВАТЬ ЕГО И ВОЗВРАЩАТЬ. ДАЛЬШЕ УЖЕ ПРОВОДИТ ВАЛИДАЦИЮ
+     */
+    private $fakeKey;
+    /**
      * @var array $routes списки доступных роутов api
      * TODO
      * ЗДЕСЬ ТАК ЖЕ ДОЛЖНЫ БЫТЬ ПРОПИСАНЫ ОБЯЗАТЕЛЬНЫЕ И НЕ ОБЯЗАТЕЛЬНЫЕ ПЕРЕДАВАЕМЫЕ POST АРГУМЕНТЫ И ПАРАМЕТРЫ ИХ ВАЛИДАЦИИ
@@ -102,7 +106,7 @@ class CipherController
      */
     public function __construct(string $action)
     {
-        
+
         set_error_handler([$this, "myErrorHandler"]);
         $this->action = $action;
         $this->rqstParams = json_decode(file_get_contents('php://input'), true) ?? [];
@@ -297,7 +301,7 @@ class CipherController
     {
         
         //$this->encryptText = $encryptText;
-        require_once ("./cipher_ver" . $this->cipherVer . ".php");
+        require_once ("./versions/" . $this->cipherVer . "/cipher.php");
         // $this->cipherVer = $this->cipherVer;
         $resultCipher = null;
         $this->cipherObj = new SimpleCipher($encryptText, $this->cipherSalt);
@@ -326,10 +330,10 @@ class CipherController
     {
         $this->decryptText = $decryptText;
         
-        $this->cipherVer = CipherVersion::getVersion($this->decryptText)['cipherVersion'];
+        $this->cipherVer = CipherVersion::getVersion($this->decryptText);
         #Гаврилов
         //ПРОВЕРКА СУЩЕСТВУЕТ ЛИ ФАЙЛЫ
-        require_once ("./cipher_ver" . $this->cipherVer . ".php");
+        require_once ("./versions/" . $this->cipherVer . "/cipher.php");
         $this->cipherObj = new SimpleCipher($this->decryptText, $this->cipherSalt);
         $testCipher =  $this->cipherObj->decryptText();
 

@@ -3,7 +3,8 @@
   --color_orange_main_opacity: rgba(234, 193, 138, 0.75);
   --color_blue_main: #3a3a65;
   --color_background: #fffdeb;
-  --color_blue_minor: #6f6f9d;
+  --color_blue_button: #6f6f9d;
+  --color_blue_minor: #555590;
 }
 
 *, *::before, *::after {
@@ -27,7 +28,7 @@ button{
     line-height: 32px;
     font-size: 14px;
     color: white;
-    background-color: var(--color_blue_minor);
+    background-color: var(--color_blue_button);
     cursor: pointer;
     transition: 0.3s;
     /* box-shadow: 0px 0px 3px 1px #8b8b8b; */
@@ -214,7 +215,7 @@ textarea{
       z-index: 2;
 
       & #decrypt-result-text{
-        background: #6969b2;
+        background: var(--color_blue_minor);
         color: white;
       }
 
@@ -224,6 +225,7 @@ textarea{
         border-radius: 10px;
         margin: 10px;
         box-shadow: 0 0 5px 3px grey;
+        padding-bottom: 50px;
         
         &>.content__input-block{
           /* display: grid;
@@ -242,9 +244,11 @@ textarea{
           }
 
           &>.content__input-block__submit-btn{
-            width: 25%;
+            width: 200px;
             /* margin: auto; */
             display: block;
+            position: absolute;
+            bottom: 0;
           }  
         }
 
@@ -254,7 +258,7 @@ textarea{
       &>#cipher-content__encrypt-block{
           color: white;
           flex-basis: 50%;
-          background: #555590;
+          background: var(--color_blue_minor);
 
           &>#content__encrypt-block__result{
             overflow-y: scroll;

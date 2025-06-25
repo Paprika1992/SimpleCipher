@@ -7,28 +7,28 @@ class CipherVersion
    * Метод получает из зашифрованного текста версию алгоритма
    *
    * @param string $cipherText зашифрованный текст
-   * @return array
+   * @return int
    */
-  public static function getVersion(string $cipherText): array
+  public static function getVersion(string $cipherText): int
 	{
-		$versionArr = [
-			'cipherVersion' => null,
-			'cipherKey' => null,
-		];
+		// $versionArr = [
+		// 	'cipherVersion' => null,
+		// 	'cipherKey' => null,
+		// ];
     $versionString = mb_substr($cipherText, -6);
 		//Массив кирилических и латинских букв и цифр, которые участвовали в формировании версии
 		$lettersArr = self::$lettersArr;
 		$numberArr = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
 		$versionSymbArr = preg_split('//u', $versionString, -1, PREG_SPLIT_NO_EMPTY);
 		//Вычленяем числа из строки с шифром
-		$numberArr  = array_values(array_intersect($versionSymbArr, $numberArr));
+		$versionNumberArr  = array_values(array_intersect($versionSymbArr, $numberArr));
 		//Вычленяем буквы из строки с шифром
 		$letterArr  = array_values(array_diff($versionSymbArr, $numberArr));
 		//Определяем паттерн размещения
-		$pattern = $numberArr[0];
+		$pattern = $versionNumberArr[0];
 		//Получаем флаг реверса 
-		$reverseLettersArr = (($numberArr[1] % 2 === 0) ? 0 : 1);
-		$cipherKeyNum = $numberArr[2];
+		$reverseLettersArr = (($versionNumberArr[1] % 2 === 0) ? 0 : 1);
+		//$cipherKeyNum = $versionNumberArr[2];
 		//var_dump($cipherKeyNum);
 		if (!($reverseLettersArr % 2 === 0)) {
 			$lettersArr = array_combine(array_keys($lettersArr), array_reverse(array_values($lettersArr)));
@@ -50,13 +50,12 @@ class CipherVersion
 		// $this->cipherKey = $this->cipherKeyStorage[substr($version, -1)];
 		// $this->cipherKey_second = $this->cipherKeyStorage[substr($version, -1) == (count($this->cipherKeyStorage) - 1) ? 0 : substr($version, -1) + 1];
 
+		// $versionArr['cipherVersion'] = (int)$version;
+		// $versionArr['cipherKey'] = $cipherKeyNum;
 
-		$versionArr['cipherVersion'] = (int)$version;
-		$versionArr['cipherKey'] = $cipherKeyNum;
+		// return $versionArr;
 
-		return $versionArr;
-
-		//return (int)$version;
+		return (int)$version;
 	}
 
 }

@@ -20,27 +20,27 @@ class SimpleCipher
 	/**
 	 * @var array массив ключей шифра, которые будут использоваться в зависимости от 3ей цифры в версии алогоритма
 	 */
-	private $cipherKeyStorage = [
-		0 => 'Sт⇔цVяСН@KИЮВr[5"Z:t*П}÷OmoЕЯврЗ08()ы4§чЙ9ГДУWэ7ишЛvcщАEH~ЖЩ!Iдеaлb/%3ОFу1`М-пёYюШsqJ©;LC_xЫQ\P.zp=ьGdЦy2аз×жX+ nhЬ€NЪм>kХб,{#AфR^]Т6ФРuКЁъБг|efоi≠wMкUπTЭн$jg<&хйЧ№?BсDl',
-		1 => '}tлз0sWyк1пЕ%N×\с3LеЯДXу:дTЙцw€мE?)о№G|]pPвщFπIг`rz6хkeЬOj8эяВuDZ>ШьSКМh$Э4аИУЁ2Щ*Рmx@Uрш©и"Т=vъ#(QФн[i≠l<Ъ;Г+П5Jч⇔Зф§coБYёХЫ~Лbы.йVОтq^C,СЦKd{ M_gHб&А7aRю/НЧf÷Ю-A9Ж!Bnж',
-		2 => 'йЧо83з]МылlK≠©;d0eW1wэYЖh4v+xЪ>аГ9{ШЙн*bуюCИФЕoпёХвБzУТyЮЫ€ЛНiV÷⇔X?геgК~#Q"Ашa)AЁSт&J§75`%хСкjr(|ВFB:sRжLмTG@ф/t^П×яОMqЩ,ZH}ЯЭ2Nд._u[O<иъ=\Dpцч$πPEсЗ IРfЬUcnЦkбрД6щ!m-ь№',
-		3 => 'T&π[03eшМэnВoqГДNX2в{П)о÷4д!Биs<€Ы]B`же}>9hарщKг#%k5Шaiь©PЁl(ЮmUHGQЗA*=№хФХЪЧЦRР+чLЭп"§О-~jwлrСgtO⇔АЬv8ЕxЙЯ\Dй×я/z≠SЖтЩ @ёНEF.Y$кZъИКV:?JбfзCc|Wuм1юц^ынуIpс7_yУЛb;,фd6MТ',
-		4 => 'J;oeчэиЖ]"ЁцTwз7{ыфК3хГ+SюПzbИIЮОмkt!тUpвдРЫAViH?З4ХБvЛaЦоOGж2ruR%[C6ьXcMъёKL|sh ФЪE0DZ9FаУd№А}QЬYЧqЩШy(fейnуPлс)mбТЭНBС8В1ДМlЙгрЯяjнЕW5Ngx:пшкщ&*\^-=`~@#$_/,.<>©§π≠×÷€⇔',
-		5 => '])2h8Т_гK:ИСoGсП4§щёЦSgЬГ&≠\wcЕrт€FJыyЮ©?aНlm@бндzшжЗх#.Ё~Вqef/$3ХеЧво№uЭь⇔vDБWQ7id|з=уФH`кj(юМTπ"k*0КЖяф×N[UЯVIRп1CиXр;%Z {}мчЛцpДЙ^O6лtЪYАL,ъEMPsОA!B÷эШЫx<а5-РУb+й>9nЩ',
-		6 => ',пЙЩ@GRS]#YHМ$€цUчж5pхьl}©ЮъJgF94ф0шРНЖЗзЪ1мmto×юaЁны>uQ⇔ОэЯа3EВТ!БЬIу|XisBд"К8WD≠y/nтkС A<с{:оё`÷h-jлГfФqe.Ур~Е*ИTя2А+[x?P=бL%K6ЫrйO§№г;ЛcV)ДЦvwbZвк_^ПC&ХщMЧd(7\ШиNеzπЭ',
-		7 => 'н)Ичph[:EзH"π&К71^фВLy©AGё]§ьRnbmэг!%NуЫO*М№3DYS#o{вЛI/ШЧ€ЁАwJ2Te5zПГ$VxЖl?-тQС `@б≠UX;цпО_ЕBлЭvж~÷и}БъdйсЙZ|рыЮа\оs8.uХю⇔FKP,WCЩхмcФfУЬqЦgщР×iТ<9шЪr0tяЯеЗДН(j6M+=кa>kд4',
-		8 => 'B§)яе{Лf$,Ыщi№сВpМb.jlI*KудшСЯЦktzЙ>MЪкgnмx=47Wy^ehDФз÷;ё€ГЖъ(rZ×©~юХd%вэv08цc\л⇔й[_C#So`OЧчGОЕuп3m<т2FД гQEЩ&ы!ЁиA]оπЮЭУYPa+|Т"}L:@нVРЬН/ь-а?RБ6ЗUжШб1хрИJHs9XфП5NTw≠КqА',
-		9 => 'ТS9NИz&оxMlзе!эпGL<yМБYRДf$v{КОч€akыЫq⇔=Лw/туJлHh#mё4~ЮOшб|CюTAШ0F?я*ъngЁГ(oXС5VЕн§Ьu[U@ b>Жф%,Пπ}8ЭЙФ2©PЩЪtХ:А_-хЗЧp÷I+и`6рщйrгс№sDмiьcкжУKBв≠E"eQН;d17^)ацдВ]\W3Z.Ц×ЯРj',
-		// 1 => 'Sт⇔цVяСН@KИЮВr[5"Z:t*П}÷OmoЕЯврЗ08()ы4§чЙ9ГДУWэ7ишЛvcщАEH~ЖЩ!Iдеaлb/%3ОFу1`М-пёYюШsqJ©;LC_xЫQ\P.zp=ьGdЦy2аз×жX+ nhЬ€NЪм>kХб,{#AфR^]Т6ФРuКЁъБг|efоi≠wMкUπTЭн$jg<&хйЧ№?BсDl',
-		// 2 => 'Sт⇔цVяСН@KИЮВr[5"Z:t*П}÷OmoЕЯврЗ08()ы4§чЙ9ГДУWэ7ишЛvcщАEH~ЖЩ!Iдеaлb/%3ОFу1`М-пёYюШsqJ©;LC_xЫQ\P.zp=ьGdЦy2аз×жX+ nhЬ€NЪм>kХб,{#AфR^]Т6ФРuКЁъБг|efоi≠wMкUπTЭн$jg<&хйЧ№?BсDl',
-		// 3 => 'Sт⇔цVяСН@KИЮВr[5"Z:t*П}÷OmoЕЯврЗ08()ы4§чЙ9ГДУWэ7ишЛvcщАEH~ЖЩ!Iдеaлb/%3ОFу1`М-пёYюШsqJ©;LC_xЫQ\P.zp=ьGdЦy2аз×жX+ nhЬ€NЪм>kХб,{#AфR^]Т6ФРuКЁъБг|efоi≠wMкUπTЭн$jg<&хйЧ№?BсDl',
-		// 4 => 'Sт⇔цVяСН@KИЮВr[5"Z:t*П}÷OmoЕЯврЗ08()ы4§чЙ9ГДУWэ7ишЛvcщАEH~ЖЩ!Iдеaлb/%3ОFу1`М-пёYюШsqJ©;LC_xЫQ\P.zp=ьGdЦy2аз×жX+ nhЬ€NЪм>kХб,{#AфR^]Т6ФРuКЁъБг|efоi≠wMкUπTЭн$jg<&хйЧ№?BсDl',
-		// 5 => 'Sт⇔цVяСН@KИЮВr[5"Z:t*П}÷OmoЕЯврЗ08()ы4§чЙ9ГДУWэ7ишЛvcщАEH~ЖЩ!Iдеaлb/%3ОFу1`М-пёYюШsqJ©;LC_xЫQ\P.zp=ьGdЦy2аз×жX+ nhЬ€NЪм>kХб,{#AфR^]Т6ФРuКЁъБг|efоi≠wMкUπTЭн$jg<&хйЧ№?BсDl',
-		// 6 => 'Sт⇔цVяСН@KИЮВr[5"Z:t*П}÷OmoЕЯврЗ08()ы4§чЙ9ГДУWэ7ишЛvcщАEH~ЖЩ!Iдеaлb/%3ОFу1`М-пёYюШsqJ©;LC_xЫQ\P.zp=ьGdЦy2аз×жX+ nhЬ€NЪм>kХб,{#AфR^]Т6ФРuКЁъБг|efоi≠wMкUπTЭн$jg<&хйЧ№?BсDl',
-		// 7 => 'Sт⇔цVяСН@KИЮВr[5"Z:t*П}÷OmoЕЯврЗ08()ы4§чЙ9ГДУWэ7ишЛvcщАEH~ЖЩ!Iдеaлb/%3ОFу1`М-пёYюШsqJ©;LC_xЫQ\P.zp=ьGdЦy2аз×жX+ nhЬ€NЪм>kХб,{#AфR^]Т6ФРuКЁъБг|efоi≠wMкUπTЭн$jg<&хйЧ№?BсDl',
-		// 8 => 'Sт⇔цVяСН@KИЮВr[5"Z:t*П}÷OmoЕЯврЗ08()ы4§чЙ9ГДУWэ7ишЛvcщАEH~ЖЩ!Iдеaлb/%3ОFу1`М-пёYюШsqJ©;LC_xЫQ\P.zp=ьGdЦy2аз×жX+ nhЬ€NЪм>kХб,{#AфR^]Т6ФРuКЁъБг|efоi≠wMкUπTЭн$jg<&хйЧ№?BсDl',
-		// 9 => 'Sт⇔цVяСН@KИЮВr[5"Z:t*П}÷OmoЕЯврЗ08()ы4§чЙ9ГДУWэ7ишЛvcщАEH~ЖЩ!Iдеaлb/%3ОFу1`М-пёYюШsqJ©;LC_xЫQ\P.zp=ьGdЦy2аз×жX+ nhЬ€NЪм>kХб,{#AфR^]Т6ФРuКЁъБг|efоi≠wMкUπTЭн$jg<&хйЧ№?BсDl'
-	];
+	// private $cipherKeyStorage = [
+	// 	0 => 'Sт⇔цVяСН@KИЮВr[5"Z:t*П}÷OmoЕЯврЗ08()ы4§чЙ9ГДУWэ7ишЛvcщАEH~ЖЩ!Iдеaлb/%3ОFу1`М-пёYюШsqJ©;LC_xЫQ\P.zp=ьGdЦy2аз×жX+ nhЬ€NЪм>kХб,{#AфR^]Т6ФРuКЁъБг|efоi≠wMкUπTЭн$jg<&хйЧ№?BсDl',
+	// 	1 => '}tлз0sWyк1пЕ%N×\с3LеЯДXу:дTЙцw€мE?)о№G|]pPвщFπIг`rz6хkeЬOj8эяВuDZ>ШьSКМh$Э4аИУЁ2Щ*Рmx@Uрш©и"Т=vъ#(QФн[i≠l<Ъ;Г+П5Jч⇔Зф§coБYёХЫ~Лbы.йVОтq^C,СЦKd{ M_gHб&А7aRю/НЧf÷Ю-A9Ж!Bnж',
+	// 	2 => 'йЧо83з]МылlK≠©;d0eW1wэYЖh4v+xЪ>аГ9{ШЙн*bуюCИФЕoпёХвБzУТyЮЫ€ЛНiV÷⇔X?геgК~#Q"Ашa)AЁSт&J§75`%хСкjr(|ВFB:sRжLмTG@ф/t^П×яОMqЩ,ZH}ЯЭ2Nд._u[O<иъ=\Dpцч$πPEсЗ IРfЬUcnЦkбрД6щ!m-ь№',
+	// 	3 => 'T&π[03eшМэnВoqГДNX2в{П)о÷4д!Биs<€Ы]B`же}>9hарщKг#%k5Шaiь©PЁl(ЮmUHGQЗA*=№хФХЪЧЦRР+чLЭп"§О-~jwлrСgtO⇔АЬv8ЕxЙЯ\Dй×я/z≠SЖтЩ @ёНEF.Y$кZъИКV:?JбfзCc|Wuм1юц^ынуIpс7_yУЛb;,фd6MТ',
+	// 	4 => 'J;oeчэиЖ]"ЁцTwз7{ыфК3хГ+SюПzbИIЮОмkt!тUpвдРЫAViH?З4ХБvЛaЦоOGж2ruR%[C6ьXcMъёKL|sh ФЪE0DZ9FаУd№А}QЬYЧqЩШy(fейnуPлс)mбТЭНBС8В1ДМlЙгрЯяjнЕW5Ngx:пшкщ&*\^-=`~@#$_/,.<>©§π≠×÷€⇔',
+	// 	5 => '])2h8Т_гK:ИСoGсП4§щёЦSgЬГ&≠\wcЕrт€FJыyЮ©?aНlm@бндzшжЗх#.Ё~Вqef/$3ХеЧво№uЭь⇔vDБWQ7id|з=уФH`кj(юМTπ"k*0КЖяф×N[UЯVIRп1CиXр;%Z {}мчЛцpДЙ^O6лtЪYАL,ъEMPsОA!B÷эШЫx<а5-РУb+й>9nЩ',
+	// 	6 => ',пЙЩ@GRS]#YHМ$€цUчж5pхьl}©ЮъJgF94ф0шРНЖЗзЪ1мmto×юaЁны>uQ⇔ОэЯа3EВТ!БЬIу|XisBд"К8WD≠y/nтkС A<с{:оё`÷h-jлГfФqe.Ур~Е*ИTя2А+[x?P=бL%K6ЫrйO§№г;ЛcV)ДЦvwbZвк_^ПC&ХщMЧd(7\ШиNеzπЭ',
+	// 	7 => 'н)Ичph[:EзH"π&К71^фВLy©AGё]§ьRnbmэг!%NуЫO*М№3DYS#o{вЛI/ШЧ€ЁАwJ2Te5zПГ$VxЖl?-тQС `@б≠UX;цпО_ЕBлЭvж~÷и}БъdйсЙZ|рыЮа\оs8.uХю⇔FKP,WCЩхмcФfУЬqЦgщР×iТ<9шЪr0tяЯеЗДН(j6M+=кa>kд4',
+	// 	8 => 'B§)яе{Лf$,Ыщi№сВpМb.jlI*KудшСЯЦktzЙ>MЪкgnмx=47Wy^ehDФз÷;ё€ГЖъ(rZ×©~юХd%вэv08цc\л⇔й[_C#So`OЧчGОЕuп3m<т2FД гQEЩ&ы!ЁиA]оπЮЭУYPa+|Т"}L:@нVРЬН/ь-а?RБ6ЗUжШб1хрИJHs9XфП5NTw≠КqА',
+	// 	9 => 'ТS9NИz&оxMlзе!эпGL<yМБYRДf$v{КОч€akыЫq⇔=Лw/туJлHh#mё4~ЮOшб|CюTAШ0F?я*ъngЁГ(oXС5VЕн§Ьu[U@ b>Жф%,Пπ}8ЭЙФ2©PЩЪtХ:А_-хЗЧp÷I+и`6рщйrгс№sDмiьcкжУKBв≠E"eQН;d17^)ацдВ]\W3Z.Ц×ЯРj',
+	// 	// 1 => 'Sт⇔цVяСН@KИЮВr[5"Z:t*П}÷OmoЕЯврЗ08()ы4§чЙ9ГДУWэ7ишЛvcщАEH~ЖЩ!Iдеaлb/%3ОFу1`М-пёYюШsqJ©;LC_xЫQ\P.zp=ьGdЦy2аз×жX+ nhЬ€NЪм>kХб,{#AфR^]Т6ФРuКЁъБг|efоi≠wMкUπTЭн$jg<&хйЧ№?BсDl',
+	// 	// 2 => 'Sт⇔цVяСН@KИЮВr[5"Z:t*П}÷OmoЕЯврЗ08()ы4§чЙ9ГДУWэ7ишЛvcщАEH~ЖЩ!Iдеaлb/%3ОFу1`М-пёYюШsqJ©;LC_xЫQ\P.zp=ьGdЦy2аз×жX+ nhЬ€NЪм>kХб,{#AфR^]Т6ФРuКЁъБг|efоi≠wMкUπTЭн$jg<&хйЧ№?BсDl',
+	// 	// 3 => 'Sт⇔цVяСН@KИЮВr[5"Z:t*П}÷OmoЕЯврЗ08()ы4§чЙ9ГДУWэ7ишЛvcщАEH~ЖЩ!Iдеaлb/%3ОFу1`М-пёYюШsqJ©;LC_xЫQ\P.zp=ьGdЦy2аз×жX+ nhЬ€NЪм>kХб,{#AфR^]Т6ФРuКЁъБг|efоi≠wMкUπTЭн$jg<&хйЧ№?BсDl',
+	// 	// 4 => 'Sт⇔цVяСН@KИЮВr[5"Z:t*П}÷OmoЕЯврЗ08()ы4§чЙ9ГДУWэ7ишЛvcщАEH~ЖЩ!Iдеaлb/%3ОFу1`М-пёYюШsqJ©;LC_xЫQ\P.zp=ьGdЦy2аз×жX+ nhЬ€NЪм>kХб,{#AфR^]Т6ФРuКЁъБг|efоi≠wMкUπTЭн$jg<&хйЧ№?BсDl',
+	// 	// 5 => 'Sт⇔цVяСН@KИЮВr[5"Z:t*П}÷OmoЕЯврЗ08()ы4§чЙ9ГДУWэ7ишЛvcщАEH~ЖЩ!Iдеaлb/%3ОFу1`М-пёYюШsqJ©;LC_xЫQ\P.zp=ьGdЦy2аз×жX+ nhЬ€NЪм>kХб,{#AфR^]Т6ФРuКЁъБг|efоi≠wMкUπTЭн$jg<&хйЧ№?BсDl',
+	// 	// 6 => 'Sт⇔цVяСН@KИЮВr[5"Z:t*П}÷OmoЕЯврЗ08()ы4§чЙ9ГДУWэ7ишЛvcщАEH~ЖЩ!Iдеaлb/%3ОFу1`М-пёYюШsqJ©;LC_xЫQ\P.zp=ьGdЦy2аз×жX+ nhЬ€NЪм>kХб,{#AфR^]Т6ФРuКЁъБг|efоi≠wMкUπTЭн$jg<&хйЧ№?BсDl',
+	// 	// 7 => 'Sт⇔цVяСН@KИЮВr[5"Z:t*П}÷OmoЕЯврЗ08()ы4§чЙ9ГДУWэ7ишЛvcщАEH~ЖЩ!Iдеaлb/%3ОFу1`М-пёYюШsqJ©;LC_xЫQ\P.zp=ьGdЦy2аз×жX+ nhЬ€NЪм>kХб,{#AфR^]Т6ФРuКЁъБг|efоi≠wMкUπTЭн$jg<&хйЧ№?BсDl',
+	// 	// 8 => 'Sт⇔цVяСН@KИЮВr[5"Z:t*П}÷OmoЕЯврЗ08()ы4§чЙ9ГДУWэ7ишЛvcщАEH~ЖЩ!Iдеaлb/%3ОFу1`М-пёYюШsqJ©;LC_xЫQ\P.zp=ьGdЦy2аз×жX+ nhЬ€NЪм>kХб,{#AфR^]Т6ФРuКЁъБг|efоi≠wMкUπTЭн$jg<&хйЧ№?BсDl',
+	// 	// 9 => 'Sт⇔цVяСН@KИЮВr[5"Z:t*П}÷OmoЕЯврЗ08()ы4§чЙ9ГДУWэ7ишЛvcщАEH~ЖЩ!Iдеaлb/%3ОFу1`М-пёYюШsqJ©;LC_xЫQ\P.zp=ьGdЦy2аз×жX+ nhЬ€NЪм>kХб,{#AфR^]Т6ФРuКЁъБг|efоi≠wMкUπTЭн$jg<&хйЧ№?BсDl'
+	// ];
 
 
 	/**
@@ -169,16 +169,35 @@ class SimpleCipher
 	private $saltNumberSegments;
 	//Хэш суммы всех символов соли
 	private $saltHashSum = null;
+	/**
+	 * @var string путь до файлов с ключами шифра
+	 */
+	private $keyFilesPath;
 
 	public function __construct(string $text, ?string $salt = null)
 	{
+		// var_dump(__DIR__);
+		require_once (__DIR__ . "./../../CipherVersion.php");
+		// if (count(debug_backtrace()) == 1) {
+		// 	require_once (__DIR__ . "./../../CipherVersion.php");
+		// 	//$this->keyFilesPath = "./cipherKeys/";
+		// } else {
+		// 	//$this->keyFilesPath = "./versions/cipherKeys/";
+		// 	require_once ("./CipherVersion.php");
+		// }
+		$this->keyFilesPath = (__DIR__ . "./cipherKeys/");
+		#Гаврилов
+		//ПЕРЕД РЕЛИЗОМ УДАЛИ
+		
+		//var_dump(file_get_contents($this->keyFilesPath . "cipherKey_0.txt"));
 		$this->text = $text;
 		#Гаврилов
 		//ПОПРОБУЙ В СОЛЬ ПЕРЕДАТЬ КИТАЙСКИЙ СИМВОЛ ИЛИ РУССКИЙ, ОНИ ДОЛЖНЫ УДАЛЯТЬСЯ ТУТ. В СОЛИ МОЖЕТ БЫТЬ ТОЛЬКО ЛАТИНСКИЕ СИМВОЛЫ И ЦИФРЫ
 		//ОНИ НИ В КОЕМ СЛУЧАЕ НЕ ДОЛЖНЫ УДАЛЯТЬСЯ ТУТ. СОЛЬ ДОЛЖНА ВАЛИДИРОВАТЬСЯ НА КАКОМ-ТО ЭТАПЕ. ЕСЛИ ВАЛИДАЦИЯ НЕ ПРОШЛА - ВОЗВРАЩАЕМ ОШИБКУ И СООБЩАЕМ ПОЛЬЗОВАТЕЛЮ О КРИВОЙ СОЛИ
 		$this->salt = preg_replace('/[^a-zA-Z0-9]+/', '', $salt);
-		$this->matrixDepth = sqrt(mb_strlen($this->cipherKeyStorage[0]));
+		$this->matrixDepth = sqrt(mb_strlen(file_get_contents($this->keyFilesPath . "cipherKey_0.txt")));
 		$this->saltNumberSegments = $this->getSaltNumbersArr();
+
 	}
 
 
@@ -248,7 +267,7 @@ class SimpleCipher
 		$fakeLength = $fakeLength < 50 ? 50 : $fakeLength;
 		$this->encrypt = true;
 		//Максимальное значение - примерно половина от длины ключа шифра
-		$this->windowSizeFirst = $this->getRandNum(floor(count($this->getStrArr($this->cipherKeyStorage[0])) / 2), 12);
+		$this->windowSizeFirst = $this->getRandNum(floor(pow($this->matrixDepth, 2) / 2), 12);
 		$this->shiftCountFirst = $this->getRandNum(999, 99);
 		/**
 		 * @var string Флаг реверса ключа шифра, который используется для формирования первой матрицы. Ключ для второй матрицы всегда имеет противоположное значение
@@ -261,9 +280,12 @@ class SimpleCipher
 		if ($this->salt) {
 			$cipherKeyIndex = $this->getRealCipherKey($cipherKeyIndex);
 		}
-		$this->cipherKey = $this->cipherKeyStorage[$cipherKeyIndex];
+		//$this->cipherKey = $this->cipherKeyStorage[$cipherKeyIndex];
+		$this->cipherKey = file_get_contents($this->keyFilesPath . "cipherKey_$cipherKeyIndex.txt");
+		//$this->cipherKey = file_get_contents($this->keyFilesPath . "cipherKey_$cipherKeyIndex.php");
 		//Ключ второго шифра для формирования второй матрицы строится на основании другого ключа из массива $this->cipherKeyStorage (следующего ключ после ключа первой матрицы, либо первый ключ массива, если ключ для первый матрицы оказался последним в массиве)
-		$this->cipherKey_second = $this->cipherKeyStorage[$cipherKeyIndex == (count($this->cipherKeyStorage) - 1) ? 0 : $cipherKeyIndex + 1];
+		// $this->cipherKey_second = $this->cipherKeyStorage[$cipherKeyIndex == (count($this->cipherKeyStorage) - 1) ? 0 : $cipherKeyIndex + 1];
+		$this->cipherKey_second = file_get_contents($this->keyFilesPath . "cipherKey_" . ($cipherKeyIndex == 9 ? 0 : $cipherKeyIndex + 1 . ".txt"));
 		//Если передается соль, формируем из нее хэш на сумму всех символов соли, которая будет использоваться для запутывания ключей шифра и для определения паттерном формирования матриц. 
 		//Формируем ПОСЛЕ определения ключа шифра, так как он используется при формировании хэша 
 		if ($this->salt) {
@@ -279,7 +301,7 @@ class SimpleCipher
 		 * @var string версия приложения в зашифрованном виде
 		 */
 		$encryptVersion = $this->setVersion($this->salt ? $cipherKeyIndex_fake : $cipherKeyIndex);
-		$this->windowSizeSecond = $this->getRandNum(floor(count($this->getStrArr($this->cipherKeyStorage[0])) / 2), 12);
+		$this->windowSizeSecond = $this->getRandNum(floor(pow($this->matrixDepth, 2) / 2), 12);
 		$this->shiftCountSecond = $this->shiftCountFirst + $this->getRandNum(1999, 99);
 		//Заполняем массив с параметрами преобразования матриц (пока что данными для преобразования первой матрицы)
 		$matrixParamArr = [
@@ -510,16 +532,23 @@ class SimpleCipher
 		//Получаем чистую версию алгоритма из зашифрованного отрезка, удаляя в строке два последних символа (вектор горизонтальной инициализации) и заменяя на пустоту сегмент, содержащий 2ю часть фейковой длины шифра ($lengthSecondMatches[1])
 		//$cipherVersion = $this->getVersion(mb_substr(str_replace($lengthSecondMatches[1], '', $cipherVersion), 0, -2));
 		//$cipherVersion = $this->getVersion($cipherVersion);
-		$cipherVersionInfo = CipherVersion::getVersion($this->text);
+		//$cipherVersionInfo = CipherVersion::getVersion($this->text);
 		// $cipherVersionInfo = $this->getVersion($cipherVersion);
-		$cipherVersion = $cipherVersionInfo['cipherVersion'];
+		//$cipherVersion = $cipherVersionInfo['cipherVersion'];
+		$cipherVersion = CipherVersion::getVersion($this->text);
 		//$cipherKeyIndex = substr($cipherVersion, -1);
-		$cipherKeyIndex = $cipherVersionInfo['cipherKey'];
+		//$cipherKeyIndex = $cipherVersionInfo['cipherKey'];
+		$cipherKeyIndex = $this->getCipherKey();
 		if ($this->salt) {
 			$cipherKeyIndex = $this->getRealCipherKey($cipherKeyIndex);
 		}
-		$this->cipherKey = $this->cipherKeyStorage[$cipherKeyIndex];
-		$this->cipherKey_second = $this->cipherKeyStorage[$cipherKeyIndex == (count($this->cipherKeyStorage) - 1) ? 0 : $cipherKeyIndex + 1];
+		// $this->cipherKey = $this->cipherKeyStorage[$cipherKeyIndex];
+		// $this->cipherKey_second = $this->cipherKeyStorage[$cipherKeyIndex == (count($this->cipherKeyStorage) - 1) ? 0 : $cipherKeyIndex + 1];
+		$this->cipherKey = file_get_contents($this->keyFilesPath . "cipherKey_$cipherKeyIndex.txt");
+		//$this->cipherKey = file_get_contents($this->keyFilesPath . "cipherKey_$cipherKeyIndex.php");
+		//Ключ второго шифра для формирования второй матрицы строится на основании другого ключа из массива $this->cipherKeyStorage (следующего ключ после ключа первой матрицы, либо первый ключ массива, если ключ для первый матрицы оказался последним в массиве)
+		// $this->cipherKey_second = $this->cipherKeyStorage[$cipherKeyIndex == (count($this->cipherKeyStorage) - 1) ? 0 : $cipherKeyIndex + 1];
+		$this->cipherKey_second = file_get_contents($this->keyFilesPath . "cipherKey_" . ($cipherKeyIndex == 9 ? 0 : $cipherKeyIndex + 1 . ".txt"));
 		if ($this->salt) {
 			$this->saltHashSum = $this->getHashSaltSum();
 		}
@@ -726,9 +755,11 @@ class SimpleCipher
 		$shiftIteration_first = (int)substr($this->saltHashSum, -4, 2);
 		$shiftIteration_second = (int)substr($this->saltHashSum, -6, 2);
 		//Трансформируем массив с параметрами сдвига ключа шифра. Если новые значений окна захвата символов больше примерно половины от ключа шифра - через вычитание делаем окно захвата меньше исходного, а не больше
-		$transformedMatrixParam[0] = ($transformedMatrixParam[0] + $shiftWindowSize_first >= floor(count($this->getStrArr($this->cipherKeyStorage[0])) / 2)) ? $transformedMatrixParam[0] - $shiftWindowSize_first : $transformedMatrixParam[0] - $shiftWindowSize_first;
+		#Гаврилов
+		//ЗНАЧЕНИЕ НИЖЕ (РАЗМЕР ОКНА) МОЖНО ВЫНЕСТИ В СВОЙСТВА КЛАССА, ОНО ЧАСТО ГДЕ ВСТРЕЧАЕТСЯ
+		$transformedMatrixParam[0] = ($transformedMatrixParam[0] + $shiftWindowSize_first >= floor(pow($this->matrixDepth, 2) / 2)) ? $transformedMatrixParam[0] - $shiftWindowSize_first : $transformedMatrixParam[0] - $shiftWindowSize_first;
 		$transformedMatrixParam[1] = $transformedMatrixParam[1] + $shiftIteration_first;
-		$transformedMatrixParam[3] = ($transformedMatrixParam[3] + $shiftWindowSize_second >= floor(count($this->getStrArr($this->cipherKeyStorage[0])) / 2)) ? $transformedMatrixParam[3] - $shiftWindowSize_second : $transformedMatrixParam[3] - $shiftWindowSize_second;
+		$transformedMatrixParam[3] = ($transformedMatrixParam[3] + $shiftWindowSize_second >= floor(pow($this->matrixDepth, 2) / 2)) ? $transformedMatrixParam[3] - $shiftWindowSize_second : $transformedMatrixParam[3] - $shiftWindowSize_second;
 		$transformedMatrixParam[4] = $transformedMatrixParam[4] + $shiftIteration_second;
 
 		return $transformedMatrixParam;
@@ -1261,6 +1292,24 @@ class SimpleCipher
 		return $matrixOne;
 	}
 
+	/**
+	 * Метод получает номер ключа шифрования из сегмента с информацией по версии
+	 *
+	 * @return int
+	 */
+	private function getCipherKey(): int
+    {
+		//Вся информация по версии шифра находится в последних 6ти символах
+		$cipherVersionInfo = mb_substr($this->text, -6);
+      	$numberArr = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
+		$versionSymbArr = preg_split('//u', $cipherVersionInfo, -1, PREG_SPLIT_NO_EMPTY);
+		//Вычленяем числа из строки с шифром
+		$versionNumberArr  = array_values(array_intersect($versionSymbArr, $numberArr));
+		$cipherKeyNum = $versionNumberArr[2];
+
+		return $cipherKeyNum;
+    }
+
 
 	#Гаврилов
 	//ВЫДЕЛИТЬ СОВПАДАЮЩИЙ ЧАСТИ КОДА ИЗ ШИФРОВАНИЯ И ДЕШИФРОВАНИЯ ВЕРСИИ И ОФОРМИТЬ ОТДЕЛЬНЫМИ МЕТОДАМИ
@@ -1270,54 +1319,54 @@ class SimpleCipher
 	 * @param string $versionString зашифрованное представление версии шифра
 	 * @return array
 	 */
-	public function getVersion(string $versionString): array
-	{
-		$versionArr = [
-			'cipherVersion' => null,
-			'cipherKey' => null,
-		];
-		//Массив кирилических и латинских букв и цифр, которые участвовали в формировании версии
-		$lettersArr = $this->cyrilicLetters + $this->latinLetters;
-		$numberArr = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
-		$versionSymbArr = $this->getStrArr($versionString);
-		//Вычленяем числа из строки с шифром
-		$numberArr  = array_values(array_intersect($versionSymbArr, $numberArr));
-		//Вычленяем буквы из строки с шифром
-		$letterArr  = array_values(array_diff($versionSymbArr, $numberArr));
-		//Определяем паттерн размещения
-		$pattern = $numberArr[0];
-		//Получаем флаг реверса 
-		$reverseLettersArr = (($numberArr[1] % 2 === 0) ? 0 : 1);
-		$cipherKeyNum = $numberArr[2];
-		//var_dump($cipherKeyNum);
-		if (!($reverseLettersArr % 2 === 0)) {
-			$lettersArr = array_combine(array_keys($lettersArr), array_reverse(array_values($lettersArr)));
-		}
-		switch ($pattern) {
-			case 1:
-				$version = implode('', array_map(function($el) use($lettersArr) {return $lettersArr[$el];}, $letterArr));
-				break;
-			case 2:
-			case 3:
-				$version = (string)$lettersArr[$letterArr[0]] . (string)$lettersArr[$letterArr[1]];
-				break;
-			case 4:
-			case 5:
-				$version = (string)$lettersArr[$letterArr[1]] . (string)$lettersArr[$letterArr[2]];
-				break;
-		}
-		//Определяем ключ конкретного шифра, беря последнюю цифру из версии алгоритма
-		// $this->cipherKey = $this->cipherKeyStorage[substr($version, -1)];
-		// $this->cipherKey_second = $this->cipherKeyStorage[substr($version, -1) == (count($this->cipherKeyStorage) - 1) ? 0 : substr($version, -1) + 1];
+	// public function getVersion(string $versionString): array
+	// {
+	// 	$versionArr = [
+	// 		'cipherVersion' => null,
+	// 		'cipherKey' => null,
+	// 	];
+	// 	//Массив кирилических и латинских букв и цифр, которые участвовали в формировании версии
+	// 	$lettersArr = $this->cyrilicLetters + $this->latinLetters;
+	// 	$numberArr = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
+	// 	$versionSymbArr = $this->getStrArr($versionString);
+	// 	//Вычленяем числа из строки с шифром
+	// 	$numberArr  = array_values(array_intersect($versionSymbArr, $numberArr));
+	// 	//Вычленяем буквы из строки с шифром
+	// 	$letterArr  = array_values(array_diff($versionSymbArr, $numberArr));
+	// 	//Определяем паттерн размещения
+	// 	$pattern = $numberArr[0];
+	// 	//Получаем флаг реверса 
+	// 	$reverseLettersArr = (($numberArr[1] % 2 === 0) ? 0 : 1);
+	// 	$cipherKeyNum = $numberArr[2];
+	// 	//var_dump($cipherKeyNum);
+	// 	if (!($reverseLettersArr % 2 === 0)) {
+	// 		$lettersArr = array_combine(array_keys($lettersArr), array_reverse(array_values($lettersArr)));
+	// 	}
+	// 	switch ($pattern) {
+	// 		case 1:
+	// 			$version = implode('', array_map(function($el) use($lettersArr) {return $lettersArr[$el];}, $letterArr));
+	// 			break;
+	// 		case 2:
+	// 		case 3:
+	// 			$version = (string)$lettersArr[$letterArr[0]] . (string)$lettersArr[$letterArr[1]];
+	// 			break;
+	// 		case 4:
+	// 		case 5:
+	// 			$version = (string)$lettersArr[$letterArr[1]] . (string)$lettersArr[$letterArr[2]];
+	// 			break;
+	// 	}
+	// 	//Определяем ключ конкретного шифра, беря последнюю цифру из версии алгоритма
+	// 	// $this->cipherKey = $this->cipherKeyStorage[substr($version, -1)];
+	// 	// $this->cipherKey_second = $this->cipherKeyStorage[substr($version, -1) == (count($this->cipherKeyStorage) - 1) ? 0 : substr($version, -1) + 1];
 
 
-		$versionArr['cipherVersion'] = (int)$version;
-		$versionArr['cipherKey'] = $cipherKeyNum;
+	// 	$versionArr['cipherVersion'] = (int)$version;
+	// 	$versionArr['cipherKey'] = $cipherKeyNum;
 
-		return $versionArr;
+	// 	return $versionArr;
 
-		//return (int)$version;
-	}
+	// 	//return (int)$version;
+	// }
 
 
 	/**
@@ -1972,10 +2021,10 @@ $saltNew = $salt;
 	// 	$s++;
 	// }
 
-	// echo '<pre>'; var_dump($decryptText); echo'</pre>';
-	// if ($decryptText !== $cipherText) {
-	// 	var_dump('ОШИПКА!');
-	// }
+// 	echo '<pre>'; var_dump($decryptText); echo'</pre>';
+// 	if ($decryptText !== $cipherText) {
+// 		var_dump('ОШИПКА!');
+// 	}
 //  	$n++;
 // }
 
