@@ -217,22 +217,36 @@ function clearDecryptText()
 
 //Шифрование текста
 document.getElementById('content__encrypt-block__input__encrypt').addEventListener('click', async function () {
-    let encryptText = document.getElementById('encryptText').value,
+    let encryptText = document.getElementById('encryptText').value.trim(),
         encryptFakeLength = document.getElementById('cipherLength').value ?? 50,
         resultCipherCount = document.getElementById('cipherCount').value ?? 1,
         encryptSalt = document.getElementById('cipherSalt').value ?? null,
         prevResulst = document.querySelectorAll('.content__encrypt-block__result__parent');
+
+    if (encryptFakeLength > 899) {
+        alert('Максимальная желаемая длина шифра 899 символов')
+
+        return;
+    }
+
+    if (resultCipherCount > 20) {
+        alert('Максимальная количество итоговых шифров 20')
+        
+        return;
+    }
+
+    if (!encryptText.length) {
+        alert('Пустой шифруемый текст')
+
+        return;
+    }
+
 
     //Если есть предыдущие результаты шифрования - очищаем их
     if (prevResulst.length) {
         for (let encryptIndex = 0; encryptIndex < prevResulst.length; encryptIndex++){
             prevResulst[encryptIndex].classList.add('hide')
         }
-    }
-
-    if (!encryptText.length) {
-        alert('пусто')
-        return;
     }
 
     preloader__show()

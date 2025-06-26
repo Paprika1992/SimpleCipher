@@ -303,7 +303,7 @@ class SimpleCipher
 		//$this->cipherKey = file_get_contents($this->keyFilesPath . "cipherKey_$cipherKeyIndex.php");
 		//Ключ второго шифра для формирования второй матрицы строится на основании другого ключа из массива $this->cipherKeyStorage (следующего ключ после ключа первой матрицы, либо первый ключ массива, если ключ для первый матрицы оказался последним в массиве)
 		// $this->cipherKey_second = $this->cipherKeyStorage[$cipherKeyIndex == (count($this->cipherKeyStorage) - 1) ? 0 : $cipherKeyIndex + 1];
-		$this->cipherKey_second = file_get_contents($this->keyFilesPath . "cipherKey_" . ($cipherKeyIndex == 9 ? 0 : $cipherKeyIndex + 1 . ".txt"));
+		$this->cipherKey_second = file_get_contents($this->keyFilesPath . "cipherKey_" . ($cipherKeyIndex == 9 ? 0 : $cipherKeyIndex + 1) . ".txt");
 		//Если передается соль, формируем из нее хэш на сумму всех символов соли, которая будет использоваться для запутывания ключей шифра и для определения паттерном формирования матриц. 
 		//Формируем ПОСЛЕ определения ключа шифра, так как он используется при формировании хэша 
 		if ($this->salt) {
@@ -417,7 +417,6 @@ class SimpleCipher
 
 		return $realStringLenght;
 	}
-
 
 	#Гаврилов
 	//ПЕРЕД РЕЛИЗОМ ПОМЕНЯЙ ФУНКЦИИ ХЭШИРОВАНИЯ НА АКТУАЛЬНЫЕ ДЛЯ АКТУАЛЬНОЙ ВЕРСИИ PHP
