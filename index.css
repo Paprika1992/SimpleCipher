@@ -1,12 +1,45 @@
+:root{
+  --color_orange_main: #eac18a;
+  --color_orange_main_opacity: rgba(234, 193, 138, 0.75);
+  --color_blue_main: #3a3a65;
+  --color_background: #fffdeb;
+  --color_blue_button: #6f6f9d;
+  --color_blue_minor: #555590;
+}
+
 *, *::before, *::after {
     box-sizing: border-box;
 }
 
 body{
   /* overflow: hidden; */
+  font-family: system-ui;
+  background: var(--color_background);
 }
 
-input{
+button{
+  display: inline-block;
+    /* box-sizing: border-box; */
+    padding: 0 13px;
+    margin: 15px 0;
+    border: 1.5px solid #c7c7c7;
+    border-radius: 5px;
+    height: 32px;
+    line-height: 32px;
+    font-size: 14px;
+    color: white;
+    background-color: var(--color_blue_button);
+    cursor: pointer;
+    transition: 0.3s;
+    /* box-shadow: 0px 0px 3px 1px #8b8b8b; */
+
+    &:hover{
+      background-color: #4b4b88;
+    }
+}
+
+input,
+textarea{
   font-family: inherit;
   font-size: inherit;
   line-height: inherit;
@@ -20,17 +53,29 @@ input{
   font-weight: 400;
   line-height: 1.5;
   color: #212529;
-  background-color: #fff;
+  background-color: var(--color_background);
   background-clip: padding-box;
   border: 1px solid #bdbdbd;
   border-radius: 0.25rem;
   transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+  resize: vertical;
+}
+
+#cipherSalt,
+#cipherSalt_decrypt{
+  height: 50px;
+  resize: none;
+}
+
+#encryptText,
+#decryptText{
+  height: 100px;
 }
 
 #page-background{
   width: 100%;
   height: 100%;
-  background: grey;
+  background: rgb(109 106 147 / 75%);
   position: fixed;
   top: 0;
   left: 0;
@@ -44,14 +89,27 @@ input{
 }
 
 #GetCipherSalt{
+  display: none;
   word-break: break-all;
+
+  &.visible{
+    display: block;
+  }
+
+  &>#cipher-salt__text-block{
+    padding: 5px;
+    border-radius: 5px;
+    margin: 5px 0px 15px 0px;
+    background: #5f5f9a;
+    box-shadow: 0px 0px 3px 1px #8a8a8a inset;
+  }
 }
 
 
 #page__navigation{
   /* background: yellow; */
   display: flex;
-    gap: 10px;
+    /* gap: 10px; */
     justify-content: space-around;
   width: 50%;
   margin: auto;
@@ -60,7 +118,8 @@ input{
   position: relative;
 
   &>.navigation__block{
-    flex-basis: 33%;
+    flex: 1;
+    /* flex-basis: 33%; */
     /* position: relative; */
 
     &:not(:first-of-type){
@@ -81,11 +140,15 @@ input{
       align-content: center;
       text-align: center;
 
+      &:hover{
+        text-shadow: 1px -1px var(--color_blue_main);
+      }
+
       &+.navigation__block__content{
         transform: translateY(0px);
         /* transition-delay: 0.5s; */
         border-radius: 5px;
-        background: #372424;
+        background: var(--color_blue_main);
         color: white;
         margin-top: 10px;
         padding: 10px;
@@ -93,6 +156,8 @@ input{
         width: 100%;
         visibility: hidden;
         left: 0;
+        max-height: 500px;
+        overflow-y: scroll;
 
         & .navigation__content__section__description{
           text-align: justify;
@@ -107,22 +172,22 @@ input{
       transition: 0.3s;
     }
     &.show>.navigation__block__title{
-      transform: translateY(10px);
+      transform: translateY(5px);
       color: white;
-      background: rgb(55, 36, 36, 50%);
+      background: var(--color_blue_main);
       border-radius: 10px 10px 0 0;
-      /* border-bottom: 2px solid green; */
+      border-bottom: 5px solid var(--color_orange_main);
     }
   }
 }
 
 
 #cipher-content{
-    background: red;
+    /* background: red; */
 
     & .result-text-block{
       transition: 0.3s;
-      margin: 5px 5px 15px 5px;
+      /* margin: 5px 5px 15px 5px; */
       opacity: 1;
       animation-name: showResults;
       animation-duration: 1s;
@@ -134,35 +199,66 @@ input{
 
       &>.content__block__result__text{
         word-break: break-word;
-        background: brown;
+        background: var(--color_orange_main);
         padding: 5px;
         border-radius: 5px;
       }
     }
 
+    
+
     &>#cipher-content__input-block{
+      background: white;
       display: flex;
       position: sticky;
         top: 0;
       z-index: 2;
-      /* & .content__decrypt-block__result__decrypt-text{
-          width: 100%;
-      } */
+
+      & #decrypt-result-text{
+        background: var(--color_blue_minor);
+        color: white;
+      }
 
       &>.cipher-content__block{
-          width: 50%;
+        width: 50%;
+        padding: 10px;
+        border-radius: 10px;
+        margin: 10px;
+        box-shadow: 0 0 5px 3px grey;
+        padding-bottom: 50px;
+        
+        &>.content__input-block{
+          /* display: grid;
+            grid-template-columns: 1fr 5fr;
+            gap: 5px; */
 
-        /* &>.content__input-block{
-          position: sticky;
-          top: 0px;
-        } */
+          &>.input-block__field-row{
+            margin-bottom: 10px;
+            display: grid;
+              grid-template-columns: 1fr 5fr;
+              gap: 5px;
+
+             &.field-row--four-fields{
+                grid-template-columns: repeat(2, 1fr 2fr);
+             } 
+          }
+
+          &>.content__input-block__submit-btn{
+            width: 200px;
+            /* margin: auto; */
+            display: block;
+            position: absolute;
+            bottom: 0;
+          }  
+        }
 
 
       }
 
       &>#cipher-content__encrypt-block{
-          background: blue;
+          color: white;
           flex-basis: 50%;
+          background: var(--color_blue_minor);
 
           &>#content__encrypt-block__result{
             overflow-y: scroll;
@@ -170,23 +266,24 @@ input{
           }
 
           &>#content__encrypt-block__input{
-              display: grid;
+              /* display: grid;
                 grid-template-columns: 1fr 5fr;
-                gap: 5px;
-              position: sticky;
-              top: 0px;
+                gap: 5px; */
+              /* position: sticky;
+              top: 0px; */
               /* background: orange; */
-              height: 30%;
+              /* height: 30%; */
 
               &>#content__encrypt-block__input__encrypt{
-                width: 25%;
+                /* width: 25%;
                 margin: auto;
-                grid-column: span 2;
+                grid-column: span 2; */
               }    
           }
       }
       &>#cipher-content__decrypt-block{
-        background: green;
+        /* background: green; */
+        background: var(--color_orange_main);
         flex-basis: 50%;
       }
 
@@ -194,13 +291,14 @@ input{
 
     
   &>#content__encrypt-block__result{
-    background: orange;
+    /* background: orange; */
     padding: 10px;
 
     &>.content__encrypt-block__result__parent{
       display: flex;
         gap: 15px;
         align-items: center;
+      margin: 10px 0;
       /* transition: 0.3s;
       margin: 5px 5px 15px 5px;
       opacity: 1;
@@ -221,6 +319,52 @@ input{
     }
   }
 }
+
+#сipher-salt-timer-block{
+  position: relative;
+
+  &>#salt-timer-block__text{
+    position: relative;
+    z-index: 2;
+    color: white;
+
+    &>span{
+      pad: 0 5px;
+      /* color: white; */
+      font-size: 1.2rem;
+    }
+  }
+
+  &>#salt-timer-block__timer{
+    top: 0;
+    height: 100%;
+    width: 100%;
+    background: var(--color_orange_main);
+    position: absolute;
+    transition: 0.3s;
+
+    &.saltCounterStart{
+      animation-name: cipherSaltCounter;
+      animation-duration: 5s;
+      animation-timing-function: linear;
+      padding: 10px;
+
+      &+#salt-timer-block__text{
+        padding: 5px;
+        text-shadow: 1px 1px grey;
+      }
+    }
+  }
+}
+
+  @keyframes cipherSaltCounter{
+        from {
+          width: 100%;
+        }
+        to {
+          width: 0;
+        }
+      }
 
 @keyframes showResults{
         from {
@@ -243,3 +387,111 @@ input{
           opacity: 0;
         }
       }
+
+
+#api_description{
+
+  & .endpoint__container__uri{
+    font-size: 1.3rem;
+    width: 75%;
+    position: sticky;
+    top: -10px;
+    margin: 10px 0;
+    display: inline-block;
+    border-radius: 5px;
+    padding: 5px 10px;
+    background: #505095;
+    box-shadow: inset 0px 0px 9px 1px #7e7ed2;
+  }
+  
+  & .endpoint__container__param-block{
+    display: flex;
+      gap: 5px;
+    margin: 10px 0;
+
+    &>.endpoint__container__param__title{
+      flex-basis: 20%;
+      border-right: 2px solid var(--color_orange_main);
+      color: #bcbcbc;
+      font-size: 1.1rem;
+    }
+    &>.endpoint__container__param__description{
+      flex-basis: 80%;
+      word-break: break-all;
+      align-self: center;
+
+      &>span{
+        font-size: 1.5rem;
+        font-weight: 600;
+
+        &.endpoint__container__param__method--GET{
+          color: #3ecf33;
+        }
+        &.endpoint__container__param__method--POST{
+          color: #de6b6b;
+        }
+      }
+      
+    }
+
+    &>div{
+      padding: 3px 5px;
+    }
+  }
+}
+
+.endpoint__container__param__description__param-table {
+	width: 100%;
+	border: none;
+	margin-bottom: 20px;
+  border-collapse: collapse;
+
+  & th{
+    font-weight: bold;
+    text-align: left;
+    border: none;
+    padding: 10px 15px;
+    background: #f1c180;
+    /* font-size: 14px; */
+    text-shadow: 0 0 3px #5c5c5c;
+  }
+
+  & td{
+    text-align: left;
+    border: none;
+    padding: 10px 15px;
+    /* font-size: 14px; */
+    vertical-align: top;
+  }
+
+  & tr th:first-child {
+    border-radius: 8px 0 0 8px;
+  }
+
+  & tr th:last-child {
+    border-radius: 0 8px 8px 0;
+  }
+
+  & tr th {
+    border-left: 2px solid var(--color_blue_main);
+
+    &:last-child{
+      width: 200px;
+    }
+  }
+  & tr{
+    &>td:not(:first-child){
+      border-left: 2px solid var(--color_orange_main);
+    }
+    &>td{
+      border-bottom: 2px solid var(--color_orange_main);
+    }
+    /* background: #7373b6; */
+  }
+  /* & tr td:first-child {
+    border-radius: 8px 0 0 8px;
+  }
+  & tr td:last-child {
+    border-radius: 0 8px 8px 0;
+  } */
+}

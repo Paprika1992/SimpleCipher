@@ -1,0 +1,199 @@
+:root{
+    --main_size: 60;
+    --sapphire_color: rgb(8 37 103);
+    --sapphire_color_shine: rgb(39, 67, 132);
+}
+
+#preloader-container {
+    text-align: center;
+    padding: 20px;
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    z-index: 102;
+    background: rgb(109 106 147 / 75%);
+    backdrop-filter: blur(3px);
+    
+    &.visible{
+        display: block;
+        /* z-index: 102; */
+    }
+
+    &>#container__sapphire {
+        position: relative;
+        /* height: 259.8px; */
+        width: calc(var(--main_size) * 3px);
+        height: calc(var(--main_size) * 3px);
+        /* margin: 0 auto; */
+        margin: 100px auto;
+        /* background: red; */
+
+        &>#sapphire__upper-triangles-block {    
+            position: absolute;
+            top: 0;
+            /* left: 50%; */
+            left: 0;
+            /* transform: translateX(-50%); */
+            /* width: calc(var(--main_size) * 5px); */
+            /* width: 100%; */
+            /* height: 86.6px; */
+            /* height: 86px;
+            background: green; */
+            z-index: 5;
+        }
+
+        & .triangle {
+            position: absolute;
+            width: 0;
+            height: 0;
+            filter: drop-shadow(0px 0px 3px #eac18a);
+            transition: 0.5s;
+            transition-duration: 1s;
+
+            &.triangle--small {
+                border-left: calc(var(--main_size) / 2 * 1px) solid transparent;
+                border-right: calc(var(--main_size) / 2 * 1px) solid transparent;
+                &:nth-of-type(2){
+                   transform: translateX(calc(0px - (var(--main_size) * 1 / 2 * 1px))); 
+                }
+                &:nth-of-type(3){
+                   transform: translateX(calc(0px - (var(--main_size) * 2 / 2 * 1px))); 
+                }
+                &:nth-of-type(4){
+                   transform: translateX(calc(0px - (var(--main_size) * 3 / 2 * 1px)));  
+                }
+                &:nth-of-type(5){
+                   transform: translateX(calc(0px - (var(--main_size) * 4 / 2 * 1px)));  
+                }
+                /* &:not(:first-of-type){
+                    transform: translateX(-50%);
+                } */
+                
+
+                &.triangle-up {
+                    border-bottom: calc(var(--main_size) * 1px) solid var(--sapphire_color);
+                    /* border-bottom: 86.6px solid var(--sapphire_color); */
+
+                    &>.triangle-text {
+                        bottom: calc(0px - var(--main_size) * 0.9px);
+                        left: calc(0px - var(--main_size) * 0.05px);
+                    }
+                }
+
+                &.triangle-down {
+                    /* border-top: 86.6px solid var(--sapphire_color); */
+                    border-top: calc(var(--main_size) * 1px) solid var(--sapphire_color);
+
+                    &>.triangle-text {
+                        bottom: calc(var(--main_size) * 0.4px);
+                        left: calc(0px - var(--main_size) * 0.05px);
+                    }
+                }
+            }
+
+            &>.triangle-text {
+                visibility: hidden;
+                transition: 0.3s;
+                font-size: 1.2rem;
+                position: absolute;
+                text-indent: -2px;
+                color: #eac18a;
+
+                &.visible {
+                    animation: shineLetter;
+                    animation-duration: 1.5s;
+                    animation-iteration-count: infinite;
+                    visibility: visible;
+                }
+            }
+            &.triangle-colored {
+                filter: drop-shadow(0px 0px 3px rgb(55, 114, 133))!important;
+                border-top-color: var(--sapphire_color_shine)!important;
+                border-bottom-color: var(--sapphire_color_shine)!important;
+                /* border-top-color: rgb(207, 227, 232); */
+                /* border-bottom-color: rgb(207, 227, 232); */
+            }
+        }
+
+        & .triangle-big--center {
+            border-left: calc(var(--main_size) * 0.8px) solid transparent;
+            border-right: calc(var(--main_size) * 0.8px) solid transparent;
+            border-top: calc(var(--main_size) * 2px) solid var(--sapphire_color);
+            left: calc(var(--main_size) * 0.7px);
+            /* top: 86.6px; */
+            top: calc(var(--main_size) * 1px);
+            z-index: 4;
+
+            &>.triangle-text {
+                top: calc(0px - (var(--main_size) + var(--main_size)) * 0.7px);
+                /* left: -5px; */
+                left: calc(0px - var(--main_size) * 0.05px);
+            }
+        }
+
+        & .triangle-big--left {
+            border-left: calc(var(--main_size) * 1.5px) solid transparent;
+            border-right: 0px solid transparent;
+            border-top: calc(var(--main_size) * 2px) solid var(--sapphire_color);
+            /* left: 25px; */
+            /* top: 86.6px; */
+            top: calc(var(--main_size) * 1px);
+            z-index: 1;
+
+            &>.triangle-text {
+                top: calc(0px - (var(--main_size) + var(--main_size)) * 0.8px);
+                left: calc(0px - var(--main_size) * 0.85px);
+            }
+        }
+
+        & .triangle-big--right {
+            border-left: 0px solid transparent;
+            border-right: calc(var(--main_size) * 1.5px) solid transparent;
+            border-top: calc(var(--main_size) * 2px) solid var(--sapphire_color);
+            /* left: 175px; */
+            left: calc(var(--main_size) * 1.5px);
+            /* top: 86.6px; */
+            top: calc(var(--main_size) * 1px);
+            z-index: 2;
+
+            &>.triangle-text {
+                top: calc(0px - (var(--main_size) + var(--main_size)) * 0.8px);
+                left: calc(var(--main_size) * 0.75px);
+            }
+        }
+    }
+}
+
+
+/* Позиционирование верхних треугольников */
+.triangle--small:nth-child(1) {
+    left: 0;
+}
+.triangle--small:nth-child(2) {
+    left: calc(var(--main_size) * 1px);
+}
+.triangle--small:nth-child(3) {
+    left: calc(var(--main_size) * 2px);
+}
+.triangle--small:nth-child(4) {
+    left: calc(var(--main_size) * 3px);
+}
+.triangle--small:nth-child(5) {
+    left: calc(var(--main_size) * 4px);
+}
+
+
+@keyframes shineLetter {
+    from {
+        /* transform: translateY(-10px); */
+        opacity: 1;
+    }
+
+    to {
+        /* transform: translateY(10px); */
+        opacity: 0;
+    }
+}
