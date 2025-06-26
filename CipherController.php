@@ -57,7 +57,7 @@ class CipherController
                     'important' => true,
                     'validation' => [
                         'validationRegular' => '/[0-9]+/',
-                        'validationMethod' => 'encryptTextValidation',
+                        'validationMethod' => 'fakeLengthValidation',
                     ]
                 ],
                 'cipherSalt' => [
@@ -163,12 +163,12 @@ class CipherController
     /**
      * Метод проводит валидацию текста перед его шифрованием, например, на наличие нераспознанных символов
      *
-     * @param string $encryptText текст для шифрования
+     * @param array $fakeLength фейковая длина
      * @return bool
      */
-    private function encryptTextValidation($encryptText)
+    private function fakeLengthValidation(array $fakeLength): bool
     {
-        return false;
+        return $fakeLength[0] < 900;
     }
 
 
@@ -213,7 +213,7 @@ class CipherController
                             }
                             #Гаврилов
                             //ПОПРОБУЙ ОТПРАВИТЬ ЕНДПОИНТ С КОМПА, НЕ С СЕРВЕРА БЕЗ СОЛИ. ЗАПРОС НЕ ДОЛЖЕН ПРОЙТИ
-                        //Если в запросе предусмотрено конкретное значение для передаеваемого параметра запроса, происходит валидация по регулярному значению 
+                        //Если в запросе предусмотрено конкретное значение для передаеваемого параметра запроса, происходит валидация
                         } else if (array_key_exists('validation', $paramData) !== false) {
                             //Если для валидации параметра применяется регулярное выражение
                             if ($paramData['validation']['validationRegular']) {
@@ -225,7 +225,8 @@ class CipherController
                                     return $checkRouteArr;
                                 }         
                             //Если для валидации применяется метод класса                   
-                            } else if ($validationMethod = $paramData['validation']['validationMethod']) {
+                            } 
+                            if ($validationMethod = $paramData['validation']['validationMethod']) {
                                 $validationMethodResult = call_user_func(array($this, $validationMethod), [$this->rqstParams[$paramName]]);
                                 if (!$validationMethodResult) {
                                     $checkRouteArr['result'] = false;

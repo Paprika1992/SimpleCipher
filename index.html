@@ -141,7 +141,7 @@
                                             <th>имя</th>
                                             <th>обязательное</th>
                                             <th>тип</th>
-                                            <th>доп. инфа</th>
+                                            <th>доп. информация</th>
                                         </tr>
                                         <tr>
                                             <td>text</td>
@@ -153,7 +153,7 @@
                                             <td>fakeLength</td>
                                             <td>true</td>
                                             <td>int</td>
-                                            <td>по умолчанию 50, макс. 975</td>
+                                            <td>по умолчанию 50, макс. 899</td>
                                         </tr>
                                         <tr>
                                             <td>cipherSalt</td>
@@ -217,7 +217,7 @@
                                             <th>имя</th>
                                             <th>обязательное</th>
                                             <th>тип</th>
-                                            <th>доп. инфа</th>
+                                            <th>доп. информация</th>
                                         </tr>
                                         <tr>
                                             <td>text</td>
@@ -290,9 +290,9 @@
                     <div class="input-block__field-row field-row--four-fields">
                         <label for="cipherLength">Желамая длина шифра</label>
                         <!--подсказка: если шифруемый текст меньше длины шифра - фейковая длина не будет достигнута-->
-                        <input type="number" placeholder="минимум 50 символов" id="cipherLength" min="50" max="100" required>
+                        <input type="number" placeholder="мин. 50 макс. 899" id="cipherLength" min="50" max="100" required>
                         <label for="cipherCount">Кол-во шифров</label>
-                        <input type="number" placeholder="Минимум 1" id="cipherCount" min="0" max="100" value="1" required>
+                        <input type="numberа" placeholder="мин. 1 макс. 20" id="cipherCount" min="0" max="100" value="1" required>
                     </div>
                     <button type="button" id="content__encrypt-block__input__encrypt" class="content__input-block__submit-btn">Зашифровать</button>
                 </div>
