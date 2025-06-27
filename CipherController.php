@@ -64,6 +64,7 @@ class CipherController
                     'important' => true,
                     'validation' => [
                         'validationRegular' => '/^[0-9a-zA-Z]{171}$/',
+                        'validationMethod' => null,
                     ]
                 ],
             ]
@@ -81,7 +82,10 @@ class CipherController
                 'cipherSalt' => [
                     'important' => true,
                     'validation' => [
-                        'validationRegular' => '/^[0-9a-zA-Z]{171}$/',
+                        //ГАВРИЛОВ
+                        //При дешифровке могут передавать любую соль? мы не должны подсказывать, что есть "правильный" формат соли? Потести попередавай кривые соли: пару спецсимвоов, 0, кирилические буквы. можно вообще при несоблюдении формата соли просто возвращать "кривую" фейковую строку?
+                        'validationRegular' => null,
+                        'validationMethod' => null,
                     ]
                 ],
             ]
