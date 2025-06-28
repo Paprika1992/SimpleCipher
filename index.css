@@ -264,7 +264,7 @@ textarea{
 
               & textarea {
                 height: 50px;
-                resize: none;
+                resize: vertical;
               }
            }  
 
@@ -309,7 +309,7 @@ textarea{
               /* transform: translateY(0)!important; */
 
               &>.input-block__field-row{
-                height: 80px!important;
+                height: auto!important;
                 padding-top: 20px;
               }
 

@@ -286,8 +286,9 @@ class SimpleCipher
 	 * @param integer $fakeLength фейковая длина шифра
 	 * @return string
 	 */
-	public function encryptText(int $fakeLength = 50, array $keysArr = [null, null]): string
+	public function encryptText(int $fakeLength = 50, ?string $userCipherKeyArr = null): string
 	{
+		$userCipherKeyArr = ($userCipherKeyArr ? [mb_substr($userCipherKeyArr, 0, pow($this->matrixDepth, 2)), mb_substr($userCipherKeyArr, pow($this->matrixDepth, 2), pow($this->matrixDepth, 2))] : []);
 		//Фейковая длина не может быть меньше 50 символов
 		$fakeLength = $fakeLength < 50 ? 50 : $fakeLength;
 		$this->encrypt = true;
@@ -307,12 +308,12 @@ class SimpleCipher
 		}
 		//$this->cipherKey = $this->cipherKeyStorage[$cipherKeyIndex];
 		//Если передаются ключи - для шифрования берутся они, в противном случае один из подготовленных ключей
-		$this->cipherKey = ($keysArr[0] ? $keysArr[0] : file_get_contents(self::$keyFilesPath . "cipherKey_$cipherKeyIndex.txt"));
+		$this->cipherKey = (!empty($userCipherKeyArr) ? $userCipherKeyArr[0] : file_get_contents(self::$keyFilesPath . "cipherKey_$cipherKeyIndex.txt"));
 		//$this->cipherKey = file_get_contents($this->keyFilesPath . "cipherKey_$cipherKeyIndex.php");
 		//Ключ второго шифра для формирования второй матрицы строится на основании другого ключа из массива $this->cipherKeyStorage (следующего ключ после ключа первой матрицы, либо первый ключ массива, если ключ для первый матрицы оказался последним в массиве)
 		// $this->cipherKey_second = $this->cipherKeyStorage[$cipherKeyIndex == (count($this->cipherKeyStorage) - 1) ? 0 : $cipherKeyIndex + 1];
 		//Если передаются ключи - для шифрования берутся они, в противном случае один из подготовленных ключей
-		$this->cipherKey_second = ($keysArr[1] ? $keysArr[1] : file_get_contents(self::$keyFilesPath . "cipherKey_" . ($cipherKeyIndex == 9 ? 0 : $cipherKeyIndex + 1) . ".txt"));
+		$this->cipherKey_second = (!empty($userCipherKeyArr) ? $userCipherKeyArr[1] : file_get_contents(self::$keyFilesPath . "cipherKey_" . ($cipherKeyIndex == 9 ? 0 : $cipherKeyIndex + 1) . ".txt"));
 		//Если передается соль, формируем из нее хэш на сумму всех символов соли, которая будет использоваться для запутывания ключей шифра и для определения паттерном формирования матриц. 
 		//Формируем ПОСЛЕ определения ключа шифра, так как он используется при формировании хэша 
 		if ($this->salt) {
@@ -526,8 +527,9 @@ class SimpleCipher
 	 *
 	 * @return string
 	 */
-	public function decryptText(array $keysArr = [null, null]): string
+	public function decryptText(?string $userCipherKey = null): string
 	{
+		$userCipherKeyArr = ($userCipherKey ? [mb_substr($userCipherKey, 0, pow($this->matrixDepth, 2)), mb_substr($userCipherKey, pow($this->matrixDepth, 2), pow($this->matrixDepth, 2))] : []);
 		//var_dump('##__РАСШИФРОВКА__##');
 		$this->encrypt = false;
 		//Начинаем очищать шифр от полезной нагрузки, чтобы получить зашифрованную строку
@@ -607,11 +609,11 @@ class SimpleCipher
 		}
 		// $this->cipherKey = $this->cipherKeyStorage[$cipherKeyIndex];
 		// $this->cipherKey_second = $this->cipherKeyStorage[$cipherKeyIndex == (count($this->cipherKeyStorage) - 1) ? 0 : $cipherKeyIndex + 1];
-		$this->cipherKey = ($keysArr[0] ? $keysArr[0] : file_get_contents(self::$keyFilesPath . "cipherKey_$cipherKeyIndex.txt"));
+		$this->cipherKey = (!empty($userCipherKeyArr) ? $userCipherKeyArr[0] : file_get_contents(self::$keyFilesPath . "cipherKey_$cipherKeyIndex.txt"));
 		//$this->cipherKey = file_get_contents($this->keyFilesPath . "cipherKey_$cipherKeyIndex.php");
 		//Ключ второго шифра для формирования второй матрицы строится на основании другого ключа из массива $this->cipherKeyStorage (следующего ключ после ключа первой матрицы, либо первый ключ массива, если ключ для первый матрицы оказался последним в массиве)
 		// $this->cipherKey_second = $this->cipherKeyStorage[$cipherKeyIndex == (count($this->cipherKeyStorage) - 1) ? 0 : $cipherKeyIndex + 1];
-		$this->cipherKey_second = ($keysArr[1] ? $keysArr[1] : file_get_contents(self::$keyFilesPath . "cipherKey_" . ($cipherKeyIndex == 9 ? "0.txt" : $cipherKeyIndex + 1 . ".txt")));
+		$this->cipherKey_second = (!empty($userCipherKeyArr) ? $userCipherKeyArr[1] : file_get_contents(self::$keyFilesPath . "cipherKey_" . ($cipherKeyIndex == 9 ? "0.txt" : $cipherKeyIndex + 1 . ".txt")));
 		if ($this->salt) {
 			$this->saltHashSum = $this->getHashSaltSum();
 		}

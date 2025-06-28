@@ -67,14 +67,7 @@ class CipherController
                         'validationMethod' => null,
                     ]
                 ],
-                'firstKey' => [
-                    'important' => false,
-                    'validation' => [
-                        'validationRegular' => null,
-                        'validationMethod' => null,
-                    ]
-                ],
-                'secondKey' => [
+                'cipherKey' => [
                     'important' => false,
                     'validation' => [
                         'validationRegular' => null,
@@ -102,14 +95,7 @@ class CipherController
                         'validationMethod' => null,
                     ]
                 ],
-                'firstKey' => [
-                    'important' => false,
-                    'validation' => [
-                        'validationRegular' => null,
-                        'validationMethod' => null,
-                    ]
-                ],
-                'secondKey' => [
+                'cipherKey' => [
                     'important' => false,
                     'validation' => [
                         'validationRegular' => null,
@@ -147,6 +133,8 @@ class CipherController
         $this->rqstParams = json_decode(file_get_contents('php://input'), true) ?? [];
         $this->cipherSalt = array_key_exists('cipherSalt', $this->rqstParams) !== false ? $this->rqstParams['cipherSalt'] : null;
 
+        // var_dump($this->rqstParams);
+
         // var_dump($test);
 
         $checkEndpoint = $this->checkRoute($this->action);
@@ -163,13 +151,13 @@ class CipherController
                     $this->getEncryptText(
                         $this->rqstParams['text'], 
                         (array_key_exists('fakeLength', $this->rqstParams) !== false ? $this->rqstParams['fakeLength'] : 50),
-                        [$this->rqstParams['firstKey'] ?? null, $this->rqstParams['secondKey'] ?? null]
+                        $this->rqstParams['cipherKey']
                     );
                     break;
                 case 'getDecryptText':
                     $this->getDecryptText(
                         $this->rqstParams['text'],
-                        [$this->rqstParams['firstKey'] ?? null, $this->rqstParams['secondKey'] ?? null]
+                        $this->rqstParams['cipherKey']
                     );
                     break;
                 case 'createCipherSalt':
@@ -345,7 +333,7 @@ class CipherController
      *
      * @return array
      */
-    public function getEncryptText(string $encryptText, int $fakeLength, array $keysArr = [null, null]): void
+    public function getEncryptText(string $encryptText, int $fakeLength, ?string $userCipherKey = null): void
     {
         require_once ("./versions/" . $this->cipherVer . "/cipher.php");
         $resultCipher = null;
@@ -361,7 +349,7 @@ class CipherController
             return;
         }
 
-        $resultCipher = $this->cipherObj->encryptText($fakeLength, $keysArr);
+        $resultCipher = $this->cipherObj->encryptText($fakeLength, $userCipherKey);
         
         $this->returnResponse([
             'encryptText' => $resultCipher,
@@ -393,7 +381,7 @@ class CipherController
      *
      * @return string
      */
-    public function getDecryptText(string $decryptText, array $keysArr = [null, null]): void
+    public function getDecryptText(string $decryptText, ?string $userCipherKey = null): void
     {
         $this->decryptText = $decryptText;
         
@@ -402,7 +390,7 @@ class CipherController
         //ПРОВЕРКА СУЩЕСТВУЕТ ЛИ ФАЙЛЫ
         require_once ("./versions/" . $this->cipherVer . "/cipher.php");
         $this->cipherObj = new SimpleCipher($this->decryptText, $this->cipherSalt);
-        $testCipher =  $this->cipherObj->decryptText($keysArr);
+        $testCipher =  $this->cipherObj->decryptText($userCipherKey);
 
         $this->returnResponse([
             'decryptText' => $testCipher,

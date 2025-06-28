@@ -221,7 +221,8 @@ document.getElementById('content__encrypt-block__input__encrypt').addEventListen
         encryptFakeLength = document.getElementById('cipherLength').value ?? 50,
         resultCipherCount = document.getElementById('cipherCount').value ?? 1,
         encryptSalt = document.getElementById('cipherSalt').value ?? null,
-        prevResulst = document.querySelectorAll('.content__encrypt-block__result__parent');
+        prevResulst = document.querySelectorAll('.content__encrypt-block__result__parent'),
+        cipherKey = document.getElementById('cipherKey').value
 
     if (encryptFakeLength > 899) {
         alert('Максимальная желаемая длина шифра 899 символов')
@@ -262,7 +263,7 @@ document.getElementById('content__encrypt-block__input__encrypt').addEventListen
                     text: encryptText,
                     fakeLength: encryptFakeLength,
                     cipherSalt: encryptSalt,
-                    //action: 'encrypt'
+                    cipherKey: cipherKey
                 }),
                 headers: {
                     'content-type': 'application/json'
@@ -374,27 +375,33 @@ document.getElementById('decryptText').addEventListener('input', function(el){
 
 
 function getCipherSalt(){
-    console.log('da')
-    let cipherKey = fetch('./api/getCipherKey', {
-        method: "GET"
-    }).then(function(result){
-        result.json().then(result => {
-            console.log(result)
-        })
-    })
-    // console.log(cipherKey.json())
     
-    // console.log(cipherSalt)
-
-    // return 
 }
 
 
+let getCipherKeyFields = Array.from(document.querySelectorAll('.cipher-key-field'));
 /**
  * Получение ключа для шифра 
  */
 Array.from(document.querySelectorAll('.api-get-cipher-key')).forEach(function(el) {
-    el.addEventListener('click', getCipherSalt)
+    el.addEventListener('click', () => {
+        fetch('./api/getCipherKey', {
+            method: "GET"
+        }).then(resultJson => {
+            resultJson.json()
+            .then(result => {
+                console.log(result)
+                getCipherKeyFields.forEach( field => {
+                    console.log(field)
+                    field.value = result.cipherKey
+                })
+            }).catch( () => {
+                console.log('net');
+            })
+        }).catch( () => {
+            console.log('net');
+        })
+    })
 })
 
 
