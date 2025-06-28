@@ -371,3 +371,45 @@ navigationElem.forEach((elem) => {
 document.getElementById('decryptText').addEventListener('input', function(el){
     clearDecryptText()
 })
+
+
+function getCipherSalt(){
+    console.log('da')
+    let cipherKey = fetch('./api/getCipherKey', {
+        method: "GET"
+    }).then(function(result){
+        result.json().then(result => {
+            console.log(result)
+        })
+    })
+    // console.log(cipherKey.json())
+    
+    // console.log(cipherSalt)
+
+    // return 
+}
+
+
+/**
+ * Получение ключа для шифра 
+ */
+Array.from(document.querySelectorAll('.api-get-cipher-key')).forEach(function(el) {
+    el.addEventListener('click', getCipherSalt)
+})
+
+
+/**
+ * Клик слайдеру для разворачивания дополнительных блоков
+ */
+Array.from(document.querySelectorAll('.content__input-block__block-slide')).forEach(function(el) {
+    el.addEventListener('click', function(){
+        let sliderParentBlock = this.parentElement;
+        if (sliderParentBlock.classList.contains('visible')) {
+            sliderParentBlock.classList.remove('visible')
+        } else {
+            sliderParentBlock.classList.add('visible')
+        }
+        
+    })
+})
+

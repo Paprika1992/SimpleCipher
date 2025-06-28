@@ -67,6 +67,20 @@ class CipherController
                         'validationMethod' => null,
                     ]
                 ],
+                'firstKey' => [
+                    'important' => false,
+                    'validation' => [
+                        'validationRegular' => null,
+                        'validationMethod' => null,
+                    ]
+                ],
+                'secondKey' => [
+                    'important' => false,
+                    'validation' => [
+                        'validationRegular' => null,
+                        'validationMethod' => null,
+                    ]
+                ],
             ]
         ],
         //ODd59g756б0≠39©ш28v2084пXгqqf]ЕydyЧ|YoO 41_TIbc114h
@@ -88,12 +102,29 @@ class CipherController
                         'validationMethod' => null,
                     ]
                 ],
+                'firstKey' => [
+                    'important' => false,
+                    'validation' => [
+                        'validationRegular' => null,
+                        'validationMethod' => null,
+                    ]
+                ],
+                'secondKey' => [
+                    'important' => false,
+                    'validation' => [
+                        'validationRegular' => null,
+                        'validationMethod' => null,
+                    ]
+                ],
             ]
         ],
         //TODO
         //ПЕРЕИМЕНУЙ НА GETCIPHERSALT
         'createCipherSalt' => [
-            //'methodName' => 'createCipherSalt',
+            'method' => 'GET',
+            'methodParams' => []
+        ],
+        'getCipherKey' => [
             'method' => 'GET',
             'methodParams' => []
         ],
@@ -129,20 +160,25 @@ class CipherController
             require_once ("./CipherVersion.php");
             switch ($this->action) {
                 case 'getEncryptText':
-                    $this->getEncryptText($this->rqstParams['text'], (array_key_exists('fakeLength', $this->rqstParams) !== false ? $this->rqstParams['fakeLength'] : 50));
+                    $this->getEncryptText(
+                        $this->rqstParams['text'], 
+                        (array_key_exists('fakeLength', $this->rqstParams) !== false ? $this->rqstParams['fakeLength'] : 50),
+                        [$this->rqstParams['firstKey'] ?? null, $this->rqstParams['secondKey'] ?? null]
+                    );
                     break;
                 case 'getDecryptText':
-                    $this->getDecryptText($this->rqstParams['text']);
+                    $this->getDecryptText(
+                        $this->rqstParams['text'],
+                        [$this->rqstParams['firstKey'] ?? null, $this->rqstParams['secondKey'] ?? null]
+                    );
                     break;
                 case 'createCipherSalt':
                     $this->createCipherSalt();
                     break;
+                case 'getCipherKey':
+                    $this->getCipherKey();
+                    break;
             }
-            // call_user_func(
-            //     array($this, $this->action), 
-            //     $this->rqstParams['text'], 
-            //     (array_key_exists('fakeLength', $this->rqstParams) !== false ? $this->rqstParams['fakeLength'] : 0)
-            // );
         }
 
         die();
@@ -256,13 +292,34 @@ class CipherController
     }
 
 
-    #Гаврилов
-    //для апи - ВОЩВРАЩАЙ ОШИБКУ, ЕСЛИ РОУТ НЕ НАЙДЕН
+    /**
+     * Метод формирует соль для шифра на основе уникальных для момента формирования параметрах
+     *
+     * @return void
+     */
+    public function getCipherKey()
+    {
+        require_once ("./versions/" . $this->cipherVer . "/cipher.php");
+        $firstKeyArr = $secondKeyArr = preg_split('//u', SimpleCipher::getFakeCipherKey(), -1, PREG_SPLIT_NO_EMPTY);
+        shuffle($firstKeyArr);
+        shuffle($secondKeyArr);
+        $resultKey = implode('', $firstKeyArr) . implode('', $secondKeyArr);
+
+        // var_dump($resultKey);
+
+        #Гаврилов
+        //ПЕРЕПИШИ ВСЕ МЕТОДЫ РАЗБИТИЯ СТРОКИ НА МАССИВ ПО СИМВОЛАМ НА mb_str_split с самописного решения, так как новая версия php
+
+        $this->returnResponse(
+            ['cipherKey' => $resultKey]
+        );
+    }
+
 
     /**
      * Метод формирует соль для шифра на основе уникальных для момента формирования параметрах
      *
-     * @return string
+     * @return void
      */
     public function createCipherSalt()
     {
@@ -288,7 +345,7 @@ class CipherController
      *
      * @return array
      */
-    public function getEncryptText(string $encryptText, int $fakeLength): void
+    public function getEncryptText(string $encryptText, int $fakeLength, array $keysArr = [null, null]): void
     {
         require_once ("./versions/" . $this->cipherVer . "/cipher.php");
         $resultCipher = null;
@@ -296,7 +353,7 @@ class CipherController
         //ВЫНЕСТИ СОЗДАНИЕ ЭКЗЕМЛПРЯА КЛАССА ШИФРОВАНИЯ В КОНСТРУКТОР ВСЕ ТАКИ
         $this->cipherObj = new SimpleCipher($encryptText, $this->cipherSalt);
 
-        if (!$this->validateEncrypText($encryptText, $this->cipherObj->fakeCipherKey)) {
+        if (!$this->validateEncrypText($encryptText, SimpleCipher::getFakeCipherKey())) {
             $this->returnResponse([
                 'encryptText' => null,
             ], 400, 'The text contains invalid characters');
@@ -304,7 +361,7 @@ class CipherController
             return;
         }
 
-        $resultCipher = $this->cipherObj->encryptText($fakeLength);
+        $resultCipher = $this->cipherObj->encryptText($fakeLength, $keysArr);
         
         $this->returnResponse([
             'encryptText' => $resultCipher,
@@ -336,7 +393,7 @@ class CipherController
      *
      * @return string
      */
-    public function getDecryptText(string $decryptText): void
+    public function getDecryptText(string $decryptText, array $keysArr = [null, null]): void
     {
         $this->decryptText = $decryptText;
         
@@ -345,7 +402,7 @@ class CipherController
         //ПРОВЕРКА СУЩЕСТВУЕТ ЛИ ФАЙЛЫ
         require_once ("./versions/" . $this->cipherVer . "/cipher.php");
         $this->cipherObj = new SimpleCipher($this->decryptText, $this->cipherSalt);
-        $testCipher =  $this->cipherObj->decryptText();
+        $testCipher =  $this->cipherObj->decryptText($keysArr);
 
         $this->returnResponse([
             'decryptText' => $testCipher,

@@ -91,3 +91,7 @@
 2025-06-27 09:20:48 E_NOTICE Undefined index: validationMethod в файле C:\upload_files\OSPanel\domains\cipher\CipherController.php на 229 
 2025-06-27 09:20:48 E_NOTICE Undefined index: validationMethod в файле C:\upload_files\OSPanel\domains\cipher\CipherController.php на 229 
 2025-06-27 09:27:06 E_NOTICE Undefined offset: 12 в файле C:\upload_files\OSPanel\domains\cipher\versions\123\cipher.php на 261 
+2025-06-28 10:41:11 E_NOTICE Trying to get property 'fakeCipherKey' of non-object в файле C:\upload_files\OSPanel\domains\cipher\CipherController.php на 302 
+2025-06-28 10:41:59 E_NOTICE Trying to get property 'fakeCipherKey' of non-object в файле C:\upload_files\OSPanel\domains\cipher\CipherController.php на 302 
+2025-06-28 10:42:03 E_NOTICE Trying to get property 'fakeCipherKey' of non-object в файле C:\upload_files\OSPanel\domains\cipher\CipherController.php на 302 
+2025-06-28 10:55:38 E_WARNING Cannot modify header information - headers already sent by (output started at C:\upload_files\OSPanel\domains\cipher\CipherController.php:308) в файле C:\upload_files\OSPanel\domains\cipher\CipherController.php на 461 

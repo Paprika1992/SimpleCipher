@@ -184,7 +184,7 @@ class SimpleCipher
 	/**
 	 * @var string путь до файлов с ключами шифра
 	 */
-	private $keyFilesPath;
+	private static $keyFilesPath = __DIR__ . "./cipherKeys/";
 
 	public function __construct(string $text, ?string $salt = null)
 	{
@@ -197,7 +197,7 @@ class SimpleCipher
 		// 	//$this->keyFilesPath = "./versions/cipherKeys/";
 		// 	require_once ("./CipherVersion.php");
 		// }
-		$this->keyFilesPath = (__DIR__ . "./cipherKeys/");
+		//$this->keyFilesPath = (__DIR__ . "./cipherKeys/");
 		#Гаврилов
 		//ПЕРЕД РЕЛИЗОМ УДАЛИ
 		
@@ -207,14 +207,25 @@ class SimpleCipher
 		//ПОПРОБУЙ В СОЛЬ ПЕРЕДАТЬ КИТАЙСКИЙ СИМВОЛ ИЛИ РУССКИЙ, ОНИ ДОЛЖНЫ УДАЛЯТЬСЯ ТУТ. В СОЛИ МОЖЕТ БЫТЬ ТОЛЬКО ЛАТИНСКИЕ СИМВОЛЫ И ЦИФРЫ
 		//ОНИ НИ В КОЕМ СЛУЧАЕ НЕ ДОЛЖНЫ УДАЛЯТЬСЯ ТУТ. СОЛЬ ДОЛЖНА ВАЛИДИРОВАТЬСЯ НА КАКОМ-ТО ЭТАПЕ. ЕСЛИ ВАЛИДАЦИЯ НЕ ПРОШЛА - ВОЗВРАЩАЕМ ОШИБКУ И СООБЩАЕМ ПОЛЬЗОВАТЕЛЮ О КРИВОЙ СОЛИ
 		$this->salt = preg_replace('/[^a-zA-Z0-9]+/', '', $salt);
-		$this->fakeCipherKey = file_get_contents($this->keyFilesPath . "cipherKey_0.txt");
-		$this->fakeCipherKey = $this->getStrArr($this->fakeCipherKey);
-		shuffle($this->fakeCipherKey);
-		$this->fakeCipherKey = implode('', $this->fakeCipherKey);
-		$this->matrixDepth = sqrt(mb_strlen($this->fakeCipherKey));
-		
+		$fakeCipherKey = file_get_contents(self::$keyFilesPath . "cipherKey_0.txt");
+		$fakeCipherKey = $this->getStrArr($fakeCipherKey);
+		shuffle($fakeCipherKey);
+		$fakeCipherKey = implode('', $fakeCipherKey);
+
+		$this->matrixDepth = sqrt(mb_strlen($fakeCipherKey));
 		$this->saltNumberSegments = $this->getSaltNumbersArr();
 
+	}
+
+
+	public static function getFakeCipherKey()
+	{
+		$fakeCipherKey = file_get_contents(self::$keyFilesPath . "cipherKey_0.txt");
+		$fakeCipherKey = preg_split('//u', $fakeCipherKey, -1, PREG_SPLIT_NO_EMPTY);
+		shuffle($fakeCipherKey);
+		$fakeCipherKey = implode('', $fakeCipherKey);
+
+		return $fakeCipherKey;
 	}
 
 
@@ -275,7 +286,7 @@ class SimpleCipher
 	 * @param integer $fakeLength фейковая длина шифра
 	 * @return string
 	 */
-	public function encryptText(int $fakeLength = 50): string
+	public function encryptText(int $fakeLength = 50, array $keysArr = [null, null]): string
 	{
 		//Фейковая длина не может быть меньше 50 символов
 		$fakeLength = $fakeLength < 50 ? 50 : $fakeLength;
@@ -295,11 +306,13 @@ class SimpleCipher
 			$cipherKeyIndex = $this->getRealCipherKey($cipherKeyIndex);
 		}
 		//$this->cipherKey = $this->cipherKeyStorage[$cipherKeyIndex];
-		$this->cipherKey = file_get_contents($this->keyFilesPath . "cipherKey_$cipherKeyIndex.txt");
+		//Если передаются ключи - для шифрования берутся они, в противном случае один из подготовленных ключей
+		$this->cipherKey = ($keysArr[0] ? $keysArr[0] : file_get_contents(self::$keyFilesPath . "cipherKey_$cipherKeyIndex.txt"));
 		//$this->cipherKey = file_get_contents($this->keyFilesPath . "cipherKey_$cipherKeyIndex.php");
 		//Ключ второго шифра для формирования второй матрицы строится на основании другого ключа из массива $this->cipherKeyStorage (следующего ключ после ключа первой матрицы, либо первый ключ массива, если ключ для первый матрицы оказался последним в массиве)
 		// $this->cipherKey_second = $this->cipherKeyStorage[$cipherKeyIndex == (count($this->cipherKeyStorage) - 1) ? 0 : $cipherKeyIndex + 1];
-		$this->cipherKey_second = file_get_contents($this->keyFilesPath . "cipherKey_" . ($cipherKeyIndex == 9 ? 0 : $cipherKeyIndex + 1) . ".txt");
+		//Если передаются ключи - для шифрования берутся они, в противном случае один из подготовленных ключей
+		$this->cipherKey_second = ($keysArr[1] ? $keysArr[1] : file_get_contents(self::$keyFilesPath . "cipherKey_" . ($cipherKeyIndex == 9 ? 0 : $cipherKeyIndex + 1) . ".txt"));
 		//Если передается соль, формируем из нее хэш на сумму всех символов соли, которая будет использоваться для запутывания ключей шифра и для определения паттерном формирования матриц. 
 		//Формируем ПОСЛЕ определения ключа шифра, так как он используется при формировании хэша 
 		if ($this->salt) {
@@ -513,7 +526,7 @@ class SimpleCipher
 	 *
 	 * @return string
 	 */
-	public function decryptText()
+	public function decryptText(array $keysArr = [null, null]): string
 	{
 		//var_dump('##__РАСШИФРОВКА__##');
 		$this->encrypt = false;
@@ -594,11 +607,11 @@ class SimpleCipher
 		}
 		// $this->cipherKey = $this->cipherKeyStorage[$cipherKeyIndex];
 		// $this->cipherKey_second = $this->cipherKeyStorage[$cipherKeyIndex == (count($this->cipherKeyStorage) - 1) ? 0 : $cipherKeyIndex + 1];
-		$this->cipherKey = file_get_contents($this->keyFilesPath . "cipherKey_$cipherKeyIndex.txt");
+		$this->cipherKey = ($keysArr[0] ? $keysArr[0] : file_get_contents(self::$keyFilesPath . "cipherKey_$cipherKeyIndex.txt"));
 		//$this->cipherKey = file_get_contents($this->keyFilesPath . "cipherKey_$cipherKeyIndex.php");
 		//Ключ второго шифра для формирования второй матрицы строится на основании другого ключа из массива $this->cipherKeyStorage (следующего ключ после ключа первой матрицы, либо первый ключ массива, если ключ для первый матрицы оказался последним в массиве)
 		// $this->cipherKey_second = $this->cipherKeyStorage[$cipherKeyIndex == (count($this->cipherKeyStorage) - 1) ? 0 : $cipherKeyIndex + 1];
-		$this->cipherKey_second = file_get_contents($this->keyFilesPath . "cipherKey_" . ($cipherKeyIndex == 9 ? 0 : $cipherKeyIndex + 1 . ".txt"));
+		$this->cipherKey_second = ($keysArr[1] ? $keysArr[1] : file_get_contents(self::$keyFilesPath . "cipherKey_" . ($cipherKeyIndex == 9 ? "0.txt" : $cipherKeyIndex + 1 . ".txt")));
 		if ($this->salt) {
 			$this->saltHashSum = $this->getHashSaltSum();
 		}
@@ -1977,7 +1990,7 @@ $symbArr = ['z'=>58, 'y'=>57, 'x'=>56, 'w'=>55, 'v'=>54, 'u'=>53, 't'=>52, 's'=>
 $cipherText = 'мама мыла раму raz dvatri &^%';
 // $cipherText = '1111111111111111111111111';
 $salt = null;
-$salt = 'NTI0M2FmNWEwOGU3NDY2YTc5MAFiMTEyOTdlNmY1NTQzY2Q4MzYzMmJkMTNiODRjOGI2YjY4NjEwYjNmM2NjZGJhOWY1NjRiYmU3OTEzZjdhZmIzNDExM2QwZTgwMjhkZDE1OTIwMDlhY2YxZjIxMDljNDA4MTllZjc3MmEzOTI';
+// $salt = 'NTI0M2FmNWEwOGU3NDY2YTc5MAFiMTEyOTdlNmY1NTQzY2Q4MzYzMmJkMTNiODRjOGI2YjY4NjEwYjNmM2NjZGJhOWY1NjRiYmU3OTEzZjdhZmIzNDExM2QwZTgwMjhkZDE1OTIwMDlhY2YxZjIxMDljNDA4MTllZjc3MmEzOTI';
 //$testCipher = (new SimpleCipher($cipherText, $salt))->encryptText(40);
 $n = 1;
 $saltNew = $salt;
@@ -2032,10 +2045,10 @@ $saltNew = $salt;
 	// 	$s++;
 	// }
 
-	// echo '<pre>'; var_dump($decryptText); echo'</pre>';
-	// if ($decryptText !== $cipherText) {
-	// 	var_dump('ОШИПКА!');
-	// }
+// 	echo '<pre>'; var_dump($decryptText); echo'</pre>';
+// 	if ($decryptText !== $cipherText) {
+// 		var_dump('ОШИПКА!');
+// 	}
 //  	$n++;
 // }
 
