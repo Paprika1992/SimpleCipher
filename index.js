@@ -9,7 +9,7 @@ setTimeout(function() {
 }, 500)
 
 //Дешифровка текста
-document.getElementById('content__decrypt-block__input__decrypt').addEventListener('click', async function () {
+document.getElementById('content__decrypt-block__decrypt-btn').addEventListener('click', async function () {
     let decryptText = document.getElementById('decryptText').value,
         decryptSalt = document.getElementById('cipherSalt_decrypt').value ?? null;
 
@@ -216,7 +216,7 @@ function clearDecryptText()
 
 
 //Шифрование текста
-document.getElementById('content__encrypt-block__input__encrypt').addEventListener('click', async function () {
+document.getElementById('content__encrypt-block__encrypt-btn').addEventListener('click', async function () {
     let encryptText = document.getElementById('encryptText').value.trim(),
         encryptFakeLength = document.getElementById('cipherLength').value ?? 50,
         resultCipherCount = document.getElementById('cipherCount').value ?? 1,
@@ -374,17 +374,11 @@ document.getElementById('decryptText').addEventListener('input', function(el){
 })
 
 
-function getCipherSalt(){
-    
-}
-
-
 let getCipherKeyFields = Array.from(document.querySelectorAll('.cipher-key-field'));
 /**
  * Получение ключа для шифра 
  */
-Array.from(document.querySelectorAll('.api-get-cipher-key')).forEach(function(el) {
-    el.addEventListener('click', () => {
+document.getElementById('api-get-cipher-key').addEventListener('click', () => {
         fetch('./api/getCipherKey', {
             method: "GET"
         }).then(resultJson => {
@@ -402,21 +396,43 @@ Array.from(document.querySelectorAll('.api-get-cipher-key')).forEach(function(el
             console.log('net');
         })
     })
-})
 
+//#Гаврилов
+//НАВЕСЬ ФУНКЦИИ-ОБРАБОТЧИКИ ПРЯМО В HTML ЭЛЕМЕНТЫ, НАПРИМЕР НА АТРИБУТ ONCHANGE  
+
+const sliderCollection = Array.from(document.querySelectorAll('.content__input-block__block-slide'));
+
+let encrpytSlidersCollection = document.querySelectorAll("#cipher-content__encrypt-block .content__input-block__block-slide"),
+    decryptSlidersCollection = document.querySelectorAll("#cipher-content__decrypt-block .content__input-block__block-slide");
 
 /**
- * Клик слайдеру для разворачивания дополнительных блоков
+ * Клик по слайдеру для разворачивания дополнительных блоков
  */
-Array.from(document.querySelectorAll('.content__input-block__block-slide')).forEach(function(el) {
-    el.addEventListener('click', function(){
-        let sliderParentBlock = this.parentElement;
-        if (sliderParentBlock.classList.contains('visible')) {
-            sliderParentBlock.classList.remove('visible')
-        } else {
-            sliderParentBlock.classList.add('visible')
-        }
-        
-    })
+encrpytSlidersCollection.forEach(function(el, index) {
+    el.addEventListener('click', slideBlock(index))   
+})
+/**
+ * Клик по слайдеру для разворачивания дополнительных блоков
+ */
+decryptSlidersCollection.forEach(function(el, index) {
+    el.addEventListener('click', slideBlock(index))   
 })
 
+function slideBlock(index) 
+{
+    console.log(index)
+    return function(event) {
+        let siblingBlock = event.currentTarget.closest('#cipher-content__encrypt-block') ? decryptSlidersCollection : encrpytSlidersCollection
+        console.log(siblingBlock)
+        let sliderParentBlock = event.currentTarget.parentElement;
+        if (sliderParentBlock.classList.contains('visible')) {
+            sliderParentBlock.classList.remove('visible')
+            siblingBlock[index].parentElement.classList.remove('visible')
+        } else {
+            sliderParentBlock.classList.add('visible')
+            siblingBlock[index].parentElement.classList.add('visible')
+        }
+       
+    }
+    
+}
