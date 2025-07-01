@@ -118,44 +118,87 @@ document.getElementById('page-background').addEventListener('click', function() 
 })
 
 
+function getCipherSalt () {
+    return fetch('./api/createCipherSalt', {
+        method: "GET",
+    }).then( 
+        promise => {
+            console.log(promise.status)
+            if (promise.status !== 200) {
+                let errMsg = 'Произошла непредвиденная ошибка'
+                return {err: errMsg + ": " + promise.headers.get('X-Error-Msg')} || true
+            } else {
+                return promise.json()
+            }
+            //Проверяем есть ли ошибка в выполнении ендпоинта
+            //return {errMsg: promise.headers.get('X-Error-Msg')} || promise.json()
+        }   
+    )
+}
+
+
+//Генерация соли для шифра
+document.getElementById('api-get-cipher-salt').addEventListener('click', async function(){
+    let cipherSaltRqst = await getCipherSalt(),
+        cipherSalt
+    if (cipherSaltRqst.err) {
+        alert(cipherSaltRqst.err)
+        
+        return;
+    } else {
+        cipherSalt = cipherSaltRqst.cipherSalt
+    }
+
+    document.getElementById('cipherSalt').value = cipherSalt;
+})
+
+
 //Получение соли к шифру
 document.getElementById('getSalt').addEventListener('click', async function (event) {
+    //Если клик происходит во время отсчета до исчезновения соли
     if (event.target.classList.contains('getSalt')) {
         return;
     }
-    let cipherSalt = null,
-        response = await fetch('./api/createCipherSalt', {
-        method: "GET",
-        // body: JSON.stringify({
-        //     action: 'getSalt'
-        // }),
-        // headers: {
-        //     'content-type': 'application/json'
-        // }
-    });
-    let cipherSaltRqst = await response.json().catch(function(err){
-        console.log(err)
-    })
-        cipherSalt = cipherSaltRqst.cipherSalt
-    
-    console.log(cipherSaltRqst)
 
-    if (response.status !== 200) {
-        if (cipherSaltRqst.errMsg) {
-            alert(cipherSaltRqst.errMsg)
-        } else {
-            alert('Непредвиденная ошибка');
-        }
+    let cipherSaltRqst = await getCipherSalt(),
+        cipherSalt
+    if (cipherSaltRqst.err) {
+        alert(cipherSaltRqst.err)
         
-        //ГАВРИЛОВ
-        //ОТПРАВЛЯЙ ЕНДПОИНТ НА ЛОГИРОВАНИЕ ИНФОРМАЦИИ ОБ ОШИБКЕ
         return;
+    } else {
+        cipherSalt = cipherSaltRqst.cipherSalt
     }
+   
+    // console.log(cipherSalt)
+    
+    // let cipherSalt = null,
+    //     response = await fetch('./api/createCipherSalt', {
+    //     method: "GET",
+    // });
+    // let cipherSaltRqst = await response.json().catch(function(err){
+    //     console.log(err)
+    // })
+    //     cipherSalt = cipherSaltRqst.cipherSalt
+    
+    // console.log(cipherSaltRqst)
+
+    // if (response.status !== 200) {
+    //     if (cipherSaltRqst.errMsg) {
+    //         alert(cipherSaltRqst.errMsg)
+    //     } else {
+    //         alert('Непредвиденная ошибка');
+    //     }
+        
+    //     //ГАВРИЛОВ
+    //     //ОТПРАВЛЯЙ ЕНДПОИНТ НА ЛОГИРОВАНИЕ ИНФОРМАЦИИ ОБ ОШИБКЕ
+    //     return;
+    // }
 
     event.target.classList.add('getSalt');
 
     //Счетчик удаление соли к шифру
-    let cipherSaltCount = 5;
+    let cipherSaltCount = 7;
 
     // document.getElementById('GetCipherSalt').innerHTML = 'Ваш секретный ключ - ' + cipherSalt
     document.getElementById('GetCipherSalt').classList.add('visible')
@@ -167,8 +210,6 @@ document.getElementById('getSalt').addEventListener('click', async function (eve
         cipherSaltCount--;
         document.getElementById('salt-timer-block__text').innerHTML = 'Секретный ключ будет удален через <span>' + cipherSaltCount + '</span>';
     }, 1000)
-    //ГАВРИЛОВ  
-    //ПОКА ИДЕТ ОТСЧЕТ ПО УДАЛЕНИЮ СГЕНЕРИРОВАННОГО СЕКРЕТНОГО КЛЮЧА НАЖАТИЕ ПО КНОПКИ "ПОЛУЧИТЬ КЛЮЧ" НИ К ЧЕМУ НЕ ПРИВОДИТ
 
     setTimeout(function(){
         // document.getElementById('GetCipherSalt').innerHTML = "";
@@ -349,6 +390,7 @@ document.getElementById('content__encrypt-block__encrypt-btn').addEventListener(
 
 const navigationElem = document.querySelectorAll('.navigation__block__title');
 
+//Навешиваем обработчик клика на иконку слайдера, "разворачивающего" соседний блок
 navigationElem.forEach((elem) => {
     elem.addEventListener('click', () => {
         let showClass = elem.parentElement.classList.contains('show');
@@ -362,13 +404,10 @@ navigationElem.forEach((elem) => {
         } else {
             backgroundEl.classList.remove('visible')
         }
-        console.log(elem.parentElement.classList.contains('click'))
-       // elem.parentElement.nextElementSibling.classList.remove('click')
-        //elem.parentElement.previousElementSibling.classList.remove('click')
-        
     })
 })
 
+//Изменение значения в поле с шифром приводит к очистке блока с результатом, чтобы у пользователя не было ошибочного представления, что результат связан с другим шифром
 document.getElementById('decryptText').addEventListener('input', function(el){
     clearDecryptText()
 })
@@ -385,17 +424,18 @@ document.getElementById('api-get-cipher-key').addEventListener('click', () => {
             resultJson.json()
             .then(result => {
                 console.log(result)
-                getCipherKeyFields.forEach( field => {
-                    console.log(field)
-                    field.value = result.cipherKey
-                })
+                document.getElementById('cipherKey').value = result.cipherKey;
+                // getCipherKeyFields.forEach( field => {
+                //     console.log(field)
+                //     field.value = result.cipherKey
+                // })
             }).catch( () => {
                 console.log('net');
             })
         }).catch( () => {
             console.log('net');
         })
-    })
+})
 
 //#Гаврилов
 //НАВЕСЬ ФУНКЦИИ-ОБРАБОТЧИКИ ПРЯМО В HTML ЭЛЕМЕНТЫ, НАПРИМЕР НА АТРИБУТ ONCHANGE  
@@ -418,12 +458,12 @@ decryptSlidersCollection.forEach(function(el, index) {
     el.addEventListener('click', slideBlock(index))   
 })
 
+//Разворачивание слайдера
 function slideBlock(index) 
 {
-    console.log(index)
+    //Возвращаем замыкание, в котором получаем параметр события клика (event) и, ориентируясь на него, раскрываем или скрываем такой же блок, но в соседнем разделе (если слайдер нашат в блоке шифровании - раскрываем тот же блок в разделе дешифрования и наоборот) 
     return function(event) {
         let siblingBlock = event.currentTarget.closest('#cipher-content__encrypt-block') ? decryptSlidersCollection : encrpytSlidersCollection
-        console.log(siblingBlock)
         let sliderParentBlock = event.currentTarget.parentElement;
         if (sliderParentBlock.classList.contains('visible')) {
             sliderParentBlock.classList.remove('visible')
@@ -431,8 +471,6 @@ function slideBlock(index)
         } else {
             sliderParentBlock.classList.add('visible')
             siblingBlock[index].parentElement.classList.add('visible')
-        }
-       
-    }
-    
+        }  
+    }    
 }

@@ -21,7 +21,7 @@ button{
   display: inline-block;
     /* box-sizing: border-box; */
     padding: 0 13px;
-    margin: 15px 0;
+    /* margin: 15px 0; */
     border: 1.5px solid #c7c7c7;
     border-radius: 5px;
     height: 32px;
@@ -206,8 +206,9 @@ textarea{
     &>#cipher-content__input-block{
       background: white;
       display: flex;
-      position: sticky;
-        top: 0;
+      position: relative;
+      /* position: sticky;
+        top: 0; */
       z-index: 2;
 
       & #decrypt-result-text{
@@ -285,7 +286,11 @@ textarea{
               }
 
               &>.input-block__field-row{
-                grid-template-columns: 1fr 5fr 0.1fr;
+                grid-template-columns: 5fr 0.3fr;
+
+                &>.cipher-salt-input{
+                  height: 80px;
+                }
 
                 &>.fa-refresh{
                   padding-top: 15px;
@@ -316,7 +321,7 @@ textarea{
             /* margin: auto; */
             display: block;
             position: absolute;
-            bottom: 0;
+            bottom: 20px;
           }
 
       }
@@ -403,6 +408,15 @@ textarea{
         &>.content__input-block{
           box-shadow: 0px 4px 6px 1px #564022;
         }
+
+        &>#content__decrypt-block__result{
+          min-height: 35px;
+          /*border-radius: 10px; */
+          margin: 30px 0;
+          /* border: 1px solid grey;
+          background: #7474ab; */
+        }
+
       }
 
       & #content__decrypt-block__input{

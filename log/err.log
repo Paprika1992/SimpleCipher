@@ -100,3 +100,13 @@
 2025-06-29 12:35:48 E_WARNING Cannot modify header information - headers already sent by (output started at C:\upload_files\OSPanel\domains\cipher\CipherController.php:136) в файле C:\upload_files\OSPanel\domains\cipher\CipherController.php на 449 
 2025-06-29 12:36:01 E_WARNING Cannot modify header information - headers already sent by (output started at C:\upload_files\OSPanel\domains\cipher\CipherController.php:136) в файле C:\upload_files\OSPanel\domains\cipher\CipherController.php на 449 
 2025-06-29 12:36:53 E_WARNING Cannot modify header information - headers already sent by (output started at C:\upload_files\OSPanel\domains\cipher\CipherController.php:136) в файле C:\upload_files\OSPanel\domains\cipher\CipherController.php на 449 
+2025-07-01 08:32:29 E_NOTICE Undefined index: cipherKey в файле C:\upload_files\OSPanel\domains\cipher\CipherController.php на 160 
+2025-07-01 08:32:56 E_NOTICE Undefined index: cipherKey в файле C:\upload_files\OSPanel\domains\cipher\CipherController.php на 160 
+2025-07-01 08:36:39 E_NOTICE Undefined index: cipherKey в файле C:\upload_files\OSPanel\domains\cipher\CipherController.php на 160 
+2025-07-01 08:36:57 E_NOTICE Undefined index: cipherKey в файле C:\upload_files\OSPanel\domains\cipher\CipherController.php на 160 
+2025-07-01 08:39:05 E_NOTICE Undefined index: cipherKey в файле C:\upload_files\OSPanel\domains\cipher\CipherController.php на 160 
+2025-07-01 08:42:40 E_NOTICE Undefined index: cipherKey в файле C:\upload_files\OSPanel\domains\cipher\CipherController.php на 160 
+2025-07-01 08:43:22 E_NOTICE Undefined index: cipherKey в файле C:\upload_files\OSPanel\domains\cipher\CipherController.php на 160 
+2025-07-01 08:46:57 E_NOTICE Undefined index: cipherKey в файле C:\upload_files\OSPanel\domains\cipher\CipherController.php на 160 
+2025-07-01 08:47:39 E_NOTICE Undefined index: cipherKey в файле C:\upload_files\OSPanel\domains\cipher\CipherController.php на 160 
+2025-07-01 08:52:27 E_WARNING Cannot modify header information - headers already sent by (output started at C:\upload_files\OSPanel\domains\cipher\CipherController.php:388) в файле C:\upload_files\OSPanel\domains\cipher\CipherController.php на 454 

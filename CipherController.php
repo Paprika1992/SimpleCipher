@@ -151,13 +151,13 @@ class CipherController
                     $this->getEncryptText(
                         $this->rqstParams['text'], 
                         (array_key_exists('fakeLength', $this->rqstParams) !== false ? $this->rqstParams['fakeLength'] : 50),
-                        $this->rqstParams['cipherKey']
+                        (array_key_exists('cipherKey', $this->rqstParams) !== false ? $this->rqstParams['cipherKey'] : null),
                     );
                     break;
                 case 'getDecryptText':
                     $this->getDecryptText(
                         $this->rqstParams['text'],
-                        $this->rqstParams['cipherKey']
+                        (array_key_exists('cipherKey', $this->rqstParams) !== false ? $this->rqstParams['cipherKey'] : null)
                     );
                     break;
                 case 'createCipherSalt':
@@ -314,8 +314,8 @@ class CipherController
         $cipherSalt = base64_encode(hash('whirlpool', time() . $_SERVER['REMOTE_ADDR']));
         $cipherSalt = str_replace('=', '', $cipherSalt);
 
-        $this->returnResponse([
-            'cipherSalt' => $cipherSalt]
+        $this->returnResponse(
+            ['cipherSalt' => $cipherSalt]
         );
     }
 
@@ -385,6 +385,7 @@ class CipherController
      */
     public function getDecryptText(string $decryptText, ?string $userCipherKey = null): void
     {
+        // var_dump('da');
         $this->decryptText = $decryptText;
         
         $this->cipherVer = CipherVersion::getVersion($this->decryptText);
@@ -394,9 +395,11 @@ class CipherController
         $this->cipherObj = new SimpleCipher($this->decryptText, $this->cipherSalt);
         $testCipher =  $this->cipherObj->decryptText($userCipherKey);
 
-        $this->returnResponse([
-            'decryptText' => $testCipher,
-        ]);
+        // var_dump($testCipher);
+
+        $this->returnResponse(
+            ['decryptText' => $testCipher]
+        );
 
     }
 
@@ -425,7 +428,7 @@ class CipherController
     //Если ошибка возникает при дешифровке текста - возвращаем ранломный запутанный текст будто все прошло "по плану", но алгоритм не расшифровал кривое сообщение
     if ($this->action == 'getDecryptText') {
         $this->returnResponse([
-            'decryptText' => $this->getRandomText($this->decryptText)
+            'decryptText' => $this->getRandomText($this->rqstParams['text'])
         ], 200);
         #Гаврилов
         //если ошибка некритичная - не останавливай рабоут скрипта, не выкидывай 500 ошибку

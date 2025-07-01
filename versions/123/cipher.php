@@ -2020,10 +2020,11 @@ $saltNew = $salt;
 //НЕ ШИФРОВАТЬ СООБЩЕНИЕ, СОСТОЯЩЕЕ ТОЛЬКО ИЗ ПРОБЕЛОВ. ЕСЛИ ПРИ ВАЛИДАЦИИ ПОСЛЕ TRIM() ОСТАЕТСЯ ПУСТОТА - ВЫВОДИТЬ СООБЩЕНИЕ ОБ ОШИБКЕЫ
 
 	// die();
-	// $testCipher = (new SimpleCipher($cipherText, $salt))->encryptText(899);
+	// $testCipher = (new SimpleCipher($cipherText, $salt))->encryptText(50);
 	// echo '<pre>'; var_dump($testCipher); echo'</pre>';
 	// $decryptText = (new SimpleCipher($testCipher, $salt))->decryptText();
- 	
+	// echo '<pre>'; var_dump($decryptText); echo'</pre>';
+
 	#Гаврилов
 	//УВЕЛИЧЬ СКОРОСТЬ АНИМАЦИИ КРИСТАЛЛА. ЖЕЛАТЕЛЬНО ПЕРЕКЛЮЧЕНИЕ БУКВ, А БЛЕКС МОЖНО ОСТАВИТЬ 
 
@@ -2047,10 +2048,9 @@ $saltNew = $salt;
 	// 	$s++;
 	// }
 
-// 	echo '<pre>'; var_dump($decryptText); echo'</pre>';
-// 	if ($decryptText !== $cipherText) {
-// 		var_dump('ОШИПКА!');
-// 	}
+	// if ($decryptText !== $cipherText) {
+	// 	var_dump('ОШИПКА!');
+	// }
 //  	$n++;
 // }
 
