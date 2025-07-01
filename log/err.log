@@ -110,3 +110,10 @@
 2025-07-01 08:46:57 E_NOTICE Undefined index: cipherKey в файле C:\upload_files\OSPanel\domains\cipher\CipherController.php на 160 
 2025-07-01 08:47:39 E_NOTICE Undefined index: cipherKey в файле C:\upload_files\OSPanel\domains\cipher\CipherController.php на 160 
 2025-07-01 08:52:27 E_WARNING Cannot modify header information - headers already sent by (output started at C:\upload_files\OSPanel\domains\cipher\CipherController.php:388) в файле C:\upload_files\OSPanel\domains\cipher\CipherController.php на 454 
+2025-07-01 09:38:56 E_WARNING Cannot modify header information - headers already sent by (output started at C:\upload_files\OSPanel\domains\cipher\versions\123\cipher.php:533) в файле C:\upload_files\OSPanel\domains\cipher\CipherController.php на 457 
+2025-07-01 09:39:05 E_WARNING Cannot modify header information - headers already sent by (output started at C:\upload_files\OSPanel\domains\cipher\versions\123\cipher.php:533) в файле C:\upload_files\OSPanel\domains\cipher\CipherController.php на 457 
+2025-07-01 09:51:41 E_WARNING Cannot modify header information - headers already sent by (output started at C:\upload_files\OSPanel\domains\cipher\CipherController.php:338) в файле C:\upload_files\OSPanel\domains\cipher\CipherController.php на 458 
+2025-07-01 09:53:12 E_WARNING Cannot modify header information - headers already sent by (output started at C:\upload_files\OSPanel\domains\cipher\versions\123\cipher.php:312) в файле C:\upload_files\OSPanel\domains\cipher\CipherController.php на 457 
+2025-07-01 10:11:17 E_WARNING Cannot modify header information - headers already sent by (output started at C:\upload_files\OSPanel\domains\cipher\CipherController.php:257) в файле C:\upload_files\OSPanel\domains\cipher\CipherController.php на 467 
+2025-07-01 10:29:37 E_WARNING Illegal string offset 'cipherKey' в файле C:\upload_files\OSPanel\domains\cipher\CipherController.php на 330 
+2025-07-01 10:30:13 E_WARNING Cannot modify header information - headers already sent by (output started at C:\upload_files\OSPanel\domains\cipher\CipherController.php:333) в файле C:\upload_files\OSPanel\domains\cipher\CipherController.php на 477 

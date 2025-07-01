@@ -11,7 +11,8 @@ setTimeout(function() {
 //Дешифровка текста
 document.getElementById('content__decrypt-block__decrypt-btn').addEventListener('click', async function () {
     let decryptText = document.getElementById('decryptText').value,
-        decryptSalt = document.getElementById('cipherSalt_decrypt').value ?? null;
+        decryptSalt = document.getElementById('cipherSalt_decrypt').value ?? null,
+        cipherKey = document.getElementById('cipher-key--decrypt').value
 
     if (!decryptText.length) {
         alert('пусто')
@@ -31,7 +32,7 @@ document.getElementById('content__decrypt-block__decrypt-btn').addEventListener(
         body: JSON.stringify({
             text: decryptText,
             cipherSalt: decryptSalt,
-            // action: 'decrypt'
+            cipherKey: cipherKey
         }),
         headers: {
             'content-type': 'application/json'
