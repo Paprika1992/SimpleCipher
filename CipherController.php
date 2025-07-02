@@ -64,6 +64,14 @@ class CipherController
                     'important' => true,
                     'validation' => [
                         'validationRegular' => '/^[0-9a-zA-Z]{171}$/',
+                        'validationMethod' => null,
+                    ]
+                ],
+                'cipherKey' => [
+                    'important' => false,
+                    'validation' => [
+                        'validationRegular' => null,
+                        'validationMethod' => null,
                     ]
                 ],
             ]
@@ -81,7 +89,17 @@ class CipherController
                 'cipherSalt' => [
                     'important' => true,
                     'validation' => [
-                        'validationRegular' => '/^[0-9a-zA-Z]{171}$/',
+                        //ГАВРИЛОВ
+                        //При дешифровке могут передавать любую соль? мы не должны подсказывать, что есть "правильный" формат соли? Потести попередавай кривые соли: пару спецсимвоов, 0, кирилические буквы. можно вообще при несоблюдении формата соли просто возвращать "кривую" фейковую строку?
+                        'validationRegular' => null,
+                        'validationMethod' => null,
+                    ]
+                ],
+                'cipherKey' => [
+                    'important' => false,
+                    'validation' => [
+                        'validationRegular' => null,
+                        'validationMethod' => null,
                     ]
                 ],
             ]
@@ -89,7 +107,10 @@ class CipherController
         //TODO
         //ПЕРЕИМЕНУЙ НА GETCIPHERSALT
         'createCipherSalt' => [
-            //'methodName' => 'createCipherSalt',
+            'method' => 'GET',
+            'methodParams' => []
+        ],
+        'getCipherKey' => [
             'method' => 'GET',
             'methodParams' => []
         ],
@@ -112,6 +133,8 @@ class CipherController
         $this->rqstParams = json_decode(file_get_contents('php://input'), true) ?? [];
         $this->cipherSalt = array_key_exists('cipherSalt', $this->rqstParams) !== false ? $this->rqstParams['cipherSalt'] : null;
 
+        // var_dump($this->rqstParams);
+
         // var_dump($test);
 
         $checkEndpoint = $this->checkRoute($this->action);
@@ -125,20 +148,25 @@ class CipherController
             require_once ("./CipherVersion.php");
             switch ($this->action) {
                 case 'getEncryptText':
-                    $this->getEncryptText($this->rqstParams['text'], (array_key_exists('fakeLength', $this->rqstParams) !== false ? $this->rqstParams['fakeLength'] : 50));
+                    $this->getEncryptText(
+                        $this->rqstParams['text'], 
+                        (array_key_exists('fakeLength', $this->rqstParams) !== false ? $this->rqstParams['fakeLength'] : 50),
+                        (array_key_exists('cipherKey', $this->rqstParams) !== false ? $this->rqstParams['cipherKey'] : null),
+                    );
                     break;
                 case 'getDecryptText':
-                    $this->getDecryptText($this->rqstParams['text']);
+                    $this->getDecryptText(
+                        $this->rqstParams['text'],
+                        (array_key_exists('cipherKey', $this->rqstParams) !== false ? $this->rqstParams['cipherKey'] : null)
+                    );
                     break;
                 case 'createCipherSalt':
                     $this->createCipherSalt();
                     break;
+                case 'getCipherKey':
+                    $this->getCipherKey();
+                    break;
             }
-            // call_user_func(
-            //     array($this, $this->action), 
-            //     $this->rqstParams['text'], 
-            //     (array_key_exists('fakeLength', $this->rqstParams) !== false ? $this->rqstParams['fakeLength'] : 0)
-            // );
         }
 
         die();
@@ -198,9 +226,10 @@ class CipherController
                     // var_dump($paramName);
                     // var_dump($this->rqstParams);
                     //Если параметр обязательный
-                    if ($paramData['important'] === true) {
+                    if ($paramData['important'] === true && (array_key_exists($paramName, $this->rqstParams) === false || !$this->rqstParams[$paramName])) {
+                    //if ($paramData['important'] === true) {
                         //Если обязательный параметр отсутствует в запросе
-                        if (array_key_exists($paramName, $this->rqstParams) === false || !$this->rqstParams[$paramName]) {
+                        // if (array_key_exists($paramName, $this->rqstParams) === false || !$this->rqstParams[$paramName]) {
                             //Если отсутствующее обязательное поле - соль для шифра, она может отсутствовать, если запрос пришел с того же сервера (с демонстрационной страницы)
                             if ($paramName == 'cipherSalt' && $_SERVER['REMOTE_ADDR'] === $_SERVER['SERVER_ADDR']) {
                                 continue;
@@ -211,10 +240,12 @@ class CipherController
 
                                 return $checkRouteArr;
                             }
+                    }
                             #Гаврилов
                             //ПОПРОБУЙ ОТПРАВИТЬ ЕНДПОИНТ С КОМПА, НЕ С СЕРВЕРА БЕЗ СОЛИ. ЗАПРОС НЕ ДОЛЖЕН ПРОЙТИ
                         //Если в запросе предусмотрено конкретное значение для передаеваемого параметра запроса, происходит валидация
-                        } else if (array_key_exists('validation', $paramData) !== false) {
+                        // } else 
+                        if (array_key_exists('validation', $paramData) !== false) {
                             //Если для валидации параметра применяется регулярное выражение
                             if ($paramData['validation']['validationRegular']) {
                                 if (preg_match($paramData['validation']['validationRegular'], $this->rqstParams[$paramName]) == false) {
@@ -226,6 +257,7 @@ class CipherController
                                 }         
                             //Если для валидации применяется метод класса                   
                             } 
+                            
                             if ($validationMethod = $paramData['validation']['validationMethod']) {
                                 $validationMethodResult = call_user_func(array($this, $validationMethod), [$this->rqstParams[$paramName]]);
                                 if (!$validationMethodResult) {
@@ -238,7 +270,7 @@ class CipherController
                             }
                             
                         }
-                    }
+                    //}
                     
                 }
             }
@@ -252,29 +284,105 @@ class CipherController
     }
 
 
-    #Гаврилов
-    //для апи - ВОЩВРАЩАЙ ОШИБКУ, ЕСЛИ РОУТ НЕ НАЙДЕН
+    /**
+     * Метод формирует соль для шифра на основе уникальных для момента формирования параметрах
+     *
+     * @return void
+     */
+    public function getCipherKey()
+    {
+        require_once ("./versions/" . $this->cipherVer . "/cipher.php");
+        $firstKeyArr = $secondKeyArr = preg_split('//u', SimpleCipher::getFakeCipherKey(), -1, PREG_SPLIT_NO_EMPTY);
+        shuffle($firstKeyArr);
+        shuffle($secondKeyArr);
+        $resultKey = implode('', $firstKeyArr) . implode('', $secondKeyArr);
+
+        // var_dump($resultKey);
+
+        #Гаврилов
+        //ПЕРЕПИШИ ВСЕ МЕТОДЫ РАЗБИТИЯ СТРОКИ НА МАССИВ ПО СИМВОЛАМ НА mb_str_split с самописного решения, так как новая версия php
+
+        $this->returnResponse(
+            ['cipherKey' => $resultKey]
+        );
+    }
+
 
     /**
      * Метод формирует соль для шифра на основе уникальных для момента формирования параметрах
      *
-     * @return string
+     * @return void
      */
     public function createCipherSalt()
     {
         $cipherSalt = base64_encode(hash('whirlpool', time() . $_SERVER['REMOTE_ADDR']));
         $cipherSalt = str_replace('=', '', $cipherSalt);
 
-        $this->returnResponse([
-            'cipherSalt' => $cipherSalt]
+        $this->returnResponse(
+            ['cipherSalt' => $cipherSalt]
         );
     }
 
 
+    #Гаврилов
+    //ПРОВЕРЬ КАЖДУЮ ПРОВЕРКУ ВНУТРИ МЕТОДА
     /**
-     * 
-
+     * Метод валидации ключа шифра
+     *
+     * @param string $cipherKey переданный ключ шифра
+     * @return boolean
      */
+    private function validateCipherKey(string $cipherKey)
+    {
+        $cipherLengh = count(preg_split('//u', SimpleCipher::getFakeCipherKey(), -1, PREG_SPLIT_NO_EMPTY));
+        $cipherKey_first = mb_substr($cipherKey, 0, $cipherLengh);
+        $cipherKey_second = mb_substr($cipherKey, $cipherLengh);
+        $cipherKey_first_arr = preg_split('//u', $cipherKey_first, -1, PREG_SPLIT_NO_EMPTY);
+        $cipherKey_second_arr = preg_split('//u', $cipherKey_second, -1, PREG_SPLIT_NO_EMPTY);
+
+        if (!$this->checkInvalidChars($cipherKey_first, SimpleCipher::getFakeCipherKey()) || !$this->checkInvalidChars($cipherKey_second, SimpleCipher::getFakeCipherKey())) {
+            // var_dump('da1');
+            return false;
+        }
+
+        //Каждый ключ должен быть конкретной длины (как фейковый ключ, сформированный на основании одного из реальных ключей)
+        if (count(array_unique($cipherKey_first_arr)) !== $cipherLengh || mb_strlen($cipherKey) !== $cipherLengh * 2 || count(array_unique($cipherKey_second_arr)) !== $cipherLengh) {
+            return false;
+        }
+
+        //Правильно ли я понимаю, что с помощью base_64 можно закодировать любой символ в сочетание латинских букв и чисел? спецсимвол, например ‰ или китайский иероглиф или эмодзи?
+
+        //Проверяем расстояние Хэмминга. Какое количество символов одного массива символов ключа находится на тех же позициях, что и символы второго массива символов ключа
+        $HammingDistance = 0;
+        foreach ($cipherKey_first_arr as $symbKey => $symb){
+            if (array_search($symb, $cipherKey_second_arr) === $symbKey) {
+                $HammingDistance++;
+            }
+        }
+
+        if ($HammingDistance / $cipherLengh > 0.3) {
+            // var_dump('da3');
+            return false;
+        }
+
+        //Проверяем пересечение биграмм ключей шифра. Неважно на какой позиции они находятся в двух ключах, но если биграмм больше 25% - считаем, что ключи недостаточно отличаются
+        $bigrammCipherKeyArr = [];
+        $n = 0;
+        while ($n < $cipherLengh) {
+            if (mb_strstr($cipherKey_second, mb_substr($cipherKey_first, $n, 2)) !== false) {
+                $bigrammCipherKeyArr[] = mb_substr($cipherKey_first, $n, 2);
+            }
+            $n = $n + 2;
+        }
+ 
+        if (count($bigrammCipherKeyArr) / ($cipherLengh / 2) > 0.25) {
+            // var_dump('da4');
+            return false;
+        }
+
+        return true;
+    }
+    
 
     //TODO
     //ПЕРЕНЕСТИ КОЛИЧЕСТВО ИТЕРАЦИЙ ВЫЗОВА МЕТОДА ШИФРОВАНИЯ В JS. НА БЭКЕ НЕ ОБРАБАТЫВАЕМ ЭТОТ ПАРАМЕТР, ТОЛЬКО НА СТОРОНЕ jS ЦИКЛОМ ОБРАЩАЕМСЯ К РОУТУ GETECNRYPTtEXT
@@ -284,7 +392,7 @@ class CipherController
      *
      * @return array
      */
-    public function getEncryptText(string $encryptText, int $fakeLength): void
+    public function getEncryptText(string $encryptText, int $fakeLength, ?string $userCipherKey = null): void
     {
         require_once ("./versions/" . $this->cipherVer . "/cipher.php");
         $resultCipher = null;
@@ -292,7 +400,20 @@ class CipherController
         //ВЫНЕСТИ СОЗДАНИЕ ЭКЗЕМЛПРЯА КЛАССА ШИФРОВАНИЯ В КОНСТРУКТОР ВСЕ ТАКИ
         $this->cipherObj = new SimpleCipher($encryptText, $this->cipherSalt);
 
-        if (!$this->validateEncrypText($encryptText, $this->cipherObj->fakeCipherKey)) {
+        if ($userCipherKey) {
+            if (!$this->validateCipherKey($userCipherKey)) {
+                $this->returnResponse([
+                    'encryptText' => null,
+                //При получении этой ошибки на фронте дополнительно выводи текст "используйте специальные инструменты для генерации надежного ключа"
+                ], 400, 'Invalid type of cipher key');
+
+                return;
+            }
+        }
+        
+
+
+        if (!$this->checkInvalidChars($encryptText, SimpleCipher::getFakeCipherKey())) {
             $this->returnResponse([
                 'encryptText' => null,
             ], 400, 'The text contains invalid characters');
@@ -300,7 +421,7 @@ class CipherController
             return;
         }
 
-        $resultCipher = $this->cipherObj->encryptText($fakeLength);
+        $resultCipher = $this->cipherObj->encryptText($fakeLength, $userCipherKey);
         
         $this->returnResponse([
             'encryptText' => $resultCipher,
@@ -313,27 +434,33 @@ class CipherController
     /**
      * Метод валидирует шифруемый текст на наличие нешифруемых символов, проводя поиск по ним в одном из ключей шифра текущей версии
      *
-     * @param string $encryptText шифруемый текст
+     * @param string $text шифруемый текст
      * @param string $fakeCipherKey фейковый ключ актуальной версии шифра, сформированный на основе одного из реальных ключей шифра
      * @return bool
      */
-    private function validateEncrypText(string $encryptText, string $fakeCipherKey)
+    private function checkInvalidChars(string $text, string $fakeCipherKey)
     {
         $cipherValidSymbArr = preg_split('//u', $fakeCipherKey, -1, PREG_SPLIT_NO_EMPTY);
-        $encryptUniqueSymbArr = array_unique(preg_split('//u', $encryptText, -1, PREG_SPLIT_NO_EMPTY));
+        $encryptUniqueSymbArr = array_unique(preg_split('//u', $text, -1, PREG_SPLIT_NO_EMPTY));
         $getInvalidSymbols = empty(array_diff($encryptUniqueSymbArr, $cipherValidSymbArr));
 
         return $getInvalidSymbols;
     }
 
+    #Гаврилов
+    //ПОПРОБОВАТЬ ДОБАВИТЬ ПЕРЕНОС СТРОКИ И ПЕРЕНОС КАРЕТКИ В СИМВОЛЫ ШИФРА?
+
+    #Гаврилов
+    //ДОБАВЬ ИКОНКУ КОПИРОВАНИЯ СОЛИ И КЛЮЧА В СОСЕДНИЙ ИНПУТ ИЗ ИНПУТА, ГДЕ ОН БЫЛ СГЕНЕРИРОВАН
 
     /**
      * Метод получения зашифрованного сообщения
      *
      * @return string
      */
-    public function getDecryptText(string $decryptText): void
+    public function getDecryptText(string $decryptText, ?string $userCipherKey = null): void
     {
+        // var_dump('da');
         $this->decryptText = $decryptText;
         
         $this->cipherVer = CipherVersion::getVersion($this->decryptText);
@@ -341,11 +468,13 @@ class CipherController
         //ПРОВЕРКА СУЩЕСТВУЕТ ЛИ ФАЙЛЫ
         require_once ("./versions/" . $this->cipherVer . "/cipher.php");
         $this->cipherObj = new SimpleCipher($this->decryptText, $this->cipherSalt);
-        $testCipher =  $this->cipherObj->decryptText();
+        $testCipher =  $this->cipherObj->decryptText($userCipherKey);
 
-        $this->returnResponse([
-            'decryptText' => $testCipher,
-        ]);
+        // var_dump($testCipher);
+
+        $this->returnResponse(
+            ['decryptText' => $testCipher]
+        );
 
     }
 
@@ -374,7 +503,7 @@ class CipherController
     //Если ошибка возникает при дешифровке текста - возвращаем ранломный запутанный текст будто все прошло "по плану", но алгоритм не расшифровал кривое сообщение
     if ($this->action == 'getDecryptText') {
         $this->returnResponse([
-            'decryptText' => $this->getRandomText($this->decryptText)
+            'decryptText' => $this->getRandomText($this->rqstParams['text'])
         ], 200);
         #Гаврилов
         //если ошибка некритичная - не останавливай рабоут скрипта, не выкидывай 500 ошибку

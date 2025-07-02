@@ -6,6 +6,7 @@
     <title>Document</title>
     <link rel="stylesheet" href="./index.css">
     <link rel="stylesheet" href="./preloader.css">
+    <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"> -->
 </head>
 <body>
      <div id="preloader-container">
@@ -278,24 +279,42 @@
     <div id="cipher-content">
         <div id="cipher-content__input-block">
             <div id="cipher-content__encrypt-block" class="cipher-content__block">
-                <div id="content__encrypt-block__input" class="content__input-block">
+                <div id="content__encrypt-block__encrypt" class="content__input-block">
                     <div class="input-block__field-row">
                         <label for="encryptText">Текст для шифрования</label>
                         <textarea type="text" placeholder="Введите текст" id="encryptText" required></textarea>
                     </div>
-                    <div class="input-block__field-row">
-                        <label for="cipherSalt">Соль для шифра</label>
-                        <textarea type="text" placeholder="Введите текст" id="cipherSalt"></textarea>
-                    </div>
-                    <div class="input-block__field-row field-row--four-fields">
+                    <div class="input-block__field-row field-row--two-fields">
                         <label for="cipherLength">Желамая длина шифра</label>
                         <!--подсказка: если шифруемый текст меньше длины шифра - фейковая длина не будет достигнута-->
                         <input type="number" placeholder="мин. 50 макс. 899" id="cipherLength" min="50" max="100" required>
                         <label for="cipherCount">Кол-во шифров</label>
                         <input type="numberа" placeholder="мин. 1 макс. 20" id="cipherCount" min="0" max="100" value="1" required>
                     </div>
-                    <button type="button" id="content__encrypt-block__input__encrypt" class="content__input-block__submit-btn">Зашифровать</button>
                 </div>
+                <div id="content__encrypt-block__salt" class="content__input-block input-block--minor">
+                    <div class="input-block__field-row">
+                        <!-- <label for="cipherSalt">Соль для шифра</label> -->
+                        <textarea type="text" placeholder="Введите текст" id="cipherSalt" class="cipher-salt-input"></textarea>
+                        <i id="api-get-cipher-salt" class="fa fa-refresh" aria-hidden="true"></i>
+                    </div>
+                    <div class="content__input-block__block-slide">
+                        <i class="fa fa-chevron-down"></i>
+                        Соль для шифра
+                    </div>
+                </div>
+                <div id="content__encrypt-block__key" class="content__input-block input-block--minor">
+                    <div class="input-block__field-row">
+                        <!-- <label for="cipherSalt">Ключ для шифра</label> -->
+                        <textarea class="cipher-key-field" type="text" placeholder="Введите текст" id="cipherKey"></textarea>
+                        <i id="api-get-cipher-key" class="fa fa-refresh" aria-hidden="true"></i>
+                    </div>
+                    <div class="content__input-block__block-slide">
+                        <i class="fa fa-chevron-down"></i>
+                        Ключ для шифра
+                    </div>
+                </div>
+                <button type="button" id="content__encrypt-block__encrypt-btn" class="content__input-block__submit-btn">Зашифровать</button>
             </div>
             <div id="cipher-content__decrypt-block" class="cipher-content__block">
                 <div id="content__decrypt-block__input" class="content__input-block">
@@ -303,14 +322,29 @@
                         <label for="decryptText">Текст для расшифровки</label>
                         <textarea type="text" placeholder="Введите текст" id="decryptText"></textarea>
                     </div>
+                </div>
+                <div id="content__decrypt-block__decrypt" class="content__input-block input-block--minor">
                     <div class="input-block__field-row">
-                        <label for="cipherSalt_decrypt">Соль для шифра</label>
-                        <textarea type="text" placeholder="Введите текст" id="cipherSalt_decrypt"></textarea>
+                        <!-- <label for="cipherSalt_decrypt">Соль для шифра</label> -->
+                        <textarea type="text" placeholder="Введите текст" id="cipherSalt_decrypt" class="cipher-salt-input"></textarea>
                     </div>
-                    <button type="button" id="content__decrypt-block__input__decrypt" class="content__input-block__submit-btn">Расшифровать</button>
+                    <div class="content__input-block__block-slide">
+                        <i class="fa fa-chevron-down"></i>
+                        Соль для шифра
+                    </div>
                 </div>
-                <div id="content__decrypt-block__result">  
+                <div id="content__decrypt-block__key" class="content__input-block input-block--minor">
+                    <div class="input-block__field-row">
+                        <!-- <label for="cipherSalt">Ключ для шифра</label> -->
+                        <textarea class="cipher-key-field" type="text" placeholder="Введите текст" id="cipher-key--decrypt"></textarea>
+                    </div>
+                    <div class="content__input-block__block-slide">
+                        <i class="fa fa-chevron-down"></i>
+                        Ключ для шифра
+                    </div>
                 </div>
+                <div id="content__decrypt-block__result"></div>
+                <button type="button" id="content__decrypt-block__decrypt-btn" class="content__input-block__submit-btn">Расшифровать</button>
             </div>
         </div>
         <div id="content__encrypt-block__result">   
