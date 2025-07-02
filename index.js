@@ -260,9 +260,9 @@ function clearDecryptText()
 //Шифрование текста
 document.getElementById('content__encrypt-block__encrypt-btn').addEventListener('click', async function () {
     let encryptText = document.getElementById('encryptText').value.trim(),
-        encryptFakeLength = document.getElementById('cipherLength').value ?? 50,
-        resultCipherCount = document.getElementById('cipherCount').value ?? 1,
-        encryptSalt = document.getElementById('cipherSalt').value ?? null,
+        encryptFakeLength = document.getElementById('cipherLength').value,
+        resultCipherCount = document.getElementById('cipherCount').value || 1,
+        encryptSalt = document.getElementById('cipherSalt').value || null,
         prevResulst = document.querySelectorAll('.content__encrypt-block__result__parent'),
         cipherKey = document.getElementById('cipherKey').value
 
@@ -284,6 +284,8 @@ document.getElementById('content__encrypt-block__encrypt-btn').addEventListener(
         return;
     }
 
+
+    console.log(encryptFakeLength);
 
     //Если есть предыдущие результаты шифрования - очищаем их
     if (prevResulst.length) {
@@ -414,7 +416,7 @@ document.getElementById('decryptText').addEventListener('input', function(el){
 })
 
 
-let getCipherKeyFields = Array.from(document.querySelectorAll('.cipher-key-field'));
+//let getCipherKeyFields = Array.from(document.querySelectorAll('.cipher-key-field'));
 /**
  * Получение ключа для шифра 
  */

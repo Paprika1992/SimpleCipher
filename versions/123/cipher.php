@@ -31,16 +31,6 @@ class SimpleCipher
 	// 	7 => 'н)Ичph[:EзH"π&К71^фВLy©AGё]§ьRnbmэг!%NуЫO*М№3DYS#o{вЛI/ШЧ€ЁАwJ2Te5zПГ$VxЖl?-тQС `@б≠UX;цпО_ЕBлЭvж~÷и}БъdйсЙZ|рыЮа\оs8.uХю⇔FKP,WCЩхмcФfУЬqЦgщР×iТ<9шЪr0tяЯеЗДН(j6M+=кa>kд4',
 	// 	8 => 'B§)яе{Лf$,Ыщi№сВpМb.jlI*KудшСЯЦktzЙ>MЪкgnмx=47Wy^ehDФз÷;ё€ГЖъ(rZ×©~юХd%вэv08цc\л⇔й[_C#So`OЧчGОЕuп3m<т2FД гQEЩ&ы!ЁиA]оπЮЭУYPa+|Т"}L:@нVРЬН/ь-а?RБ6ЗUжШб1хрИJHs9XфП5NTw≠КqА',
 	// 	9 => 'ТS9NИz&оxMlзе!эпGL<yМБYRДf$v{КОч€akыЫq⇔=Лw/туJлHh#mё4~ЮOшб|CюTAШ0F?я*ъngЁГ(oXС5VЕн§Ьu[U@ b>Жф%,Пπ}8ЭЙФ2©PЩЪtХ:А_-хЗЧp÷I+и`6рщйrгс№sDмiьcкжУKBв≠E"eQН;d17^)ацдВ]\W3Z.Ц×ЯРj',
-	// 	// 1 => 'Sт⇔цVяСН@KИЮВr[5"Z:t*П}÷OmoЕЯврЗ08()ы4§чЙ9ГДУWэ7ишЛvcщАEH~ЖЩ!Iдеaлb/%3ОFу1`М-пёYюШsqJ©;LC_xЫQ\P.zp=ьGdЦy2аз×жX+ nhЬ€NЪм>kХб,{#AфR^]Т6ФРuКЁъБг|efоi≠wMкUπTЭн$jg<&хйЧ№?BсDl',
-	// 	// 2 => 'Sт⇔цVяСН@KИЮВr[5"Z:t*П}÷OmoЕЯврЗ08()ы4§чЙ9ГДУWэ7ишЛvcщАEH~ЖЩ!Iдеaлb/%3ОFу1`М-пёYюШsqJ©;LC_xЫQ\P.zp=ьGdЦy2аз×жX+ nhЬ€NЪм>kХб,{#AфR^]Т6ФРuКЁъБг|efоi≠wMкUπTЭн$jg<&хйЧ№?BсDl',
-	// 	// 3 => 'Sт⇔цVяСН@KИЮВr[5"Z:t*П}÷OmoЕЯврЗ08()ы4§чЙ9ГДУWэ7ишЛvcщАEH~ЖЩ!Iдеaлb/%3ОFу1`М-пёYюШsqJ©;LC_xЫQ\P.zp=ьGdЦy2аз×жX+ nhЬ€NЪм>kХб,{#AфR^]Т6ФРuКЁъБг|efоi≠wMкUπTЭн$jg<&хйЧ№?BсDl',
-	// 	// 4 => 'Sт⇔цVяСН@KИЮВr[5"Z:t*П}÷OmoЕЯврЗ08()ы4§чЙ9ГДУWэ7ишЛvcщАEH~ЖЩ!Iдеaлb/%3ОFу1`М-пёYюШsqJ©;LC_xЫQ\P.zp=ьGdЦy2аз×жX+ nhЬ€NЪм>kХб,{#AфR^]Т6ФРuКЁъБг|efоi≠wMкUπTЭн$jg<&хйЧ№?BсDl',
-	// 	// 5 => 'Sт⇔цVяСН@KИЮВr[5"Z:t*П}÷OmoЕЯврЗ08()ы4§чЙ9ГДУWэ7ишЛvcщАEH~ЖЩ!Iдеaлb/%3ОFу1`М-пёYюШsqJ©;LC_xЫQ\P.zp=ьGdЦy2аз×жX+ nhЬ€NЪм>kХб,{#AфR^]Т6ФРuКЁъБг|efоi≠wMкUπTЭн$jg<&хйЧ№?BсDl',
-	// 	// 6 => 'Sт⇔цVяСН@KИЮВr[5"Z:t*П}÷OmoЕЯврЗ08()ы4§чЙ9ГДУWэ7ишЛvcщАEH~ЖЩ!Iдеaлb/%3ОFу1`М-пёYюШsqJ©;LC_xЫQ\P.zp=ьGdЦy2аз×жX+ nhЬ€NЪм>kХб,{#AфR^]Т6ФРuКЁъБг|efоi≠wMкUπTЭн$jg<&хйЧ№?BсDl',
-	// 	// 7 => 'Sт⇔цVяСН@KИЮВr[5"Z:t*П}÷OmoЕЯврЗ08()ы4§чЙ9ГДУWэ7ишЛvcщАEH~ЖЩ!Iдеaлb/%3ОFу1`М-пёYюШsqJ©;LC_xЫQ\P.zp=ьGdЦy2аз×жX+ nhЬ€NЪм>kХб,{#AфR^]Т6ФРuКЁъБг|efоi≠wMкUπTЭн$jg<&хйЧ№?BсDl',
-	// 	// 8 => 'Sт⇔цVяСН@KИЮВr[5"Z:t*П}÷OmoЕЯврЗ08()ы4§чЙ9ГДУWэ7ишЛvcщАEH~ЖЩ!Iдеaлb/%3ОFу1`М-пёYюШsqJ©;LC_xЫQ\P.zp=ьGdЦy2аз×жX+ nhЬ€NЪм>kХб,{#AфR^]Т6ФРuКЁъБг|efоi≠wMкUπTЭн$jg<&хйЧ№?BсDl',
-	// 	// 9 => 'Sт⇔цVяСН@KИЮВr[5"Z:t*П}÷OmoЕЯврЗ08()ы4§чЙ9ГДУWэ7ишЛvcщАEH~ЖЩ!Iдеaлb/%3ОFу1`М-пёYюШsqJ©;LC_xЫQ\P.zp=ьGdЦy2аз×жX+ nhЬ€NЪм>kХб,{#AфR^]Т6ФРuКЁъБг|efоi≠wMкUπTЭн$jg<&хйЧ№?BсDl'
-	// ];
 
 
 	/**
@@ -206,6 +196,8 @@ class SimpleCipher
 		#Гаврилов
 		//ПОПРОБУЙ В СОЛЬ ПЕРЕДАТЬ КИТАЙСКИЙ СИМВОЛ ИЛИ РУССКИЙ, ОНИ ДОЛЖНЫ УДАЛЯТЬСЯ ТУТ. В СОЛИ МОЖЕТ БЫТЬ ТОЛЬКО ЛАТИНСКИЕ СИМВОЛЫ И ЦИФРЫ
 		//ОНИ НИ В КОЕМ СЛУЧАЕ НЕ ДОЛЖНЫ УДАЛЯТЬСЯ ТУТ. СОЛЬ ДОЛЖНА ВАЛИДИРОВАТЬСЯ НА КАКОМ-ТО ЭТАПЕ. ЕСЛИ ВАЛИДАЦИЯ НЕ ПРОШЛА - ВОЗВРАЩАЕМ ОШИБКУ И СООБЩАЕМ ПОЛЬЗОВАТЕЛЮ О КРИВОЙ СОЛИ
+		#Гаврилов
+		//ЗАЧЕМ Я ЗАМЕНЯЮ ТУТ КИРИЛИЧЕСКИЕ СИМВОЛЫ НА ПУСТОТУ? СОЛЬ ДОЛЖНА ВАЛИДИРОВАТЬСЯ В КОНРТРОЛЛЕРЕ
 		$this->salt = preg_replace('/[^a-zA-Z0-9]+/', '', $salt);
 		$fakeCipherKey = file_get_contents(self::$keyFilesPath . "cipherKey_0.txt");
 		$fakeCipherKey = $this->getStrArr($fakeCipherKey);
@@ -288,6 +280,7 @@ class SimpleCipher
 	 */
 	public function encryptText(int $fakeLength = 50, ?string $userCipherKeyArr = null): string
 	{
+		$this->text = base64_encode($this->text);
 		$userCipherKeyArr = ($userCipherKeyArr ? [mb_substr($userCipherKeyArr, 0, pow($this->matrixDepth, 2)), mb_substr($userCipherKeyArr, pow($this->matrixDepth, 2), pow($this->matrixDepth, 2))] : []);
 		//Фейковая длина не может быть меньше 50 символов
 		$fakeLength = $fakeLength < 50 ? 50 : $fakeLength;
@@ -528,7 +521,7 @@ class SimpleCipher
 	 * @return string
 	 */
 	public function decryptText(?string $userCipherKey = null): string
-	{
+	{	
 		$userCipherKeyArr = ($userCipherKey ? [mb_substr($userCipherKey, 0, pow($this->matrixDepth, 2)), mb_substr($userCipherKey, pow($this->matrixDepth, 2), pow($this->matrixDepth, 2))] : []);
 		//var_dump('##__РАСШИФРОВКА__##');
 		$this->encrypt = false;
@@ -658,7 +651,7 @@ class SimpleCipher
 			return $this->getFakeText();
 		}
 
-		return $ecnryptText_interim; 
+		return base64_decode($ecnryptText_interim); 
 	}
 
 
@@ -1989,7 +1982,14 @@ $symbArr = ['z'=>58, 'y'=>57, 'x'=>56, 'w'=>55, 'v'=>54, 'u'=>53, 't'=>52, 's'=>
 
 //40000
 
-$cipherText = 'мама мыла раму raz dvatri &^%';
+#Гаврилов
+//ЕСЛИ СОЛЬ ИЛИ КЛЮЧ ЕСТЬ В БЛОКЕ, СЛАЙДЕР ПОДСВЕЧИВАЕТСЯ ЦВЕТОМ, чтобы пользователь понимал, свернув слайдер, что внутри есть значение
+
+#Гаврилов
+//ПОДПИШИ БЛОКИ "ШИФРОВАНИЕ", "ДЕШИФРОВКА"
+
+
+$cipherText = 'جۆری نادروستی کلیلی کۆد Y$% два три';
 // $cipherText = '1111111111111111111111111';
 $salt = null;
 // $salt = 'NTI0M2FmNWEwOGU3NDY2YTc5MAFiMTEyOTdlNmY1NTQzY2Q4MzYzMmJkMTNiODRjOGI2YjY4NjEwYjNmM2NjZGJhOWY1NjRiYmU3OTEzZjdhZmIzNDExM2QwZTgwMjhkZDE1OTIwMDlhY2YxZjIxMDljNDA4MTllZjc3MmEzOTI';

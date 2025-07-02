@@ -44,6 +44,46 @@
     <div id="page-background"></div>
     <nav id="page__navigation">
         <div class="navigation__block">
+            <div class="navigation__block__title">Как пользовать сервисом</div>
+            <div class="navigation__block__content" id="navigation__block__content__how-to-use">
+                <div class="navigation__content__section">
+                    <div class="navigation__content__section__step-num">1</div>
+                    <div class="navigation__content__section__step-description">
+                        В поле <span>Текст для шифрования</span> введи текст, который хочешь зашифровать.
+                        <p>В поле <span>Желаемая длина шифра</span> введи количество символов, которое ты бы хотел видеть в шифре (это значение будет учтено только если итоговое количество символов в шифре меньше желаемого). 
+                        <br>Эта опция нужна, если ты хочешь, чтобы длина шифра не подсказывала возможные отличия между зашифрованными значениями. Используя ее, значения 10, 10 000 и 10 000 000 будут иметь одинаковое количество символов в своих шифрах, таким образом, потенциальный злоумышленник не сможет сделать, только по количеству символов шифрах, вывод в каком из них меньшее значение, а в каком большее.
+                        </p>
+                        <br>В поле <span>Кол-во шифров</span> введи количество шифров, которое сгенерируется по итогам шифрования. Используя эту опцию, ты можешь визуально сверить насколько отличаются между собой шифры, хотя каждый из них будет содержать переданное тобой значение. Это демонстрирует устойчивость алгоритма к частотному анализу (ссылка на частотный анализ?).
+                    </div>
+                </div>
+                <div class="navigation__content__section">
+                    <div class="navigation__content__section__step-num">2</div>
+                    <div class="navigation__content__section__step-description">
+                        После нажатия на кнопку <span>Зашифровать</span> сгенерируются шифры. Напротив каждого из них будет кнопка <span>Расшифровать</span>. Нажав ее, шифр прольется в поле <span>Текст для расшифровки</span> в блоке Дешифровки.
+                        <br>В нем же есть кнопка <span>Расшифровать</span>. Нажав ее, алгоритм отобразит исходное сообщение
+                    </div>
+                </div>
+                <div class="navigation__content__section">
+                    <div class="navigation__content__section__step-num">3</div>
+                    <div class="navigation__content__section__step-description">
+                        Соль для шифра предназначена для обеспечения безопасности зашифрованных вами сообщений. Она гарантирует, что даже в случае заполучения потенциальными злоумышленниками ваших шифров, их не получится расшифровать, не зная соли (вероятность подобрать соль менее 0.0000000000001% СПРОСИ У НЕЙРОСЕТИ).
+                        <br>При работе с алгоритмом с <u>демонстрационной страницы</u> передавать соль не обязательно. Однако, при использовании api запросы на шифрование будут требовать ее передачу. Соль, переданную при шифровании, необходимо передать и при дешифровке для получения исходного сообщения.
+                        ОПИШИ ГЕНЕРАЦИЮ СОЛИ, НЕ ПЫТАЙТЕСЬ СФОРМИРОВАТЬ СОЛЬ САМИ, ЭТО МОЖЕТ ухудшить ЕЕ ВЛИЯНИЕ НА БЕЗОПАСНОСТЬ
+                        <br>Храните соль отдельно от шифров!
+                        <br>ПОДРОБНЕЕ В РАЗДЕЛЕ ПЕРСОНАЛИЗАЦИЯ
+                    </div>
+                </div>
+                <div class="navigation__content__section">
+                    <div class="navigation__content__section__step-num">4</div>
+                    <div class="navigation__content__section__step-description">
+                        Ключ является необязательным параметром, который имеет схожее значение с солью и еще на несколько порядков усиливает стойкость шифра к взлому. Если соль - это сейф, который защищает ваши шифры от взлома, ключ - это еще один дополнительный сейф внутри.
+                        <br>Ключ, переданный при шифровании необходимо будет передавать и при дешифровке.
+                        <br>Не храните ключ вместе с вашими шифрами.
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="navigation__block">
             <div class="navigation__block__title">Секретный ключ</div>
             <div class="navigation__block__content">
                 <div class="navigation__content__section">
@@ -115,6 +155,49 @@
                             </div>
                         </div>
                         <div class="api_description__endpoint__container">
+                            <div class="endpoint__container__uri">api/getCipherKey</div>
+                            <div class="endpoint__container__param-block">
+                                <div class="endpoint__container__param__title">
+                                    метод
+                                </div>
+                                <div class="endpoint__container__param__description">
+                                    <span class="endpoint__container__param__method--GET">GET</span>
+                                </div>
+                            </div>
+                            <div class="endpoint__container__param-block">
+                                <div class="endpoint__container__param__title">
+                                    используется для
+                                </div>
+                                <div class="endpoint__container__param__description">
+                                    получение ключа для шифра
+                                </div>
+                            </div>
+                            <div class="endpoint__container__param-block">
+                                <div class="endpoint__container__param__title">
+                                    необходимые заголовки
+                                </div>
+                                <div class="endpoint__container__param__description">
+                                    отсутствуют
+                                </div>
+                            </div>
+                            <div class="endpoint__container__param-block">
+                                <div class="endpoint__container__param__title">
+                                    формат ответа
+                                </div>
+                                <div class="endpoint__container__param__description">
+                                    application/json
+                                </div>
+                            </div>
+                            <div class="endpoint__container__param-block">
+                                <div class="endpoint__container__param__title">
+                                    пример ответа
+                                </div>
+                                <div class="endpoint__container__param__description">
+                                    {"cipherKey": "Ъ:юMяπЬ1Д€Жje/as⇔iЗ$4×9ъZлЩТ№tУb?тN3*,{м©з.cЦцдО7DНёzПи5v>аg;TJrЭ`6ЁВQб}_Му+жРБЧЮ=]U2оwЛ§щпF(-|XOI %RыГ0хnfmoйu"VШсCkфвxргWчyС8\Bшьl&эG[кХЙYА!AФ<pн≠ЫК~И)еLЕHd^Я#÷Sh@qKPEg]\ЬМИNЖТi:К&щЮДSО©ЫGvрбk^}3ъ?ь*TГLЪПЧйпУnо;Х|aBАя+=x⇔н1!>÷эu$Ш<ЦЛФjкшцлф7)/DНheV9dгдхf%Щ8жZ6@мСO§#t ЙЭ4-WЕ`mРMY~вsFсqA{b[з"o≠rеJP€plE№юCyzтчЁБ2иUыR.5ёIа_Я0KXQwcуπЗ,ВH(×"}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="api_description__endpoint__container">
                             <div class="endpoint__container__uri">api/encryptText</div>
                             <div class="endpoint__container__param-block">
                                 <div class="endpoint__container__param__title">
@@ -161,6 +244,12 @@
                                             <td>true</td>
                                             <td>string</td>
                                             <td>генерится с помощью ендпоинта api/getCipherSalt</td>
+                                        </tr>
+                                        <tr>
+                                            <td>cipherSalt</td>
+                                            <td>false</td>
+                                            <td>string</td>
+                                            <td>генерится с помощью ендпоинта api/getCipherKey</td>
                                         </tr>
                                     </table>
                                 </div>
@@ -232,6 +321,12 @@
                                             <td>string</td>
                                             <td>генерится с помощью ендпоинта api/getCipherSalt</td>
                                         </tr>
+                                        <tr>
+                                            <td>cipherSalt</td>
+                                            <td>false</td>
+                                            <td>string</td>
+                                            <td>генерится с помощью ендпоинта api/getCipherKey</td>
+                                        </tr>
                                     </table>
                                 </div>
                             </div>
@@ -287,7 +382,9 @@
                     <div class="input-block__field-row field-row--two-fields">
                         <label for="cipherLength">Желамая длина шифра</label>
                         <!--подсказка: если шифруемый текст меньше длины шифра - фейковая длина не будет достигнута-->
-                        <input type="number" placeholder="мин. 50 макс. 899" id="cipherLength" min="50" max="100" required>
+                        <!-- гаврилов
+                         не работает параметр required -->
+                        <input type="number" placeholder="мин. 50 макс. 899" id="cipherLength" min="50" max="100" required="required" value="50">
                         <label for="cipherCount">Кол-во шифров</label>
                         <input type="numberа" placeholder="мин. 1 макс. 20" id="cipherCount" min="0" max="100" value="1" required>
                     </div>
