@@ -111,7 +111,7 @@ textarea{
   display: flex;
     /* gap: 10px; */
     justify-content: space-around;
-  /* width: 50%; */
+  width: 1000px;
   margin: auto;
   margin-bottom: 50px;
   z-index: 100;
@@ -160,6 +160,83 @@ textarea{
 
         & .navigation__content__section__description{
           text-align: justify;
+        }
+
+        &#navigation__block__content__how-to-use{
+
+          &>.navigation__content__section{
+            /* display: flex;
+              align-items: flex-start; */
+              gap: 10px;
+            display: grid;
+              grid-template-columns: 1fr 50fr;
+
+            &>.navigation__content__section__step-num{
+              display: flex;
+                justify-content: center;
+                align-items: center;
+              background: var(--color_orange_main);
+              font-size: 2rem;
+              padding: 5px 20px;
+              border-radius: 50%;
+              font-weight: 600;
+              height: 50px;
+              width: 50px;
+            }
+
+            &>.navigation__content__section__step-description{
+              margin-bottom: 30px;
+              line-height: 1.5;
+
+              &>.navigation__how-to-use__description__field-name{
+                border-radius: 5px;
+                padding: 0px 5px;
+                background: #545479;
+                box-shadow: inset 0px 0px 3px 2px #6e6e6e;
+                /* color: black; */
+              }
+
+              &>.how-to-use__description__slider-block{
+
+                &>.slider-arrow{
+                  cursor: pointer;
+                  margin: 15px 0;
+                  
+                  &>svg{
+                    transform: translateY(3px);
+
+                    &+span{
+                      margin-left: 10px;
+                    }
+                  }
+                }
+
+                &>.slider-content{
+                  /* transition: 0.3s;
+                  transition-delay: 1s; */
+                  /* visibility: hidden;
+                  height: 0; */
+                  margin-bottom: 15px;
+                  display: none;
+                  border-left: 5px solid #eac18a;
+                  padding: 5px;
+                  background: #f6e7d0;
+                  color: black;
+                  /* transform: translateY(-5px); */
+                }
+
+                &.visible{
+
+                  &>.slider-content{
+                    /* height: auto;
+                    visibility: visible; */
+                    /* transform: translateY(5px); */
+                    display: block;
+                  }
+                }
+              }
+            }
+          }
         }
       }
     }

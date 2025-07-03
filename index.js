@@ -416,6 +416,14 @@ document.getElementById('decryptText').addEventListener('input', function(el){
 })
 
 
+Array.from(document.querySelectorAll('.slider-arrow')).forEach( (el) => {
+    el.addEventListener('click', () => {
+        console.log(this)
+        el.parentElement.classList.toggle('visible')
+    })
+})
+
+
 //let getCipherKeyFields = Array.from(document.querySelectorAll('.cipher-key-field'));
 /**
  * Получение ключа для шифра 
