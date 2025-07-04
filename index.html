@@ -52,14 +52,22 @@
                         В поле <span class="navigation__how-to-use__description__field-name">Текст для шифрования</span> введи текст, который хочешь зашифровать.
                         <br>В поле <span class="navigation__how-to-use__description__field-name">Желаемая длина шифра</span> введи количество символов, которое ты бы хотел видеть в шифре (это значение будет учтено только если итоговое количество символов в шифре меньше желаемого). 
                         <div class="how-to-use__description__slider-block">
-                            <div class="slider-arrow"><svg width="1em" height="1em" viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1 4L5 8L9 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg><span>Доп. информация</span>
+                            <div class="slider-arrow">
+                                <svg width="1em" height="1em" viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1 4L5 8L9 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+                                <span>Что это дает?</span>
                             </div>
                             <div class="slider-content">
-                                Эта опция нужна, если ты хочешь, чтобы длина шифра не подсказывала возможные отличия между зашифрованными значениями. Используя ее, значения '10', '10 000' и '10 000 000' будут иметь одинаковое количество символов в своих шифрах. Таким образом, потенциальный злоумышленник не сможет сделать вывод, ориентируясь только на количество символов в шифрах, в каком из них меньшее значение, а в каком большее.
+                                Эта опция нужна, если ты хочешь, чтобы длина шифра не подсказывала возможные отличия между зашифрованными значениями. Так, текст '10', '10 000' и '10 000 000' будет иметь одинаковое количество символов в зашифрованном виде. В этом случае, потенциальный злоумышленник не сможет сделать вывод, ориентируясь только на количество символов в шифрах, в каком из них меньшее значение, а в каком большее.
                             </div>
                         </div>
-                        
-                        В поле <span class="navigation__how-to-use__description__field-name">Кол-во шифров</span> введи количество шифров, которое сгенерируется по итогам шифрования. Используя эту опцию, ты можешь визуально сверить насколько отличаются между собой шифры, хотя каждый из них будет содержать переданное тобой значение. Это демонстрирует устойчивость алгоритма к частотному анализу (ссылка на частотный анализ?).
+                        В поле <span class="navigation__how-to-use__description__field-name">Кол-во шифров</span> введи количество шифров, которое сгенерируется по итогам шифрования. 
+                        <div class="how-to-use__description__slider-block">
+                            <div class="slider-arrow"><svg width="1em" height="1em" viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1 4L5 8L9 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg><span>Зачем?</span>
+                            </div>
+                            <div class="slider-content">
+                                Используя эту опцию, ты можешь визуально сверить насколько отличаются между собой шифры, не смотря на то, что каждый из них будет содержать переданное тобой значение. Это демонстрирует устойчивость алгоритма к <a href="https://ru.wikipedia.org/wiki/Частотный_анализ" target="_blank">частотному анализу</a>.
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div class="navigation__content__section">
@@ -72,19 +80,53 @@
                 <div class="navigation__content__section">
                     <div class="navigation__content__section__step-num">3</div>
                     <div class="navigation__content__section__step-description">
-                        Соль для шифра предназначена для обеспечения безопасности зашифрованных вами сообщений. Она гарантирует, что даже в случае заполучения потенциальными злоумышленниками ваших шифров, их не получится расшифровать, не зная соли (вероятность подобрать соль менее 0.0000000000001% СПРОСИ У НЕЙРОСЕТИ).
-                        <br>При работе с алгоритмом с <u>демонстрационной страницы</u> передавать соль не обязательно. Однако, при использовании api запросы на шифрование будут требовать ее передачу. Соль, переданную при шифровании, необходимо передать и при дешифровке для получения исходного сообщения.
-                        ОПИШИ ГЕНЕРАЦИЮ СОЛИ, НЕ ПЫТАЙТЕСЬ СФОРМИРОВАТЬ СОЛЬ САМИ, ЭТО МОЖЕТ ухудшить ЕЕ ВЛИЯНИЕ НА БЕЗОПАСНОСТЬ
-                        <br>Храните соль отдельно от шифров!
-                        <br>ПОДРОБНЕЕ В РАЗДЕЛЕ ПЕРСОНАЛИЗАЦИЯ
+                        Соль для шифра предназначена для обеспечения стойкости шифров к взлому. Она гарантирует, что даже в случае заполучения потенциальным злоумышленником зашифрованных сообщений, их не получится расшифровать, не зная соли (вероятность подобрать соль менее 0.0000000000001% СПРОСИ У НЕЙРОСЕТИ).
+                        <br>Для генерации соли используй endpoint <span class="navigation__how-to-use__description__field-name">api/getCipherSalt</span>(подробнее в разделе навигации API), нажми на иконку <svg class="input-block__icon-block__icon" id="api-get-cipher-salt" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="25" height="25" viewBox="0,0,256,256"><g fill="#ffffff" fill-rule="nonzero" stroke="none" stroke-width="1" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10" stroke-dasharray="" stroke-dashoffset="0" font-family="none" font-weight="none" font-size="none" text-anchor="none" style="mix-blend-mode: normal"><g transform="scale(10.66667,10.66667)"><path d="M7,5c-3.84545,0 -7,3.15455 -7,7c0,3.84545 3.15455,7 7,7c2.77499,0 5.08941,-1.6853 6.27148,-4h2.72852v3h6v-3h2v-6h-1h-9.71289c-1.11451,-2.32444 -3.44795,-4 -6.28711,-4zM7,7c2.28025,0 4.09251,1.421 4.75586,3.32813l0.23242,0.67188h10.01172v2h-2v3h-2v-3h-5.98242l-0.24805,0.63477c-0.75942,1.94073 -2.60543,3.36523 -4.76953,3.36523c-2.75455,0 -5,-2.24545 -5,-5c0,-2.75455 2.24545,-5 5,-5zM7,9c-1.64501,0 -3,1.35499 -3,3c0,1.64501 1.35499,3 3,3c1.64501,0 3,-1.35499 3,-3c0,-1.64501 -1.35499,-3 -3,-3zM7,11c0.56413,0 1,0.43587 1,1c0,0.56413 -0.43587,1 -1,1c-0.56413,0 -1,-0.43587 -1,-1c0,-0.56413 0.43587,-1 1,-1z"></path></g></g></svg> напротив поля <span class="navigation__how-to-use__description__field-name">Ключ для шифра</span> формы основной страницы или на кнопку ниже <span class="navigation__how-to-use__description__field-name">Получить соль</span>.
+                        <div class="section-private-data" id="section-private-data--salt-block">
+                            <button type="button" id="getSalt">Получить соль</button>
+                            <!--TODO идентификато ниже не должен быть с заглавной буквы-->
+                            <div class="private-data__result" id="GetCipherSalt">
+                                <div id="cipher-salt__text-block"></div>
+                            </div>
+                            <div id="сipher-salt-timer-block">
+                                <div id="salt-timer-block__timer"></div>
+                                <div id="salt-timer-block__text"></div>
+                            </div>
+                        </div>
+                        <div class="how-to-use__description__slider-block">
+                            <div class="slider-arrow"><svg width="1em" height="1em" viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1 4L5 8L9 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg><span>Несколько важных уточнений</span>
+                            </div>
+                            <!-- ПЕРЕИЕНУЙ КЛАСС navigation__how-to-use__description__field-name -->
+                             <!-- ПЕРЕНЕСИ ИНФОРМАЦИЮ НИЖЕ В РАЗДЕЛ ПЕРСОНАЛЬНАЯ БЕЗОПАСНОСТЬ -->
+                            <div class="slider-content">
+                                <ol>
+                                    <li>Не используй соль, которую придумал сам, это не безопасно!</li>
+                                    <li>При работе с алгоритмом с <b>демонстрационной страницы</b> (где ты сейчас находишься) передавать соль не обязательно. Однако, при использовании api, ресурс будет требовать ее передачу.</li>
+                                    <li>Очевидно, ту же соль, что была передана при шифровании, необходимо передать и при дешифровке для получения исходного сообщения. Можно использовать одну и ту же соль для неограниченного количества операций шифрования/дешифрования</li>
+                                    <li>И наконец, храни соль отдельно от шифров, которые были зашифрованы с ее помощью.</li>
+                                </ol>
+                            </div>
+                        </div>
+                        
                     </div>
                 </div>
                 <div class="navigation__content__section">
                     <div class="navigation__content__section__step-num">4</div>
                     <div class="navigation__content__section__step-description">
-                        Ключ является необязательным параметром, который имеет схожее значение с солью и еще на несколько порядков усиливает стойкость шифра к взлому. Если соль - это сейф, который защищает ваши шифры от взлома, ключ - это еще один дополнительный сейф внутри.
-                        <br>Ключ, переданный при шифровании необходимо будет передавать и при дешифровке.
-                        <br>Не храните ключ вместе с вашими шифрами.
+                        Ключ является необязательным параметром, который имеет схожее значение с солью и еще на несколько порядков усиливает стойкость шифра к взлому. Если соль - это сейф, который защищает твой зашифрованный текст, ключ - это еще один сейф внутри.
+                        <br>К ключу применяются те же условия, которые описаны в подразделе Несколько важных уточнений для Соли выше, кроме того, что ключ необязательно формировать и передавать при работе с api
+                        <br>Для генерации ключа воспользуйся api ендпоинтом <span class="navigation__how-to-use__description__field-name">api/getCipherKey</span> (подробнее в разделе навигации API), нажми на иконку <svg class="input-block__icon-block__icon" id="api-get-cipher-salt" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="25" height="25" viewBox="0,0,256,256"><g fill="#ffffff" fill-rule="nonzero" stroke="none" stroke-width="1" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10" stroke-dasharray="" stroke-dashoffset="0" font-family="none" font-weight="none" font-size="none" text-anchor="none" style="mix-blend-mode: normal"><g transform="scale(10.66667,10.66667)"><path d="M7,5c-3.84545,0 -7,3.15455 -7,7c0,3.84545 3.15455,7 7,7c2.77499,0 5.08941,-1.6853 6.27148,-4h2.72852v3h6v-3h2v-6h-1h-9.71289c-1.11451,-2.32444 -3.44795,-4 -6.28711,-4zM7,7c2.28025,0 4.09251,1.421 4.75586,3.32813l0.23242,0.67188h10.01172v2h-2v3h-2v-3h-5.98242l-0.24805,0.63477c-0.75942,1.94073 -2.60543,3.36523 -4.76953,3.36523c-2.75455,0 -5,-2.24545 -5,-5c0,-2.75455 2.24545,-5 5,-5zM7,9c-1.64501,0 -3,1.35499 -3,3c0,1.64501 1.35499,3 3,3c1.64501,0 3,-1.35499 3,-3c0,-1.64501 -1.35499,-3 -3,-3zM7,11c0.56413,0 1,0.43587 1,1c0,0.56413 -0.43587,1 -1,1c-0.56413,0 -1,-0.43587 -1,-1c0,-0.56413 0.43587,-1 1,-1z"></path></g></g></svg> напротив поля <span class="navigation__how-to-use__description__field-name">Соль для шифрования</span> формы основной страницы или на кнопку ниже <span class="navigation__how-to-use__description__field-name">Получить ключ</span>
+                        <div class="section-private-data" id="section-private-data--key-block">
+                            <button type="button" id="getKey">Получить ключ</button>
+                            <!--TODO идентификато ниже не должен быть с заглавной буквы-->
+                            <div class="private-data__result" id="GetCipherKey">
+                                <div id="cipher-key__text-block"></div>
+                            </div>
+                            <div id="сipher-key-timer-block">
+                                <div id="key-timer-block__timer"></div>
+                                <div id="key-timer-block__text"></div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -97,18 +139,7 @@
                     <div class="navigation__content__section__description">Секретный ключ - это твоя персональная "приправа" для алгоритма. Шифр, полученный с использованием такого ключа получится расшифровать <u>только</u> передав этот же ключ при расшифровке. <br>Эта мера гарантирует, что даже если злоумышленник заполучит твои шифры, без секретного ключа у него не получится расшифровать их!
                     <p>Обязательно сохрани этот ключ. Каждое значение, зашифрованное с помощью секретного ключа может быть расшифрована только с помощью него же!</p></div>
                 </div>
-                <div class="navigation__content__section">
-                    <button type="button" id="getSalt">Получить секретный ключ</button>
-                    <!--TODO идентификато ниже не должен быть с заглавной буквы-->
-                    <div id="GetCipherSalt">
-                        <div>Ваша соль:</div>
-                        <div id="cipher-salt__text-block"></div>
-                    </div>
-                    <div id="сipher-salt-timer-block">
-                        <div id="salt-timer-block__timer"></div>
-                        <div id="salt-timer-block__text"></div>
-                    </div>
-                </div>
+                <!--  -->
             </div>
         </div>
         <div class="navigation__block">
@@ -399,21 +430,39 @@
                     <div class="input-block__field-row">
                         <!-- <label for="cipherSalt">Соль для шифра</label> -->
                         <textarea type="text" placeholder="Введите текст" id="cipherSalt" class="cipher-salt-input"></textarea>
-                        <i id="api-get-cipher-salt" class="fa fa-refresh" aria-hidden="true"></i>
+                        <div class="input-block__icon-block">
+                            <!-- <div  > -->
+                                <svg class="input-block__icon-block__icon" id="api-get-cipher-salt" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="25" height="25" viewBox="0,0,256,256"><g fill="#ffffff" fill-rule="nonzero" stroke="none" stroke-width="1" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10" stroke-dasharray="" stroke-dashoffset="0" font-family="none" font-weight="none" font-size="none" text-anchor="none" style="mix-blend-mode: normal"><g transform="scale(10.66667,10.66667)"><path d="M7,5c-3.84545,0 -7,3.15455 -7,7c0,3.84545 3.15455,7 7,7c2.77499,0 5.08941,-1.6853 6.27148,-4h2.72852v3h6v-3h2v-6h-1h-9.71289c-1.11451,-2.32444 -3.44795,-4 -6.28711,-4zM7,7c2.28025,0 4.09251,1.421 4.75586,3.32813l0.23242,0.67188h10.01172v2h-2v3h-2v-3h-5.98242l-0.24805,0.63477c-0.75942,1.94073 -2.60543,3.36523 -4.76953,3.36523c-2.75455,0 -5,-2.24545 -5,-5c0,-2.75455 2.24545,-5 5,-5zM7,9c-1.64501,0 -3,1.35499 -3,3c0,1.64501 1.35499,3 3,3c1.64501,0 3,-1.35499 3,-3c0,-1.64501 -1.35499,-3 -3,-3zM7,11c0.56413,0 1,0.43587 1,1c0,0.56413 -0.43587,1 -1,1c-0.56413,0 -1,-0.43587 -1,-1c0,-0.56413 0.43587,-1 1,-1z"></path></g></g></svg>
+                            <!-- </div> -->
+                            <!-- <div  > -->
+                                <svg class="input-block__icon-block__icon icon--copy" id="copy-cipher-salt" width="1.3em" height="1.3em" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="3" y="5" width="8" height="10" stroke="currentColor" stroke-width="1.5"/><rect x="5" y="3" width="8" height="10" stroke="currentColor" stroke-width="1.5"/></svg>
+                            <!-- </div> -->
+                        </div>
+                        <!-- <i id="api-get-cipher-salt" class="fa fa-refresh" aria-hidden="true"></i> -->
                     </div>
                     <div class="content__input-block__block-slide">
-                        <i class="fa fa-chevron-down"></i>
+                        <!-- <i class="fa fa-chevron-down"></i> -->
+                        <svg class="input-block__block-slide__icon-arrow" width="1em" height="1em" viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1 4L5 8L9 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
                         Соль для шифра
                     </div>
                 </div>
                 <div id="content__encrypt-block__key" class="content__input-block input-block--minor">
                     <div class="input-block__field-row">
                         <!-- <label for="cipherSalt">Ключ для шифра</label> -->
-                        <textarea class="cipher-key-field" type="text" placeholder="Введите текст" id="cipherKey"></textarea>
-                        <i id="api-get-cipher-key" class="fa fa-refresh" aria-hidden="true"></i>
+                        <textarea type="text" placeholder="Введите текст" id="cipherKey"></textarea>
+                        <div class="input-block__icon-block">
+                            <!-- <div  > -->
+                                <svg id="api-get-cipher-key" class="input-block__icon-block__icon" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="25" height="25" viewBox="0,0,256,256"><g fill="#ffffff" fill-rule="nonzero" stroke="none" stroke-width="1" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10" stroke-dasharray="" stroke-dashoffset="0" font-family="none" font-weight="none" font-size="none" text-anchor="none" style="mix-blend-mode: normal"><g transform="scale(10.66667,10.66667)"><path d="M7,5c-3.84545,0 -7,3.15455 -7,7c0,3.84545 3.15455,7 7,7c2.77499,0 5.08941,-1.6853 6.27148,-4h2.72852v3h6v-3h2v-6h-1h-9.71289c-1.11451,-2.32444 -3.44795,-4 -6.28711,-4zM7,7c2.28025,0 4.09251,1.421 4.75586,3.32813l0.23242,0.67188h10.01172v2h-2v3h-2v-3h-5.98242l-0.24805,0.63477c-0.75942,1.94073 -2.60543,3.36523 -4.76953,3.36523c-2.75455,0 -5,-2.24545 -5,-5c0,-2.75455 2.24545,-5 5,-5zM7,9c-1.64501,0 -3,1.35499 -3,3c0,1.64501 1.35499,3 3,3c1.64501,0 3,-1.35499 3,-3c0,-1.64501 -1.35499,-3 -3,-3zM7,11c0.56413,0 1,0.43587 1,1c0,0.56413 -0.43587,1 -1,1c-0.56413,0 -1,-0.43587 -1,-1c0,-0.56413 0.43587,-1 1,-1z"></path></g></g></svg>
+                            <!-- </div> -->
+                            <!-- <div > -->
+                                <svg class="input-block__icon-block__icon icon--copy" width="1.3em" height="1.3em" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="3" y="5" width="8" height="10" stroke="currentColor" stroke-width="1.5"/><rect x="5" y="3" width="8" height="10" stroke="currentColor" stroke-width="1.5"/></svg>
+                            <!-- </div> -->
+                        </div>
+                        <!-- <i id="api-get-cipher-key" class="fa fa-refresh" aria-hidden="true"></i> -->
                     </div>
                     <div class="content__input-block__block-slide">
-                        <i class="fa fa-chevron-down"></i>
+                        <!-- <i class="fa fa-chevron-down"></i> -->
+                        <svg class="input-block__block-slide__icon-arrow" width="1em" height="1em" viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1 4L5 8L9 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
                         Ключ для шифра
                     </div>
                 </div>
@@ -432,17 +481,19 @@
                         <textarea type="text" placeholder="Введите текст" id="cipherSalt_decrypt" class="cipher-salt-input"></textarea>
                     </div>
                     <div class="content__input-block__block-slide">
-                        <i class="fa fa-chevron-down"></i>
+                        <!-- <i class="fa fa-chevron-down"></i> -->
+                        <svg class="input-block__block-slide__icon-arrow" width="1em" height="1em" viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1 4L5 8L9 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
                         Соль для шифра
                     </div>
                 </div>
                 <div id="content__decrypt-block__key" class="content__input-block input-block--minor">
                     <div class="input-block__field-row">
                         <!-- <label for="cipherSalt">Ключ для шифра</label> -->
-                        <textarea class="cipher-key-field" type="text" placeholder="Введите текст" id="cipher-key--decrypt"></textarea>
+                        <textarea type="text" placeholder="Введите текст" id="cipher-key--decrypt"></textarea>
                     </div>
                     <div class="content__input-block__block-slide">
-                        <i class="fa fa-chevron-down"></i>
+                        <!-- <i class="fa fa-chevron-down"></i> -->
+                        <svg class="input-block__block-slide__icon-arrow" width="1em" height="1em" viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1 4L5 8L9 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
                         Ключ для шифра
                     </div>
                 </div>

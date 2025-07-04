@@ -119,8 +119,32 @@ document.getElementById('page-background').addEventListener('click', function() 
 })
 
 
+document.getElementById('page-background').addEventListener('click', function() {
+    this.classList.remove('visible')
+    document.querySelector('.navigation__block.show').classList.remove('show')
+})
+
+
 function getCipherSalt () {
     return fetch('./api/createCipherSalt', {
+        method: "GET",
+    }).then( 
+        promise => {
+            console.log(promise.status)
+            if (promise.status !== 200) {
+                let errMsg = 'Произошла непредвиденная ошибка'
+                return {err: errMsg + ": " + promise.headers.get('X-Error-Msg')} || true
+            } else {
+                return promise.json()
+            }
+            //Проверяем есть ли ошибка в выполнении ендпоинта
+            //return {errMsg: promise.headers.get('X-Error-Msg')} || promise.json()
+        }   
+    )
+}
+
+function getCipherKey () {
+    return fetch('./api/getCipherKey', {
         method: "GET",
     }).then( 
         promise => {
@@ -146,82 +170,74 @@ document.getElementById('api-get-cipher-salt').addEventListener('click', async f
         alert(cipherSaltRqst.err)
         
         return;
-    } else {
-        cipherSalt = cipherSaltRqst.cipherSalt
-    }
+    } 
+    cipherSalt = cipherSaltRqst.cipherSalt
 
     document.getElementById('cipherSalt').value = cipherSalt;
 })
 
 
+//Копируем значение соли из раздела Шифрование в раздел Дешифрование
+document.getElementById('copy-cipher-salt').addEventListener('click', function() {
+    let cipherSalt = document.getElementById('cipherSalt').value;
+    if (!cipherSalt) {
+        return
+    }
+    document.getElementById('cipherSalt_decrypt').value = cipherSalt;
+})
+
+
+
 //Получение соли к шифру
-document.getElementById('getSalt').addEventListener('click', async function (event) {
+document.getElementById('getSalt').addEventListener('click', getPrivateData('getSalt') )
+
+function getPrivateData (data) 
+{
+
+    return async function (event, privateData = data) {
+    let parentBlock = event.currentTarget.closest('.section-private-data').id;
+    console.log(parentBlock)
     //Если клик происходит во время отсчета до исчезновения соли
-    if (event.target.classList.contains('getSalt')) {
+    if (event.target.classList.contains('get-data')) {
         return;
     }
-
-    let cipherSaltRqst = await getCipherSalt(),
-        cipherSalt
-    if (cipherSaltRqst.err) {
-        alert(cipherSaltRqst.err)
+    let privateDataRqst = (privateData == 'getSalt' ? await getCipherSalt() : await getCipherKey()),
+        userPrivateData
+    if (privateDataRqst.err) {
+        alert(privateDataRqst.err)
         
         return;
-    } else {
-        cipherSalt = cipherSaltRqst.cipherSalt
     }
-   
-    // console.log(cipherSalt)
-    
-    // let cipherSalt = null,
-    //     response = await fetch('./api/createCipherSalt', {
-    //     method: "GET",
-    // });
-    // let cipherSaltRqst = await response.json().catch(function(err){
-    //     console.log(err)
-    // })
-    //     cipherSalt = cipherSaltRqst.cipherSalt
-    
-    // console.log(cipherSaltRqst)
-
-    // if (response.status !== 200) {
-    //     if (cipherSaltRqst.errMsg) {
-    //         alert(cipherSaltRqst.errMsg)
-    //     } else {
-    //         alert('Непредвиденная ошибка');
-    //     }
-        
+    userPrivateData = (privateData == 'getSalt' ? privateDataRqst.cipherSalt : privateDataRqst.cipherKey)
     //     //ГАВРИЛОВ
     //     //ОТПРАВЛЯЙ ЕНДПОИНТ НА ЛОГИРОВАНИЕ ИНФОРМАЦИИ ОБ ОШИБКЕ
     //     return;
     // }
-
-    event.target.classList.add('getSalt');
-
+    event.target.classList.add('get-data');
     //Счетчик удаление соли к шифру
-    let cipherSaltCount = 7;
-
-    // document.getElementById('GetCipherSalt').innerHTML = 'Ваш секретный ключ - ' + cipherSalt
-    document.getElementById('GetCipherSalt').classList.add('visible')
-    document.getElementById('cipher-salt__text-block').innerHTML = cipherSalt;
-    document.getElementById('salt-timer-block__text').innerHTML = 'Секретный ключ будет удален через <span>' + cipherSaltCount + '<span>';
+    let privateDataTimerCount = 7,
+        privateDataResultBlock = document.querySelector(`#${parentBlock} .private-data__result`);
+    privateDataResultBlock.classList.add('visible')
+    document.getElementById('cipher-salt__text-block').innerHTML = userPrivateData;
+    document.getElementById('salt-timer-block__text').innerHTML = 'Секретный ключ будет удален через <span>' + privateDataTimerCount + '<span>';
     document.getElementById('salt-timer-block__timer').classList.add('saltCounterStart')
 
-    let cipherSaltInterval = setInterval(function(){
-        cipherSaltCount--;
-        document.getElementById('salt-timer-block__text').innerHTML = 'Секретный ключ будет удален через <span>' + cipherSaltCount + '</span>';
-    }, 1000)
-
     setTimeout(function(){
-        // document.getElementById('GetCipherSalt').innerHTML = "";
         document.getElementById('GetCipherSalt').classList.remove('visible');
         document.getElementById('cipher-salt__text-block').innerHTML = "";
         document.getElementById('salt-timer-block__text').innerHTML = "";
-        event.target.classList.remove('getSalt');
+        event.target.classList.remove('get-data');
         document.getElementById('salt-timer-block__timer').classList.remove('saltCounterStart')
-        clearInterval(cipherSaltInterval);
-    }, 5000)
-})
+        clearInterval(privateDataInterval);
+    }, 1000 * privateDataTimerCount - 100)
+
+    let privateDataInterval = setInterval(function(){
+        privateDataTimerCount--;
+        document.getElementById('salt-timer-block__text').innerHTML = 'Соль будет удалена через <span>' + privateDataTimerCount + '</span>';
+    }, 1000)
+
+}
+}
 
 
 //ПРИ КЛИКЕ ПО КНОПКЕ "РАСШИФРОВАТЬ" НЕМНОГО ВЫДВИГАТЬ И ПОДСВЕЧИВАТЬ ВЫБРАННЫЙ ЭЛЕМЕНТ  
@@ -454,8 +470,16 @@ document.getElementById('api-get-cipher-key').addEventListener('click', () => {
 const sliderCollection = Array.from(document.querySelectorAll('.content__input-block__block-slide'));
 
 let encrpytSlidersCollection = document.querySelectorAll("#cipher-content__encrypt-block .content__input-block__block-slide"),
-    decryptSlidersCollection = document.querySelectorAll("#cipher-content__decrypt-block .content__input-block__block-slide");
+    decryptSlidersCollection = document.querySelectorAll("#cipher-content__decrypt-block .content__input-block__block-slide"),
+    encryptIconCopyCollection = document.querySelectorAll("#cipher-content__encrypt-block .input-block__icon-block__icon.icon--copy"),
+    decryptTextareaCollection = document.querySelectorAll("#cipher-content__decrypt-block .input-block--minor textarea")
 
+/**
+ * Клик по кнопке скопировать значение из шифрования в дешифровку
+ */
+encryptIconCopyCollection.forEach( (el, index) => {
+    el.addEventListener('click', insertValue(index));
+})
 /**
  * Клик по слайдеру для разворачивания дополнительных блоков
  */
@@ -485,3 +509,18 @@ function slideBlock(index)
         }  
     }    
 }
+
+//Копирование и вставка значения из поля в блоке шифрования в поле дешифровки
+function insertValue(index) 
+{
+    //Возвращаем замыкание, в котором получаем параметр события клика (event) и, ориентируясь на него, раскрываем или скрываем такой же блок, но в соседнем разделе (если слайдер нашат в блоке шифровании - раскрываем тот же блок в разделе дешифрования и наоборот) 
+    return function(event) {
+        let encryptFieldVal = event.currentTarget.closest('.input-block__field-row').children[0].value;
+        if (!encryptFieldVal) {
+            return;
+        }
+        decryptTextareaCollection[index].value = event.currentTarget.closest('.input-block__field-row').children[0].value
+    }
+}
+
+
