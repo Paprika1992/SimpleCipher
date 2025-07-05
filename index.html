@@ -73,14 +73,14 @@
                 <div class="navigation__content__section">
                     <div class="navigation__content__section__step-num">2</div>
                     <div class="navigation__content__section__step-description">
-                        После нажатия на кнопку <span class="navigation__how-to-use__description__field-name">Зашифровать</span> сгенерируются шифры. Напротив каждого из них будет кнопка <span class="navigation__how-to-use__description__field-name">Расшифровать</span>. Нажав ее, шифр прольется в поле <span class="navigation__how-to-use__description__field-name">Текст для расшифровки</span> в блоке Дешифровки.
-                        <br>В нем же есть кнопка <span class="navigation__how-to-use__description__field-name">Расшифровать</span>. Нажав ее, алгоритм отобразит исходное сообщение
+                        После нажатия на кнопку <span class="navigation__how-to-use__description__field-name">Зашифровать</span> сгенерируются шифры. Напротив каждого из них будет кнопка <span class="navigation__how-to-use__description__field-name">Расшифровать</span>. Нажав на ее, шифр прольется в поле <span class="navigation__how-to-use__description__field-name">Текст для расшифровки</span> в блоке Дешифровки.
+                        <br>В нем же есть кнопка <span class="navigation__how-to-use__description__field-name">Расшифровать</span>. Нажав на ее, алгоритм отобразит исходное сообщение
                     </div>
                 </div>
                 <div class="navigation__content__section">
                     <div class="navigation__content__section__step-num">3</div>
                     <div class="navigation__content__section__step-description">
-                        Соль для шифра предназначена для обеспечения стойкости шифров к взлому. Она гарантирует, что даже в случае заполучения потенциальным злоумышленником зашифрованных сообщений, их не получится расшифровать, не зная соли (вероятность подобрать соль менее 0.0000000000001% СПРОСИ У НЕЙРОСЕТИ).
+                        Соль для шифра предназначена для обеспечения стойкости шифров к взлому. Она гарантирует, что даже в случае заполучения потенциальным злоумышленником зашифрованных сообщений, их не получится расшифровать, не зная соли (вероятность подобрать соль менее 0.00000000001%).
                         <br>Для генерации соли используй endpoint <span class="navigation__how-to-use__description__field-name">api/getCipherSalt</span>(подробнее в разделе навигации API), нажми на иконку <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="25" height="25" viewBox="0,0,256,256"><g fill="#ffffff" fill-rule="nonzero" stroke="none" stroke-width="1" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10" stroke-dasharray="" stroke-dashoffset="0" font-family="none" font-weight="none" font-size="none" text-anchor="none" style="mix-blend-mode: normal"><g transform="scale(10.66667,10.66667)"><path d="M7,5c-3.84545,0 -7,3.15455 -7,7c0,3.84545 3.15455,7 7,7c2.77499,0 5.08941,-1.6853 6.27148,-4h2.72852v3h6v-3h2v-6h-1h-9.71289c-1.11451,-2.32444 -3.44795,-4 -6.28711,-4zM7,7c2.28025,0 4.09251,1.421 4.75586,3.32813l0.23242,0.67188h10.01172v2h-2v3h-2v-3h-5.98242l-0.24805,0.63477c-0.75942,1.94073 -2.60543,3.36523 -4.76953,3.36523c-2.75455,0 -5,-2.24545 -5,-5c0,-2.75455 2.24545,-5 5,-5zM7,9c-1.64501,0 -3,1.35499 -3,3c0,1.64501 1.35499,3 3,3c1.64501,0 3,-1.35499 3,-3c0,-1.64501 -1.35499,-3 -3,-3zM7,11c0.56413,0 1,0.43587 1,1c0,0.56413 -0.43587,1 -1,1c-0.56413,0 -1,-0.43587 -1,-1c0,-0.56413 0.43587,-1 1,-1z"></path></g></g></svg> напротив поля <span class="navigation__how-to-use__description__field-name">Ключ для шифра</span> формы основной страницы или на кнопку ниже <span class="navigation__how-to-use__description__field-name">Получить соль</span>.
                         <div class="section-private-data" id="section-private-data--salt-block">
                             <button type="button" id="getSalt">Получить соль</button>
@@ -132,22 +132,24 @@
             </div>
         </div>
         <div class="navigation__block">
-            <div class="navigation__block__title">Секретный ключ</div>
-            <div class="navigation__block__content">
-                <div class="navigation__content__section">
-                    <div class="navigation__content__section__title"><h3>Зачем нужен секретный ключ?</h3></div>
-                    <div class="navigation__content__section__description">Секретный ключ - это твоя персональная "приправа" для алгоритма. Шифр, полученный с использованием такого ключа получится расшифровать <u>только</u> передав этот же ключ при расшифровке. <br>Эта мера гарантирует, что даже если злоумышленник заполучит твои шифры, без секретного ключа у него не получится расшифровать их!
-                    <p>Обязательно сохрани этот ключ. Каждое значение, зашифрованное с помощью секретного ключа может быть расшифрована только с помощью него же!</p></div>
-                </div>
-                <!--  -->
-            </div>
-        </div>
-        <div class="navigation__block">
             <div class="navigation__block__title">API</div>
             <div class="navigation__block__content">
                 <div id="api_description">
+                    <div class="api_description__block">
+                        <h3>Общая информация</h3>
+                        <ul>
+                            <li>Передача персонального api ключа или заголовка авторизации: не требуется</li>
+                            <li>Ограничение на отправку запросов в минуту?</li>
+                        </ul>
+                    </div>
+                    <div class="api_description__block">
+                        <h3>Возвращаемые специальные заголовки:</h3>
+                        <ul>
+                            <li><span class="navigation__how-to-use__description__field-name">X-Error-Msg</span>: сообщение об ошибке</li>
+                        </ul>
+                    </div>
                     <div id="api_description__block--endpoint" class="api_description__block">
-                        <h3>Ендопинты</h3>
+                        <h3>Ендопоинты</h3>
                         <div class="api_description__endpoint__container">
                             <div class="endpoint__container__uri">api/getCipherSalt</div>
                             <div class="endpoint__container__param-block">
@@ -283,7 +285,7 @@
                                             <td>генерится с помощью ендпоинта api/getCipherSalt</td>
                                         </tr>
                                         <tr>
-                                            <td>cipherSalt</td>
+                                            <td>cipherKey</td>
                                             <td>false</td>
                                             <td>string</td>
                                             <td>генерится с помощью ендпоинта api/getCipherKey</td>
@@ -359,7 +361,7 @@
                                             <td>генерится с помощью ендпоинта api/getCipherSalt</td>
                                         </tr>
                                         <tr>
-                                            <td>cipherSalt</td>
+                                            <td>cipherKey</td>
                                             <td>false</td>
                                             <td>string</td>
                                             <td>генерится с помощью ендпоинта api/getCipherKey</td>
@@ -396,11 +398,9 @@
                 </div>
             </div>
         </div>
-        <div class="navigation__block">
-            <div class="navigation__block__title">Почему Simple Cipher</div>
-            <div class="navigation__block__content">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Labore ab esse aperiam necessitatibus, aut ipsum, laudantium sed minima, nobis assumenda laboriosam. Explicabo totam fugiat, sint officia corporis eum quas laboriosam.</div>
-        </div>
     </nav>
+    <!-- ГАВРИЛОВ
+     ДОБАВЬ В БЛОК КАК ПОЛЬЗОВАТЬСЯ СЕРВИСОМ, ЧТО АЛГОРИТМ АСИНХРОННЫЙ И ПРЕДСТАВЛЯЕТ ВОЗОМЖНОСТЬ ДВУСТОРОННЕГО ШИФРОВАНИЯ (СПРОСИ УТОЧНЕНИЯ У НЕЙРОСЕТИ) -->
     <!--ГАВРИЛОВ
     ПЕРЕДЕЛАЙ СЛЕДУЮЩИМ ОБРАЗОМ ВЕРСТКУ: 
     1) ВЕРХНЯЯ СТРОКА - 2 БЛОКА (ЗАШИФРОВКА, РАСШИФРОВКА)
@@ -408,6 +408,25 @@
     2) СЛЕДУЮЩАЯ СТРОКА - ЦЕЛИКОМ БЛОК НА ВСЮ ШИРИНУ ГДЕ БУДУТ РЕЗУЛЬТАТЫ ШИФРОВАНИЯ-->
     <!--Добавь при подключении css и js ver=?-->
     <!--Нужен ли тег форм, если запрос отправляется ajax?-->
+    <div id="page-title">
+        <div id="app-name">
+            <div id="app-name--cipher" class="page-title__app-name">
+                <span>Cip</span>
+                <span>her</span>
+            </div>
+            <div id="app-name--sapphire" class="page-title__app-name">
+                <span>Sap</span>
+                <span>phire</span>
+            </div>
+        </div>
+        <div id="app_description">
+            <span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+            <span></span><span></span><span></span><span></span><span></span>
+            <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+            <span></span><span></span><span></span><span></span><span></span>
+        </div>
+        
+    </div>
     <div id="cipher-content">
         <div id="cipher-content__input-block">
             <div id="cipher-content__encrypt-block" class="cipher-content__block">

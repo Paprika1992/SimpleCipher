@@ -118,14 +118,92 @@ textarea{
   margin: 10px 0;
 } */
 
+#page-title{
+  /* background: green; */
+  display: flex;
+    justify-content: center;
+    gap: 30px;
+  margin: 50px 0;
+
+  &>#app_description{
+    display: flex;
+      justify-content: center;
+      align-items: center;
+    opacity: 0;
+    width: 500px;
+    font-size: 1.7rem;
+    transition: 0.3s;
+    transform: translateX(10px);
+
+    &.shift{
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    &>span{
+
+      &.shine{
+        animation-name: shineSymb;
+        animation-iteration-count: infinite;
+        animation-duration: 0.3s;
+        /* animation-fill-mode: backwards; */
+        animation-direction: alternate;
+      }
+    }
+  }
+
+  &>#app-name{
+    transition: 0.3s;
+    display: flex;
+    opacity: 0;
+    transform: translateX(-10px);
+    font-size: 4rem;
+    font-family: math;
+
+    &.shift{
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+
+  & #app-name--cipher{
+    color: orange;
+
+    &>span:last-child{
+      width: 1.5em;
+    }
+  }
+
+  & #app-name--sapphire{
+    color: var(--color_blue_main);
+
+    &>span:first-child{
+      width: 1.5em;
+    }
+  }
+
+  & .page-title__app-name{
+    display: flex;
+
+    &>span{
+      overflow: hidden;
+      transition: 0.3s;
+
+      &.hide{
+        width: 0!important;
+      }
+    }
+  }
+}
+
 #page__navigation{
   /* background: yellow; */
   display: flex;
     /* gap: 10px; */
     justify-content: space-around;
-  width: 1000px;
+  width: 700px;
   margin: auto;
-  margin-bottom: 50px;
+  /* margin-bottom: 50px; */
   z-index: 100;
   position: relative;
 
@@ -133,6 +211,15 @@ textarea{
     flex: 1;
     /* flex-basis: 33%; */
     /* position: relative; */
+    
+
+    &.show{
+      opacity: 1;
+    }
+
+    &:hover{
+      opacity: 1;
+    }
 
     &:not(:first-of-type){
 
@@ -143,17 +230,19 @@ textarea{
 
     &>.navigation__block__title{
       /* background: lightblue; */
-      color: grey;
+      /* color: grey; */
       height: 100px;
       transition: 0.3s;
       cursor: pointer;
       padding: 5px;
-      font-size: 2rem;
+      font-size: 1.5rem;
       align-content: center;
       text-align: center;
+      opacity: 0.6;
 
       &:hover{
-        text-shadow: 1px -1px var(--color_blue_main);
+        /* text-shadow: 1px -1px var(--color_blue_main); */
+        opacity: 1;
       }
 
       &+.navigation__block__content{
@@ -314,6 +403,7 @@ textarea{
       /* position: sticky;
         top: 0; */
       z-index: 2;
+      background: transparent;
 
       & #decrypt-result-text{
         background: var(--color_blue_minor);
@@ -327,6 +417,7 @@ textarea{
         margin: 10px;
         box-shadow: 0 0 5px 3px grey;
         padding-bottom: 50px;
+        background: transparent;
         
         & .content__input-block{
             padding: 10px;
@@ -609,6 +700,15 @@ textarea{
         }
         to {
           width: 0;
+        }
+      }
+
+   @keyframes shineSymb{
+        from {
+          opacity: 1;
+        }
+        to {
+          opacity: 0.1;
         }
       }
 

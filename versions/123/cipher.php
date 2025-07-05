@@ -224,13 +224,14 @@ class SimpleCipher
 	/**
 	 * Метод формирует хэш на сумму всех символов соли
 	 *
-	 * @param [type] $args
 	 * @return void
 	 */
 	private function getHashSaltSum()
 	{
+		//Вычленяем только числа из ключа шифрования и фиксируем их как ключи будущего массива, где значениями будут выступать сегменты символов.
 		$cipherKeyNumbers = array_merge([], array_map(function($el){return (int)$el;}, array_filter($this->getStrArr($this->cipherKey), function($el){return preg_match('/[0-9]/', $el);})));
-		//Определенным образом дополняем массив числами 10, 11, 12. Так как итоговый массив должен содержать 13 элементов. Столько же, сколько в одном сегменте массива $this->saltNumberSegments. Если элементов будет меньше - мы не будем задействовать один из элементов в сегментах $this->saltNumberSegments. Если элементов будет больше - мы не найдем нужный элемент в сегменте $this->saltNumberSegment, будет ошибка
+
+		//Определенным образом дополняем массив числами 10, 11, 12. Так как итоговый массив с сегментами соли должен содержать 13 элементов. Столько же, сколько в одном сегменте массива $this->saltNumberSegments. Если элементов будет меньше, мы не будем задействовать один из элементов в сегментах $this->saltNumberSegments. Если элементов будет больше, мы не найдем нужный элемент в сегменте $this->saltNumberSegment, будет ошибка. 
 		foreach (array_reverse($cipherKeyNumbers) as $key => $value){
 			if (in_array($value, [0, 1, 2]) !== false){
 				$newPos = ($key == 9 ? 0 : $key);
@@ -243,6 +244,8 @@ class SimpleCipher
 				}
 			}
 		}
+
+		// var_dump($cipherKeyNumbers);
 		//Этот метод позволяет суммировать вложенные массивы
 		$getSaltSum = function (array $arr) use (&$getSaltSum) : float {
 			$sum = array_sum($arr);
@@ -251,7 +254,7 @@ class SimpleCipher
 			}
 			return $sum;
 		};
-		//Общая сумма всех индексов всех символов соли
+		//Общая сумма всех элементов массива, где каждый символ соли представлен в виде числа
 		$generalSaltSum = $getSaltSum($this->saltNumberSegments);
 		//Умножаем, чтобы не уйти в отрицательные значения при дальнейших операциях
 		$generalSaltSum = $generalSaltSum * 3.14;
@@ -267,6 +270,11 @@ class SimpleCipher
 			}
 		}
 		$generalSaltSum = str_replace('.', '', (string)$generalSaltSum);
+
+		#Гаврилов
+		//ЗАТЕСТИ 100 000 СОЛЕЙ, ВЕРНУТ ЛИ ОНИ ОДНУ И ТУ ЖЕ СУММУ С ОДНИМ И ТЕМ ЖЕ КЛЮЧОМ
+
+		// var_dump($generalSaltSum);
 
 		return $generalSaltSum;
 	}
@@ -815,9 +823,9 @@ class SimpleCipher
 		//Трансформируем массив с параметрами сдвига ключа шифра. Если новые значений окна захвата символов больше примерно половины от ключа шифра - через вычитание делаем окно захвата меньше исходного, а не больше
 		#Гаврилов
 		//ЗНАЧЕНИЕ НИЖЕ (РАЗМЕР ОКНА) МОЖНО ВЫНЕСТИ В СВОЙСТВА КЛАССА, ОНО ЧАСТО ГДЕ ВСТРЕЧАЕТСЯ
-		$transformedMatrixParam[0] = ($transformedMatrixParam[0] + $shiftWindowSize_first >= floor(pow($this->matrixDepth, 2) / 2)) ? $transformedMatrixParam[0] - $shiftWindowSize_first : $transformedMatrixParam[0] - $shiftWindowSize_first;
+		$transformedMatrixParam[0] = ($transformedMatrixParam[0] + $shiftWindowSize_first >= floor(pow($this->matrixDepth, 2) / 2)) ? $transformedMatrixParam[0] - $shiftWindowSize_first : $transformedMatrixParam[0] + $shiftWindowSize_first;
 		$transformedMatrixParam[1] = $transformedMatrixParam[1] + $shiftIteration_first;
-		$transformedMatrixParam[3] = ($transformedMatrixParam[3] + $shiftWindowSize_second >= floor(pow($this->matrixDepth, 2) / 2)) ? $transformedMatrixParam[3] - $shiftWindowSize_second : $transformedMatrixParam[3] - $shiftWindowSize_second;
+		$transformedMatrixParam[3] = ($transformedMatrixParam[3] + $shiftWindowSize_second >= floor(pow($this->matrixDepth, 2) / 2)) ? $transformedMatrixParam[3] - $shiftWindowSize_second : $transformedMatrixParam[3] + $shiftWindowSize_second;
 		$transformedMatrixParam[4] = $transformedMatrixParam[4] + $shiftIteration_second;
 
 		return $transformedMatrixParam;
@@ -2004,7 +2012,7 @@ $symbArr = ['z'=>58, 'y'=>57, 'x'=>56, 'w'=>55, 'v'=>54, 'u'=>53, 't'=>52, 's'=>
 $cipherText = 'جۆری نادروستی کلیلی کۆد Y$% два три';
 // $cipherText = '1111111111111111111111111';
 $salt = null;
-// $salt = 'NTI0M2FmNWEwOGU3NDY2YTc5MAFiMTEyOTdlNmY1NTQzY2Q4MzYzMmJkMTNiODRjOGI2YjY4NjEwYjNmM2NjZGJhOWY1NjRiYmU3OTEzZjdhZmIzNDExM2QwZTgwMjhkZDE1OTIwMDlhY2YxZjIxMDljNDA4MTllZjc3MmEzOTI';
+$salt = 'NTI0M2FmNWEwOGU3NDY2YTc5MAFiMTEyOTdlNmY1NTQzY2Q4MzYzMmJkMTNiODRjOGI2YjY4NjEwYjNmM2NjZGJhOWY1NjRiYmU3OTEzZjdhZmIzNDExM2QwZTgwMjhkZDE1OTIwMDlhY2YxZjIxMDljNDA4MTllZjc3MmEzOTI';
 //$testCipher = (new SimpleCipher($cipherText, $salt))->encryptText(40);
 $n = 1;
 $saltNew = $salt;
@@ -2099,4 +2107,7 @@ $saltNew = $salt;
 #Гаврилов
 //очищать шифруемый текст от переноса строк, переноса кареток и прочее
 
-
+// Cipher
+// Sapphire
+//Cipphire  сэфайр
+//Sappher сафер (созвучно с suffer - страдания)

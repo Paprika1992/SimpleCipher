@@ -6,7 +6,51 @@ preloader__show()
 
 setTimeout(function() {
     preloader__hide()
-}, 500)
+}, 300)
+
+setTimeout( () => {
+    document.getElementById('app-name').classList.add('shift');
+}, 700)
+
+setTimeout( () => {
+    document.getElementById('app-name--cipher').children[1].classList.add('hide');
+    document.getElementById('app-name--sapphire').children[0].classList.add('hide');
+    matrixText();
+    document.getElementById('app_description').classList.add('shift');
+}, 1800)
+
+const MatrixSymbArr = ['а', 'б', 'в', 'г', 'д', 'е', 'ё', 'ж', 'з', 'и', 'й', 'к', 'л', 'м', 'н', 'о', 'п', 'р', 'с', 'т', 'у', 'ф', 'х', 'ц', 'ч', 'ш', 'щ', 'ъ', 'ы', 'ь', 'э', 'ю', 'я', 'z', 'y', 'x', 'w', 'v', 'u', 't', 's', 'r', 'p', 'q', 'o', 'n', 'm', 'l', 'k', 'j', 'i','h', 'g', 'f', 'e', 'd', 'c', 'b', 'a', '*', '=', '№', '⇔', '{', '}', '^', '-', '=', '~', '@', '#', '_', ' '],
+    MatrixOriginSymbols = ['п', 'р', 'о', 'с', 'т', 'о', 'й с', 'п', 'о', 'с', 'о', 'б з', 'а', 'ш', 'и', 'ф', 'р', 'о', 'в', 'а', 'т', 'ь т', 'е', 'к', 'с', 'т'];
+
+function matrixText() {
+    let matrixOriginSymbols = [];   //Массив оригинальных символов из строки
+
+    let matrixIntervalCount = 0,
+        matrixInterval = setInterval ( () => {
+            Array.from(document.querySelectorAll('#app_description span')).forEach( (el, index) => {
+                setTimeout ( () => {
+                    el.classList.add('shine')
+                    el.textContent = MatrixSymbArr[Math.floor(Math.random() * MatrixSymbArr.length)]
+                }, index * 50)
+            })
+            matrixIntervalCount++;
+            if (matrixIntervalCount == 4) {
+                clearInterval(matrixInterval)
+                Array.from(document.querySelectorAll('#app_description span')).forEach( (el, index) => {
+                    setTimeout ( () => {
+                        el.textContent = MatrixOriginSymbols[index]
+                        el.classList.remove('shine')
+                    }, index * 50)
+                })
+            }
+        }, 400)
+   
+
+
+    console.log(matrixOriginSymbols)
+
+    Math.floor(Math.random() * MatrixSymbArr.length)
+}
 
 //Дешифровка текста
 document.getElementById('content__decrypt-block__decrypt-btn').addEventListener('click', async function () {
