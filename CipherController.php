@@ -104,6 +104,13 @@ class CipherController
                 ],
             ]
         ],
+
+        #Гаврилов
+        //РЕАЛИЗОВАТЬ МЕХАНИКУ СЖАТОГО ШИФРОВАНИЯ. ЕСЛИ ПЕРЕДАЕТСЯ ЗАГОЛОВОК СЖАТОГО ШИФРОВАНИЯ, ИСПОЛЬЗУЕТСЯ ПРОВЕРКА НА НАЛИЧИЕ НЕВАЛИДНЫХ СИМВОЛОВ И ТОГДА КОЛИЧЕСТВО СИМВОЛОВ В ИТОГОВОМ ШИФРЕ СНИЗИТСЯ В 3 РАЗА, НО МОЖНО БУДЕТ ШИФРОВАТЬ ТОЛЬКО СИМВОЛЫ, НАХОДЯЩИЕСЯ В КЛЮЧЕ (латиница, кирилица, цифры, некоторые спецсимволы)
+
+        #Гаврилов
+        //при изменении текста в поле текст для шифра рассчитывай итоговое количество в поле желаемая длина шифра, умножая количество символов на 4 и прибавляя полезную нагрузку + несколько символов, чтобы полезную нагрузку нельзя было вычислить
+
         //TODO
         //ПЕРЕИМЕНУЙ НА GETCIPHERSALT
         'createCipherSalt' => [
@@ -340,10 +347,10 @@ class CipherController
         $cipherKey_first_arr = preg_split('//u', $cipherKey_first, -1, PREG_SPLIT_NO_EMPTY);
         $cipherKey_second_arr = preg_split('//u', $cipherKey_second, -1, PREG_SPLIT_NO_EMPTY);
 
-        if (!$this->checkInvalidChars($cipherKey_first, SimpleCipher::getFakeCipherKey()) || !$this->checkInvalidChars($cipherKey_second, SimpleCipher::getFakeCipherKey())) {
-            // var_dump('da1');
-            return false;
-        }
+        // if (!$this->checkInvalidChars($cipherKey_first, SimpleCipher::getFakeCipherKey()) || !$this->checkInvalidChars($cipherKey_second, SimpleCipher::getFakeCipherKey())) {
+        //     // var_dump('da1');
+        //     return false;
+        // }
 
         //Каждый ключ должен быть конкретной длины (как фейковый ключ, сформированный на основании одного из реальных ключей)
         if (count(array_unique($cipherKey_first_arr)) !== $cipherLengh || mb_strlen($cipherKey) !== $cipherLengh * 2 || count(array_unique($cipherKey_second_arr)) !== $cipherLengh) {
@@ -413,13 +420,13 @@ class CipherController
         
 
 
-        if (!$this->checkInvalidChars($encryptText, SimpleCipher::getFakeCipherKey())) {
-            $this->returnResponse([
-                'encryptText' => null,
-            ], 400, 'The text contains invalid characters');
+        // if (!$this->checkInvalidChars($encryptText, SimpleCipher::getFakeCipherKey())) {
+        //     $this->returnResponse([
+        //         'encryptText' => null,
+        //     ], 400, 'The text contains invalid characters');
 
-            return;
-        }
+        //     return;
+        // }
 
         $resultCipher = $this->cipherObj->encryptText($fakeLength, $userCipherKey);
         
@@ -438,14 +445,14 @@ class CipherController
      * @param string $fakeCipherKey фейковый ключ актуальной версии шифра, сформированный на основе одного из реальных ключей шифра
      * @return bool
      */
-    private function checkInvalidChars(string $text, string $fakeCipherKey)
-    {
-        $cipherValidSymbArr = preg_split('//u', $fakeCipherKey, -1, PREG_SPLIT_NO_EMPTY);
-        $encryptUniqueSymbArr = array_unique(preg_split('//u', $text, -1, PREG_SPLIT_NO_EMPTY));
-        $getInvalidSymbols = empty(array_diff($encryptUniqueSymbArr, $cipherValidSymbArr));
+    // private function checkInvalidChars(string $text, string $fakeCipherKey)
+    // {
+    //     $cipherValidSymbArr = preg_split('//u', $fakeCipherKey, -1, PREG_SPLIT_NO_EMPTY);
+    //     $encryptUniqueSymbArr = array_unique(preg_split('//u', $text, -1, PREG_SPLIT_NO_EMPTY));
+    //     $getInvalidSymbols = empty(array_diff($encryptUniqueSymbArr, $cipherValidSymbArr));
 
-        return $getInvalidSymbols;
-    }
+    //     return $getInvalidSymbols;
+    // }
 
     #Гаврилов
     //ПОПРОБОВАТЬ ДОБАВИТЬ ПЕРЕНОС СТРОКИ И ПЕРЕНОС КАРЕТКИ В СИМВОЛЫ ШИФРА?
