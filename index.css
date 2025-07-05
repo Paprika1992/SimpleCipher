@@ -96,12 +96,12 @@ textarea{
     display: block;
   }
 
-  &>#cipher-salt__text-block{
-    /* padding: 5px;
+  &>.private-data__result__text{
+    padding: 5px;
     border-radius: 5px;
-    margin: 5px 0px 15px 0px;
+    margin: 15px 0px;
     background: #5f5f9a;
-    box-shadow: 0px 0px 3px 1px #8a8a8a inset; */
+    box-shadow: 0px 0px 3px 1px #8a8a8a inset;
   }
 }
 
@@ -110,13 +110,13 @@ textarea{
   font-weight: 500;        
 }
 
-#cipher-salt__text-block{
+/* #cipher-salt__text-block{
   border-radius: 5px;
   padding: 10px;
   background: #545479;
   box-shadow: inset 0px 0px 3px 2px #6e6e6e;
   margin: 10px 0;
-}
+} */
 
 #page__navigation{
   /* background: yellow; */
@@ -565,10 +565,11 @@ textarea{
   }
 }
 
-#сipher-salt-timer-block{
+
+.private-data__timer-block{
   position: relative;
 
-  &>#salt-timer-block__text{
+  &>.private-data__timer-block__text{
     position: relative;
     z-index: 2;
     color: white;
@@ -580,7 +581,7 @@ textarea{
     }
   }
 
-  &>#salt-timer-block__timer{
+  &>.private-data__timer-block__timer{
     top: 0;
     height: 100%;
     width: 100%;
@@ -594,7 +595,7 @@ textarea{
       animation-timing-function: linear;
       padding: 10px;
 
-      &+#salt-timer-block__text{
+      &+.private-data__timer-block__text{
         padding: 5px;
         text-shadow: 1px 1px grey;
       }

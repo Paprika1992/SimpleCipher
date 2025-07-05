@@ -172,6 +172,7 @@ document.getElementById('api-get-cipher-salt').addEventListener('click', async f
         return;
     } 
     cipherSalt = cipherSaltRqst.cipherSalt
+    console.log(cipherSalt)
 
     document.getElementById('cipherSalt').value = cipherSalt;
 })
@@ -189,7 +190,8 @@ document.getElementById('copy-cipher-salt').addEventListener('click', function()
 
 
 //Получение соли к шифру
-document.getElementById('getSalt').addEventListener('click', getPrivateData('getSalt') )
+document.getElementById('getSalt').addEventListener('click', getPrivateData('getSalt'))
+document.getElementById('getKey').addEventListener('click', getPrivateData('getKey'))
 
 function getPrivateData (data) 
 {
@@ -216,27 +218,40 @@ function getPrivateData (data)
     event.target.classList.add('get-data');
     //Счетчик удаление соли к шифру
     let privateDataTimerCount = 7,
-        privateDataResultBlock = document.querySelector(`#${parentBlock} .private-data__result`);
+        timerTextBlock = document.querySelector(`#${parentBlock} .private-data__timer-block .private-data__timer-block__text`),
+        timerAnimationBlock = document.querySelector(`#${parentBlock} .private-data__timer-block .private-data__timer-block__timer`),
+        privateDataResultBlock = document.querySelector(`#${parentBlock} .private-data__result`),
+        privateDataResultText = document.querySelector(`#${parentBlock} .private-data__result .private-data__result__text`);
     privateDataResultBlock.classList.add('visible')
-    document.getElementById('cipher-salt__text-block').innerHTML = userPrivateData;
-    document.getElementById('salt-timer-block__text').innerHTML = 'Секретный ключ будет удален через <span>' + privateDataTimerCount + '<span>';
-    document.getElementById('salt-timer-block__timer').classList.add('saltCounterStart')
+    privateDataResultText.textContent = userPrivateData
+    timerTextBlock.innerHTML = (privateData == 'getSalt' ? 'Соль будет удалена ' : 'Ключ будет удален ') + ' через <span>' + privateDataTimerCount + '<span>';
+
+    // private-data__timer-block__text
+    // document.getElementById('salt-timer-block__text').innerHTML = 'Секретный ключ будет удален через <span>' + privateDataTimerCount + '<span>';
+
+    // private-data__result__result-text
+    // document.getElementById('cipher-salt__text-block').innerHTML = userPrivateData;
+    //document.getElementById('salt-timer-block__text').innerHTML = 'Секретный ключ будет удален через <span>' + privateDataTimerCount + '<span>';
+    timerAnimationBlock.classList.add('saltCounterStart')
 
     setTimeout(function(){
-        document.getElementById('GetCipherSalt').classList.remove('visible');
-        document.getElementById('cipher-salt__text-block').innerHTML = "";
-        document.getElementById('salt-timer-block__text').innerHTML = "";
+        privateDataResultBlock.classList.remove('visible')
+        //document.getElementById('GetCipherSalt').classList.remove('visible');
+        privateDataResultText.textContent = "";
+        //document.getElementById('cipher-salt__text-block').innerHTML = "";
+        //document.getElementById('salt-timer-block__text').innerHTML = "";
+        timerTextBlock.innerHTML = "";
         event.target.classList.remove('get-data');
-        document.getElementById('salt-timer-block__timer').classList.remove('saltCounterStart')
+        timerAnimationBlock.classList.remove('saltCounterStart')
         clearInterval(privateDataInterval);
     }, 1000 * privateDataTimerCount - 100)
 
     let privateDataInterval = setInterval(function(){
         privateDataTimerCount--;
-        document.getElementById('salt-timer-block__text').innerHTML = 'Соль будет удалена через <span>' + privateDataTimerCount + '</span>';
+        timerTextBlock.innerHTML = (privateData == 'getSalt' ? 'Соль будет удалена ' : 'Ключ будет удален ') + ' через <span>' + privateDataTimerCount + '<span>';
     }, 1000)
 
-}
+    }
 }
 
 
