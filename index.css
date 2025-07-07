@@ -105,6 +105,27 @@ textarea{
   }
 }
 
+#footer-content{
+  display: flex;
+    justify-content: space-between;
+  transition: 0.3s;
+  opacity: 0.5;
+  color: grey;
+
+  &:hover{
+    opacity: 1;
+    color: black;
+  }
+
+  &>svg{
+    color: orange;
+  }
+
+  &>#footer-content__notification{
+    align-self: center;
+  }  
+}
+
 .navigation__how-to-use__description__field-name{
   color: #e6d4bb;
   font-weight: 500;        
@@ -130,7 +151,7 @@ textarea{
       justify-content: center;
       align-items: center;
     opacity: 0;
-    width: 500px;
+    width: 550px;
     font-size: 1.7rem;
     transition: 0.3s;
     transform: translateX(10px);
@@ -141,11 +162,15 @@ textarea{
     }
 
     &>span{
+      color: #3a3a65;
+      font-weight: 500;
 
       &.shine{
+        color: orange;
+        min-width: 15px;
         animation-name: shineSymb;
         animation-iteration-count: infinite;
-        animation-duration: 0.3s;
+        animation-duration: 0.7s;
         /* animation-fill-mode: backwards; */
         animation-direction: alternate;
       }

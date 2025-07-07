@@ -121,6 +121,30 @@ class CipherController
             'method' => 'GET',
             'methodParams' => []
         ],
+        'sendFeedback' => [
+            'method' => 'POST',
+            'methodParams' => [
+                'feedback_text' => [
+                    'important' => true,
+                    'validation' => [
+                        #Гаврилов
+                        //МАКСИМАЛЬНОЕ ЗНАЧЕНИЕ ПОЛЯ ПРОПИШИ В ИНПУТАХ
+                        'validationRegular' => '/.{500}/',
+                        'validationMethod' => null,
+                    ]
+                ],
+                'feedback_sender_contact' => [
+                    'important' => false,
+                    'validation' => [
+                        #Гаврилов
+                        //МАКСИМАЛЬНОЕ ЗНАЧЕНИЕ ПОЛЯ ПРОПИШИ В ИНПУТАХ
+                        'validationRegular' => '/.{50}/',
+                        'validationMethod' => null,
+                    ]
+                ],
+            ]
+
+        ]
     ];
     
     
@@ -139,10 +163,6 @@ class CipherController
         $this->action = $action;
         $this->rqstParams = json_decode(file_get_contents('php://input'), true) ?? [];
         $this->cipherSalt = array_key_exists('cipherSalt', $this->rqstParams) !== false ? $this->rqstParams['cipherSalt'] : null;
-
-        // var_dump($this->rqstParams);
-
-        // var_dump($test);
 
         $checkEndpoint = $this->checkRoute($this->action);
         //$checkEndPointErr = null;
@@ -173,6 +193,9 @@ class CipherController
                 case 'getCipherKey':
                     $this->getCipherKey();
                     break;
+                case 'sendFeedback':
+                    $this->sendFeedback();
+                    break;
             }
         }
 
@@ -193,6 +216,12 @@ class CipherController
     #Гаврилов
     //ПЕРЕДАВАТЬ С ШИФРОВАНИЕМ И ДЕШИФРОВКОЙ ЕЩЕ ОДИН ПАРАМЕТР "ДЕМОНСТРАЦИОННАЯ СТРАНИЦА": FALSE\TRUE. ПЕРЕДАВАТЬ ЕГО ТОЛЬКО С ДЕМОНСТРАЦИОННОЙ СТРАНИЦЫ. ЕСЛИ ПЕРЕДАЕТСЯ TRUE - ДЕЛАТЬ ПОЛЕ С СОЛЬЮ НЕОБЯЗАТЕЛЬНЫМ ДЛЯ ПЕРЕДАЧИ. МОЖНО ЛИ КАК-ТО ПРОВЕРЯТЬ ОТКУДА ИДЕТ ЗАПРОС ПО IP НАПРИМЕР?, ЧТОБЫ ПОЛЬЗОВАТЕЛЬ НЕ МОГ ПОДСТАВИТЬ ЭТОТ ЗАГОЛОВОК, ОТПРАВЛЯЯ СВОЙ ЗАПРОС СО СВОЕГО СЕРВЕРА
     
+
+    private function sendFeedback()
+    {
+        $logFeedbackMsg = (new DateTime())->format('Y-m-d h:i:s') . "|" . $this->rqstParams['feedback_text'] . "|" . $this->rqstParams['feedback_sender_contact'] . "\n";
+        file_put_contents("./feedback.log", $logFeedbackMsg, FILE_APPEND);
+    }
 
 
     /**

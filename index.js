@@ -1,56 +1,109 @@
-const backgroundEl = document.getElementById('page-background');
-
 import {preloader__show, preloader__hide} from "./preloader.js";
 
-preloader__show()
+/**
+ * Массив с рандомными символами, которые будут проскакивать в анимации
+ */
+const MatrixSymbArr = ['а', 'б', 'в', 'г', 'д', 'е', 'ё', 'ж', 'з', 'и', 'й', 'к', 'л', 'м', 'н', 'о', 'п', 'р', 'с', 'т', 'у', 'ф', 'х', 'ц', 'ч', 'ш', 'щ', 'ъ', 'ы', 'ь', 'э', 'ю', 'я', 'z', 'y', 'x', 'w', 'v', 'u', 't', 's', 'r', 'p', 'q', 'o', 'n', 'm', 'l', 'k', 'j', 'i','h', 'g', 'f', 'e', 'd', 'c', 'b', 'a', '*', '=', '№', '⇔', '{', '}', '^', '-', '=', '~', '@', '#', '_', ' '],
+    /**
+     * Массив оригинальной фразы, которая должна отображаться в результате
+     */
+    MatrixOriginSymbols = ['п', 'р', 'о', 'с', 'т', 'о', 'й с', 'п', 'о', 'с', 'о', 'б з', 'а', 'ш', 'и', 'ф', 'р', 'о', 'в', 'а', 'т', 'ь т', 'е', 'к', 'с', 'т'],
+    /**
+     * Коллекция span элементов с буквами в блоке описания приложения
+     */
+    AppDescriptionSpanCollection = Array.from(document.querySelectorAll('#app_description span')),
+    /**
+     * Элемент фонового затемнения стараницы
+     */
+    PageBackgroundElement = document.getElementById('page-background');
 
+/**
+ * Интервал отображения рандомных символов
+ */    
+let clearRandomSymbTimeout = 50
+
+preloader__show()
 setTimeout(function() {
     preloader__hide()
 }, 300)
 
+
+//Показываем название приложения
 setTimeout( () => {
-    document.getElementById('app-name').classList.add('shift');
+    document.getElementById('app-name').classList.add('shift');    
 }, 700)
 
+
+/**
+ * Массив интервалов, которые накапливаются при отображени фейковых символов в описании приложения на стартовой странице
+ */
+// let allIntervals = []
+
+
 setTimeout( () => {
+    //Трансформируем название приложения CipherSapphire => Cipphire
     document.getElementById('app-name--cipher').children[1].classList.add('hide');
     document.getElementById('app-name--sapphire').children[0].classList.add('hide');
-    matrixText();
+    //Показываем строку с текстом описания приложения и заполнявем ее рандомными символами
     document.getElementById('app_description').classList.add('shift');
+    descriptionRandSymbols()
 }, 1800)
 
-const MatrixSymbArr = ['а', 'б', 'в', 'г', 'д', 'е', 'ё', 'ж', 'з', 'и', 'й', 'к', 'л', 'м', 'н', 'о', 'п', 'р', 'с', 'т', 'у', 'ф', 'х', 'ц', 'ч', 'ш', 'щ', 'ъ', 'ы', 'ь', 'э', 'ю', 'я', 'z', 'y', 'x', 'w', 'v', 'u', 't', 's', 'r', 'p', 'q', 'o', 'n', 'm', 'l', 'k', 'j', 'i','h', 'g', 'f', 'e', 'd', 'c', 'b', 'a', '*', '=', '№', '⇔', '{', '}', '^', '-', '=', '~', '@', '#', '_', ' '],
-    MatrixOriginSymbols = ['п', 'р', 'о', 'с', 'т', 'о', 'й с', 'п', 'о', 'с', 'о', 'б з', 'а', 'ш', 'и', 'ф', 'р', 'о', 'в', 'а', 'т', 'ь т', 'е', 'к', 'с', 'т'];
 
-function matrixText() {
-    let matrixOriginSymbols = [];   //Массив оригинальных символов из строки
-
-    let matrixIntervalCount = 0,
-        matrixInterval = setInterval ( () => {
-            Array.from(document.querySelectorAll('#app_description span')).forEach( (el, index) => {
-                setTimeout ( () => {
-                    el.classList.add('shine')
-                    el.textContent = MatrixSymbArr[Math.floor(Math.random() * MatrixSymbArr.length)]
-                }, index * 50)
-            })
-            matrixIntervalCount++;
-            if (matrixIntervalCount == 4) {
-                clearInterval(matrixInterval)
-                Array.from(document.querySelectorAll('#app_description span')).forEach( (el, index) => {
-                    setTimeout ( () => {
-                        el.textContent = MatrixOriginSymbols[index]
-                        el.classList.remove('shine')
-                    }, index * 50)
-                })
-            }
-        }, 400)
-   
-
-
-    console.log(matrixOriginSymbols)
-
-    Math.floor(Math.random() * MatrixSymbArr.length)
+/**
+ * Очищение рандомных символов и замена их на буквы оригинального сообщения
+ */  
+function clearRandomSymb() 
+{
+    AppDescriptionSpanCollection.forEach( (el, index) => {
+        setTimeout ( () => {
+            el.textContent = MatrixOriginSymbols[index]
+            el.classList.remove('shine')
+        }, 50 * index)
+    })
 }
+
+
+let randomSymbInterval;
+/**
+ * Отображение рандомных символов в описании приложения и последующая замена на оригинальное описание
+ */
+function descriptionRandSymbols()
+{
+        randomSymbInterval = setInterval ( () => {
+            let randSymb = Math.floor(Math.random() * AppDescriptionSpanCollection.length);
+            AppDescriptionSpanCollection[randSymb].classList.add('shine');
+            AppDescriptionSpanCollection[randSymb].textContent = MatrixSymbArr[Math.floor(Math.random() * MatrixSymbArr.length)];
+        }, 50)
+
+        /**
+         * Через некоторое время очищаем рандомные символы и заменем их символами оригинального сообщения 
+         */
+        setTimeout( () => {
+            clearRandomSymb();
+            //Очищаем все накопившиеся интервалы заполнения описания рандомными символами
+            //allIntervals.forEach( interval => clearInterval(interval) )
+            clearInterval(randomSymbInterval);
+        }, 2000);
+}
+
+
+//Наведение мышки на блок с названием приложения отображает полное название, а не объединенное
+document.getElementById('app-name').addEventListener('mouseover', () => {
+    document.getElementById('app-name--cipher').children[1].classList.remove('hide')
+    document.getElementById('app-name--sapphire').children[0].classList.remove('hide')
+})
+document.getElementById('app-name').addEventListener('mouseout', () => {
+    document.getElementById('app-name--cipher').children[1].classList.add('hide')
+    document.getElementById('app-name--sapphire').children[0].classList.add('hide')
+})
+
+
+//Отправка обратной связи
+document.getElementById('feedback-submit').addEventListener('click', function () {
+    fetch(/)
+})
+
 
 //Дешифровка текста
 document.getElementById('content__decrypt-block__decrypt-btn').addEventListener('click', async function () {
@@ -478,9 +531,9 @@ navigationElem.forEach((elem) => {
 
         if (!showClass) {
             elem.parentElement.classList.add('show')
-            backgroundEl.classList.add('visible')
+            PageBackgroundElement.classList.add('visible')
         } else {
-            backgroundEl.classList.remove('visible')
+            PageBackgroundElement.classList.remove('visible')
         }
     })
 })

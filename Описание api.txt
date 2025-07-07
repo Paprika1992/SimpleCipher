@@ -1,8 +1,0 @@
-Ендпоинты:
-1) 	api/getCipherSalt
-	method: GET
-	use to: получение секретного ключа для работы с шифром
-	необходимые заголовки: отсутствуют
-	формат ответа: application/json
- 	пример ответа:
-	{"cipherSalt":"Y2M3MzMxYjk0MDA2NzVjMDE5MzNjOTViYzE4YjVhZTgxNjAxYjg2MzM1ODcwYjQ3MTZmNTI4Zjg1MzFjNDU1MGYzYWM2NDQ5YmRlYTZmOTg5ZjcyYzI5M2Q4NDEyYzI5NWEzNjEzZTY5OTcxZTQzZWFlMmUxMTY4MzQ0ZjcxNTQ"}

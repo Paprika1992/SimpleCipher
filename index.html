@@ -44,7 +44,7 @@
     <div id="page-background"></div>
     <nav id="page__navigation">
         <div class="navigation__block">
-            <div class="navigation__block__title">Как пользовать сервисом</div>
+            <div class="navigation__block__title">Как пользоваться сервисом</div>
             <div class="navigation__block__content" id="navigation__block__content__how-to-use">
                 <div class="navigation__content__section">
                     <div class="navigation__content__section__step-num">1</div>
@@ -398,6 +398,28 @@
                 </div>
             </div>
         </div>
+        <div class="navigation__block">
+            <div class="navigation__block__title">Обратная связь</div>
+            <div class="navigation__block__content" id="navigation__block__content__feedback">
+                <div class="navigation__content__section">
+                    Любые вопросы и предложения пишите на почту CIPPHER.GMAIL.COM (ПОПРАВЬ ПОЧТУ), на страницу проекта (ССЫЛКА НА публичную страницу GITHUB) или заполните форму ниже
+                    <br>Буду рад увидеть вашу оценку сервиса и предложения по его улучшению!
+                </div>
+                <div class="navigation__content__section">
+                    <div class="input-block__field-row">
+                        <!-- ГАВРИЛОВ. ОГРАНИЧЕНИЯ НА ОТПРАВКУ ЗАПРОСОВ ФИДБЕКА КОЛИЧЕСТВО ЗАПРОСОВ В МИНУТУ МИНИМАЛЬНОЕ (10) -->
+                        <label for="feedback-text">Вопрос/предложение</label>
+                        <textarea type="text" placeholder="Макс. 500 символов" id="feedback-text" required="required"></textarea>
+                    </div>
+                    <div class="input-block__field-row">
+                        <!-- ГАВРИЛОВ. ОГРАНИЧЕНИЯ НА ОТПРАВКУ ЗАПРОСОВ ФИДБЕКА КОЛИЧЕСТВО ЗАПРОСОВ В МИНУТУ МИНИМАЛЬНОЕ (10) -->
+                        <label for="feedback-sender-contact">Контакт для обратной связи (не обязательно)</label>
+                        <input type="text" id="feedback-sender-contact">
+                    </div>
+                    <button type="button" id="feedback-submit" class="">Отправить</button>
+                </div>
+            </div>
+        </div>            
     </nav>
     <!-- ГАВРИЛОВ
      ДОБАВЬ В БЛОК КАК ПОЛЬЗОВАТЬСЯ СЕРВИСОМ, ЧТО АЛГОРИТМ АСИНХРОННЫЙ И ПРЕДСТАВЛЯЕТ ВОЗОМЖНОСТЬ ДВУСТОРОННЕГО ШИФРОВАНИЯ (СПРОСИ УТОЧНЕНИЯ У НЕЙРОСЕТИ) -->
@@ -524,7 +546,20 @@
         </div>
     </div>
     <footer>
-        <div>форма обратной связи. Тут будет инпут для для ввода сообщения, текст, что можно оставить отзыв или сообщить о проблеме. наверное можно в виде круглой иконки это оформить</div>
+        <div id="footer-content">
+                <svg width="1.5em" height="1.5em" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M8 1L15 14H1L8 1Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+                    <path d="M8 6V9M8 11V11.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                </svg>
+            
+            <div id="footer-content__notification">Приложение разработано в академических целях. Любое использование в противозаконных целях (МОЖЕТ С ПРОТИВОЗАКОННЫМИ ЦЕЛЯМИ?) запрещено</div>
+           
+                <svg width="1.5em" height="1.5em" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M8 1L15 14H1L8 1Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+                    <path d="M8 6V9M8 11V11.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                </svg>
+            
+        </div>
     </footer>
     <script src="./index.js" type="module"></script>
     <script type="module" src="./preloader.js"></script>
