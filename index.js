@@ -101,7 +101,30 @@ document.getElementById('app-name').addEventListener('mouseout', () => {
 
 //Отправка обратной связи
 document.getElementById('feedback-submit').addEventListener('click', function () {
-    fetch(/)
+    let feedbackText = document.getElementById('feedback-text').value.trim(),
+        feedbackSender = document.getElementById('feedback-sender-contact').value.trim()
+
+    if (!feedbackText.length) {
+        alert('Пустое сообщение');
+
+        return;
+    }
+
+    fetch('./api/postFeedback', {
+        method: 'POST',
+        body: JSON.stringify({
+            feedback_text: feedbackText,
+            feedback_sender_contact: feedbackSender,
+        }),
+    });
+
+    Array.from(document.querySelectorAll('#feedback-fields-block .feedback-fields-block__field')).forEach( (el) => {
+        el.value = '';  
+    })
+
+    document.getElementById('page-background').click()
+    
+    alert('Спасибо за твою обратную связь!');
 })
 
 

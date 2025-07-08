@@ -145,7 +145,7 @@
                     <div class="api_description__block">
                         <h3>Возвращаемые специальные заголовки:</h3>
                         <ul>
-                            <li><span class="navigation__how-to-use__description__field-name">X-Error-Msg</span>: сообщение об ошибке</li>
+                            <li><span class="navigation__how-to-use__description__field-name">X-Error-Msg</span>: кастомное сообщение об ошибке</li>
                         </ul>
                     </div>
                     <div id="api_description__block--endpoint" class="api_description__block">
@@ -405,16 +405,16 @@
                     Любые вопросы и предложения пишите на почту CIPPHER.GMAIL.COM (ПОПРАВЬ ПОЧТУ), на страницу проекта (ССЫЛКА НА публичную страницу GITHUB) или заполните форму ниже
                     <br>Буду рад увидеть вашу оценку сервиса и предложения по его улучшению!
                 </div>
-                <div class="navigation__content__section">
+                <div class="navigation__content__section" id="feedback-fields-block">
                     <div class="input-block__field-row">
                         <!-- ГАВРИЛОВ. ОГРАНИЧЕНИЯ НА ОТПРАВКУ ЗАПРОСОВ ФИДБЕКА КОЛИЧЕСТВО ЗАПРОСОВ В МИНУТУ МИНИМАЛЬНОЕ (10) -->
                         <label for="feedback-text">Вопрос/предложение</label>
-                        <textarea type="text" placeholder="Макс. 500 символов" id="feedback-text" required="required"></textarea>
+                        <textarea class="feedback-fields-block__field" type="text" placeholder="Макс. 500 символов" id="feedback-text" required="required"></textarea>
                     </div>
                     <div class="input-block__field-row">
                         <!-- ГАВРИЛОВ. ОГРАНИЧЕНИЯ НА ОТПРАВКУ ЗАПРОСОВ ФИДБЕКА КОЛИЧЕСТВО ЗАПРОСОВ В МИНУТУ МИНИМАЛЬНОЕ (10) -->
                         <label for="feedback-sender-contact">Контакт для обратной связи (не обязательно)</label>
-                        <input type="text" id="feedback-sender-contact">
+                        <input class="feedback-fields-block__field" type="text" id="feedback-sender-contact">
                     </div>
                     <button type="button" id="feedback-submit" class="">Отправить</button>
                 </div>
@@ -552,7 +552,7 @@
                     <path d="M8 6V9M8 11V11.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
                 </svg>
             
-            <div id="footer-content__notification">Приложение разработано в академических целях. Любое использование в противозаконных целях (МОЖЕТ С ПРОТИВОЗАКОННЫМИ ЦЕЛЯМИ?) запрещено</div>
+            <div id="footer-content__notification">Приложение разработано в академических целях. Любое использование для нарушения закона (МОЖЕТ С ПРОТИВОЗАКОННЫМИ ЦЕЛЯМИ?) запрещено</div>
            
                 <svg width="1.5em" height="1.5em" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M8 1L15 14H1L8 1Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>

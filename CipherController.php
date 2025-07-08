@@ -121,7 +121,7 @@ class CipherController
             'method' => 'GET',
             'methodParams' => []
         ],
-        'sendFeedback' => [
+        'postFeedback' => [
             'method' => 'POST',
             'methodParams' => [
                 'feedback_text' => [
@@ -129,7 +129,7 @@ class CipherController
                     'validation' => [
                         #Гаврилов
                         //МАКСИМАЛЬНОЕ ЗНАЧЕНИЕ ПОЛЯ ПРОПИШИ В ИНПУТАХ
-                        'validationRegular' => '/.{500}/',
+                        'validationRegular' => '/^.{1,500}$/',
                         'validationMethod' => null,
                     ]
                 ],
@@ -138,7 +138,7 @@ class CipherController
                     'validation' => [
                         #Гаврилов
                         //МАКСИМАЛЬНОЕ ЗНАЧЕНИЕ ПОЛЯ ПРОПИШИ В ИНПУТАХ
-                        'validationRegular' => '/.{50}/',
+                        'validationRegular' => '/^.{1,50}$/',
                         'validationMethod' => null,
                     ]
                 ],
@@ -158,7 +158,6 @@ class CipherController
      */
     public function __construct(string $action)
     {
-
         set_error_handler([$this, "myErrorHandler"]);
         $this->action = $action;
         $this->rqstParams = json_decode(file_get_contents('php://input'), true) ?? [];
@@ -193,8 +192,8 @@ class CipherController
                 case 'getCipherKey':
                     $this->getCipherKey();
                     break;
-                case 'sendFeedback':
-                    $this->sendFeedback();
+                case 'postFeedback':
+                    $this->postFeedback();
                     break;
             }
         }
@@ -217,10 +216,15 @@ class CipherController
     //ПЕРЕДАВАТЬ С ШИФРОВАНИЕМ И ДЕШИФРОВКОЙ ЕЩЕ ОДИН ПАРАМЕТР "ДЕМОНСТРАЦИОННАЯ СТРАНИЦА": FALSE\TRUE. ПЕРЕДАВАТЬ ЕГО ТОЛЬКО С ДЕМОНСТРАЦИОННОЙ СТРАНИЦЫ. ЕСЛИ ПЕРЕДАЕТСЯ TRUE - ДЕЛАТЬ ПОЛЕ С СОЛЬЮ НЕОБЯЗАТЕЛЬНЫМ ДЛЯ ПЕРЕДАЧИ. МОЖНО ЛИ КАК-ТО ПРОВЕРЯТЬ ОТКУДА ИДЕТ ЗАПРОС ПО IP НАПРИМЕР?, ЧТОБЫ ПОЛЬЗОВАТЕЛЬ НЕ МОГ ПОДСТАВИТЬ ЭТОТ ЗАГОЛОВОК, ОТПРАВЛЯЯ СВОЙ ЗАПРОС СО СВОЕГО СЕРВЕРА
     
 
-    private function sendFeedback()
+    /**
+     * Метод фиксирует обратную связь в текстовом файле в папке проекта (в будущем в БД)
+     *
+     * @return void
+     */
+    private function postFeedback()
     {
         $logFeedbackMsg = (new DateTime())->format('Y-m-d h:i:s') . "|" . $this->rqstParams['feedback_text'] . "|" . $this->rqstParams['feedback_sender_contact'] . "\n";
-        file_put_contents("./feedback.log", $logFeedbackMsg, FILE_APPEND);
+        file_put_contents("./log/feedback.log", $logFeedbackMsg, FILE_APPEND);
     }
 
 
@@ -259,10 +263,8 @@ class CipherController
                 return $checkRouteArr;
             } else if (!empty($this->routes[$routeName]['methodParams'])) {
                 foreach ($this->routes[$routeName]['methodParams'] as $paramName => $paramData){
-                    // var_dump($paramName);
-                    // var_dump($this->rqstParams);
                     //Если параметр обязательный
-                    if ($paramData['important'] === true && (array_key_exists($paramName, $this->rqstParams) === false || !$this->rqstParams[$paramName])) {
+                    if ($paramData['important'] === true && (array_key_exists($paramName, $this->rqstParams) === false || !mb_strlen($this->rqstParams[$paramName]))) {
                     //if ($paramData['important'] === true) {
                         //Если обязательный параметр отсутствует в запросе
                         // if (array_key_exists($paramName, $this->rqstParams) === false || !$this->rqstParams[$paramName]) {

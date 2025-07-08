@@ -61,11 +61,13 @@ textarea{
   resize: vertical;
 }
 
-/* #cipherSalt,
-#cipherSalt_decrypt{
-  height: 50px;
-  resize: none;
-} */
+#feedback-fields-block{
+  margin: 15px 0;
+
+  &>.input-block__field-row{
+    margin-bottom: 10px;
+  }
+}
 
 #encryptText,
 #decryptText{
@@ -170,7 +172,7 @@ textarea{
         min-width: 15px;
         animation-name: shineSymb;
         animation-iteration-count: infinite;
-        animation-duration: 0.7s;
+        animation-duration: 0.3s;
         /* animation-fill-mode: backwards; */
         animation-direction: alternate;
       }
@@ -236,10 +238,13 @@ textarea{
     flex: 1;
     /* flex-basis: 33%; */
     /* position: relative; */
-    
 
     &.show{
       opacity: 1;
+
+      &>.navigation__block__title{
+        opacity: 1;
+      }
     }
 
     &:hover{
