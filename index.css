@@ -446,10 +446,20 @@ textarea{
         border-radius: 10px;
         margin: 10px;
         box-shadow: 0 0 5px 3px grey;
-        padding-bottom: 50px;
+        /* padding-bottom: 50px; */
         background: transparent;
+        position: relative;
         
-        & .content__input-block{
+        &>form{
+          /* position: relative; */
+          height: 100%;
+          display: flex;
+            flex-direction: column;
+            align-content: space-between;
+            
+            justify-content: space-between;
+
+          &>.content__input-block{
             padding: 10px;
             position: relative;
 
@@ -490,6 +500,27 @@ textarea{
 
             }
           }
+        }
+
+        
+
+        & .content-block__btn-block{
+          /* position: absolute;
+          bottom: 10px; */
+
+          &>.content__encrypt-block__encrypt-clear{
+            background: #fffdeb;
+            color: black;
+            border: 2px solid #555590;
+            transition: 0.3;
+            opacity: 0.6;
+
+            &:hover{
+              opacity: 1;
+              background: #fff1de;
+            }
+          }
+        }
 
         & .content__input-block{
           border-radius: 10px;
@@ -555,9 +586,9 @@ textarea{
         &>.content__input-block__submit-btn{
             width: 150px;
             /* margin: auto; */
-            display: block;
+            /* display: block;
             position: absolute;
-            bottom: 20px;
+            bottom: 20px; */
           }
 
       }
@@ -602,7 +633,7 @@ textarea{
             }
           }
 
-          &>#content__encrypt-block__encrypt{
+          & #content__encrypt-block__encrypt{
             z-index: 10;
             background: var(--color_blue_minor);
           }
@@ -610,7 +641,7 @@ textarea{
             z-index: 9;
             background: var(--color_blue_minor);
             background: #7474ab;
-            transform: translateY(-10px);
+            transform: translateY(-25px);
 
             /* &>.input-block__field-row{
               height: 0;
@@ -622,7 +653,7 @@ textarea{
             z-index: 8;
             /* transform: translateY(-100%); */
             background: #a9a9d5;
-            transform: translateY(-20px);
+            transform: translateY(-50px);
             /* background: var(--color_blue_minor); */
 
              &>.input-block__field-row{
@@ -639,13 +670,13 @@ textarea{
 
       }
 
-      &>#cipher-content__decrypt-block{
+      & #cipher-content__decrypt-block{
 
-        &>.content__input-block{
+        & .content__input-block{
           box-shadow: 0px 4px 6px 1px #564022;
         }
 
-        &>#content__decrypt-block__result{
+        & #content__decrypt-block__result{
           min-height: 35px;
           /*border-radius: 10px; */
           margin: 30px 0;

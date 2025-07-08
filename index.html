@@ -452,94 +452,104 @@
     <div id="cipher-content">
         <div id="cipher-content__input-block">
             <div id="cipher-content__encrypt-block" class="cipher-content__block">
-                <div id="content__encrypt-block__encrypt" class="content__input-block">
-                    <div class="input-block__field-row">
-                        <label for="encryptText">Текст для шифрования</label>
-                        <textarea type="text" placeholder="Введите текст" id="encryptText" required></textarea>
-                    </div>
-                    <div class="input-block__field-row field-row--two-fields">
-                        <label for="cipherLength">Желамая длина шифра</label>
-                        <!--подсказка: если шифруемый текст меньше длины шифра - фейковая длина не будет достигнута-->
-                        <!-- гаврилов
-                         не работает параметр required -->
-                        <input type="number" placeholder="мин. 50 макс. 899" id="cipherLength" min="50" max="100" required="required" value="50">
-                        <label for="cipherCount">Кол-во шифров</label>
-                        <input type="numberа" placeholder="мин. 1 макс. 20" id="cipherCount" min="0" max="100" value="1" required>
-                    </div>
-                </div>
-                <div id="content__encrypt-block__salt" class="content__input-block input-block--minor">
-                    <div class="input-block__field-row">
-                        <!-- <label for="cipherSalt">Соль для шифра</label> -->
-                        <textarea type="text" placeholder="Введите текст" id="cipherSalt" class="cipher-salt-input"></textarea>
-                        <div class="input-block__icon-block">
-                            <!-- <div  > -->
-                                <svg class="input-block__icon-block__icon" id="api-get-cipher-salt" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="25" height="25" viewBox="0,0,256,256"><g fill="#ffffff" fill-rule="nonzero" stroke="none" stroke-width="1" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10" stroke-dasharray="" stroke-dashoffset="0" font-family="none" font-weight="none" font-size="none" text-anchor="none" style="mix-blend-mode: normal"><g transform="scale(10.66667,10.66667)"><path d="M7,5c-3.84545,0 -7,3.15455 -7,7c0,3.84545 3.15455,7 7,7c2.77499,0 5.08941,-1.6853 6.27148,-4h2.72852v3h6v-3h2v-6h-1h-9.71289c-1.11451,-2.32444 -3.44795,-4 -6.28711,-4zM7,7c2.28025,0 4.09251,1.421 4.75586,3.32813l0.23242,0.67188h10.01172v2h-2v3h-2v-3h-5.98242l-0.24805,0.63477c-0.75942,1.94073 -2.60543,3.36523 -4.76953,3.36523c-2.75455,0 -5,-2.24545 -5,-5c0,-2.75455 2.24545,-5 5,-5zM7,9c-1.64501,0 -3,1.35499 -3,3c0,1.64501 1.35499,3 3,3c1.64501,0 3,-1.35499 3,-3c0,-1.64501 -1.35499,-3 -3,-3zM7,11c0.56413,0 1,0.43587 1,1c0,0.56413 -0.43587,1 -1,1c-0.56413,0 -1,-0.43587 -1,-1c0,-0.56413 0.43587,-1 1,-1z"></path></g></g></svg>
-                            <!-- </div> -->
-                            <!-- <div  > -->
-                                <svg class="input-block__icon-block__icon icon--copy" id="copy-cipher-salt" width="1.3em" height="1.3em" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="3" y="5" width="8" height="10" stroke="currentColor" stroke-width="1.5"/><rect x="5" y="3" width="8" height="10" stroke="currentColor" stroke-width="1.5"/></svg>
-                            <!-- </div> -->
+                <form>
+                    <div id="content__encrypt-block__encrypt" class="content__input-block">
+                        <div class="input-block__field-row">
+                            <label for="encryptText">Текст для шифрования</label>
+                            <textarea type="text" placeholder="Введите текст" id="encryptText" required></textarea>
                         </div>
-                        <!-- <i id="api-get-cipher-salt" class="fa fa-refresh" aria-hidden="true"></i> -->
-                    </div>
-                    <div class="content__input-block__block-slide">
-                        <!-- <i class="fa fa-chevron-down"></i> -->
-                        <svg class="input-block__block-slide__icon-arrow" width="1em" height="1em" viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1 4L5 8L9 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
-                        Соль для шифра
-                    </div>
-                </div>
-                <div id="content__encrypt-block__key" class="content__input-block input-block--minor">
-                    <div class="input-block__field-row">
-                        <!-- <label for="cipherSalt">Ключ для шифра</label> -->
-                        <textarea type="text" placeholder="Введите текст" id="cipherKey"></textarea>
-                        <div class="input-block__icon-block">
-                            <!-- <div  > -->
-                                <svg id="api-get-cipher-key" class="input-block__icon-block__icon" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="25" height="25" viewBox="0,0,256,256"><g fill="#ffffff" fill-rule="nonzero" stroke="none" stroke-width="1" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10" stroke-dasharray="" stroke-dashoffset="0" font-family="none" font-weight="none" font-size="none" text-anchor="none" style="mix-blend-mode: normal"><g transform="scale(10.66667,10.66667)"><path d="M7,5c-3.84545,0 -7,3.15455 -7,7c0,3.84545 3.15455,7 7,7c2.77499,0 5.08941,-1.6853 6.27148,-4h2.72852v3h6v-3h2v-6h-1h-9.71289c-1.11451,-2.32444 -3.44795,-4 -6.28711,-4zM7,7c2.28025,0 4.09251,1.421 4.75586,3.32813l0.23242,0.67188h10.01172v2h-2v3h-2v-3h-5.98242l-0.24805,0.63477c-0.75942,1.94073 -2.60543,3.36523 -4.76953,3.36523c-2.75455,0 -5,-2.24545 -5,-5c0,-2.75455 2.24545,-5 5,-5zM7,9c-1.64501,0 -3,1.35499 -3,3c0,1.64501 1.35499,3 3,3c1.64501,0 3,-1.35499 3,-3c0,-1.64501 -1.35499,-3 -3,-3zM7,11c0.56413,0 1,0.43587 1,1c0,0.56413 -0.43587,1 -1,1c-0.56413,0 -1,-0.43587 -1,-1c0,-0.56413 0.43587,-1 1,-1z"></path></g></g></svg>
-                            <!-- </div> -->
-                            <!-- <div > -->
-                                <svg class="input-block__icon-block__icon icon--copy" width="1.3em" height="1.3em" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="3" y="5" width="8" height="10" stroke="currentColor" stroke-width="1.5"/><rect x="5" y="3" width="8" height="10" stroke="currentColor" stroke-width="1.5"/></svg>
-                            <!-- </div> -->
+                        <div class="input-block__field-row field-row--two-fields">
+                            <label for="cipherLength">Желамая длина шифра</label>
+                            <!--подсказка: если шифруемый текст меньше длины шифра - фейковая длина не будет достигнута-->
+                            <!-- гаврилов
+                            не работает параметр required -->
+                            <input type="number" placeholder="мин. 50 макс. 899" id="cipherLength" min="50" max="100" required="required" value="50">
+                            <label for="cipherCount">Кол-во шифров</label>
+                            <input type="numberа" placeholder="мин. 1 макс. 20" id="cipherCount" min="0" max="100" value="1" required>
                         </div>
-                        <!-- <i id="api-get-cipher-key" class="fa fa-refresh" aria-hidden="true"></i> -->
                     </div>
-                    <div class="content__input-block__block-slide">
-                        <!-- <i class="fa fa-chevron-down"></i> -->
-                        <svg class="input-block__block-slide__icon-arrow" width="1em" height="1em" viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1 4L5 8L9 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
-                        Ключ для шифра
+                    <div id="content__encrypt-block__salt" class="content__input-block input-block--minor">
+                        <div class="input-block__field-row">
+                            <!-- <label for="cipherSalt">Соль для шифра</label> -->
+                            <textarea type="text" placeholder="Введите текст" id="cipherSalt" class="cipher-salt-input"></textarea>
+                            <div class="input-block__icon-block">
+                                <!-- <div  > -->
+                                    <svg class="input-block__icon-block__icon" id="api-get-cipher-salt" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="25" height="25" viewBox="0,0,256,256"><g fill="#ffffff" fill-rule="nonzero" stroke="none" stroke-width="1" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10" stroke-dasharray="" stroke-dashoffset="0" font-family="none" font-weight="none" font-size="none" text-anchor="none" style="mix-blend-mode: normal"><g transform="scale(10.66667,10.66667)"><path d="M7,5c-3.84545,0 -7,3.15455 -7,7c0,3.84545 3.15455,7 7,7c2.77499,0 5.08941,-1.6853 6.27148,-4h2.72852v3h6v-3h2v-6h-1h-9.71289c-1.11451,-2.32444 -3.44795,-4 -6.28711,-4zM7,7c2.28025,0 4.09251,1.421 4.75586,3.32813l0.23242,0.67188h10.01172v2h-2v3h-2v-3h-5.98242l-0.24805,0.63477c-0.75942,1.94073 -2.60543,3.36523 -4.76953,3.36523c-2.75455,0 -5,-2.24545 -5,-5c0,-2.75455 2.24545,-5 5,-5zM7,9c-1.64501,0 -3,1.35499 -3,3c0,1.64501 1.35499,3 3,3c1.64501,0 3,-1.35499 3,-3c0,-1.64501 -1.35499,-3 -3,-3zM7,11c0.56413,0 1,0.43587 1,1c0,0.56413 -0.43587,1 -1,1c-0.56413,0 -1,-0.43587 -1,-1c0,-0.56413 0.43587,-1 1,-1z"></path></g></g></svg>
+                                <!-- </div> -->
+                                <!-- <div  > -->
+                                    <svg class="input-block__icon-block__icon icon--copy" id="copy-cipher-salt" width="1.3em" height="1.3em" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="3" y="5" width="8" height="10" stroke="currentColor" stroke-width="1.5"/><rect x="5" y="3" width="8" height="10" stroke="currentColor" stroke-width="1.5"/></svg>
+                                <!-- </div> -->
+                            </div>
+                            <!-- <i id="api-get-cipher-salt" class="fa fa-refresh" aria-hidden="true"></i> -->
+                        </div>
+                        <div class="content__input-block__block-slide">
+                            <!-- <i class="fa fa-chevron-down"></i> -->
+                            <svg class="input-block__block-slide__icon-arrow" width="1em" height="1em" viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1 4L5 8L9 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+                            Соль для шифра
+                        </div>
                     </div>
-                </div>
-                <button type="button" id="content__encrypt-block__encrypt-btn" class="content__input-block__submit-btn">Зашифровать</button>
+                    <div id="content__encrypt-block__key" class="content__input-block input-block--minor">
+                        <div class="input-block__field-row">
+                            <!-- <label for="cipherSalt">Ключ для шифра</label> -->
+                            <textarea type="text" placeholder="Введите текст" id="cipherKey"></textarea>
+                            <div class="input-block__icon-block">
+                                <!-- <div  > -->
+                                    <svg id="api-get-cipher-key" class="input-block__icon-block__icon" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="25" height="25" viewBox="0,0,256,256"><g fill="#ffffff" fill-rule="nonzero" stroke="none" stroke-width="1" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10" stroke-dasharray="" stroke-dashoffset="0" font-family="none" font-weight="none" font-size="none" text-anchor="none" style="mix-blend-mode: normal"><g transform="scale(10.66667,10.66667)"><path d="M7,5c-3.84545,0 -7,3.15455 -7,7c0,3.84545 3.15455,7 7,7c2.77499,0 5.08941,-1.6853 6.27148,-4h2.72852v3h6v-3h2v-6h-1h-9.71289c-1.11451,-2.32444 -3.44795,-4 -6.28711,-4zM7,7c2.28025,0 4.09251,1.421 4.75586,3.32813l0.23242,0.67188h10.01172v2h-2v3h-2v-3h-5.98242l-0.24805,0.63477c-0.75942,1.94073 -2.60543,3.36523 -4.76953,3.36523c-2.75455,0 -5,-2.24545 -5,-5c0,-2.75455 2.24545,-5 5,-5zM7,9c-1.64501,0 -3,1.35499 -3,3c0,1.64501 1.35499,3 3,3c1.64501,0 3,-1.35499 3,-3c0,-1.64501 -1.35499,-3 -3,-3zM7,11c0.56413,0 1,0.43587 1,1c0,0.56413 -0.43587,1 -1,1c-0.56413,0 -1,-0.43587 -1,-1c0,-0.56413 0.43587,-1 1,-1z"></path></g></g></svg>
+                                <!-- </div> -->
+                                <!-- <div > -->
+                                    <svg class="input-block__icon-block__icon icon--copy" width="1.3em" height="1.3em" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="3" y="5" width="8" height="10" stroke="currentColor" stroke-width="1.5"/><rect x="5" y="3" width="8" height="10" stroke="currentColor" stroke-width="1.5"/></svg>
+                                <!-- </div> -->
+                            </div>
+                            <!-- <i id="api-get-cipher-key" class="fa fa-refresh" aria-hidden="true"></i> -->
+                        </div>
+                        <div class="content__input-block__block-slide">
+                            <!-- <i class="fa fa-chevron-down"></i> -->
+                            <svg class="input-block__block-slide__icon-arrow" width="1em" height="1em" viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1 4L5 8L9 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+                            Ключ для шифра
+                        </div>
+                    </div>
+                    <div class="content-block__btn-block">
+                        <button type="button" id="content__encrypt-block__encrypt-submit" class="content__input-block__submit-btn">Зашифровать</button>
+                        <button type="reset" class="content__encrypt-block__encrypt-clear">Очистить</button>
+                    </div>
+                </form>
             </div>
             <div id="cipher-content__decrypt-block" class="cipher-content__block">
-                <div id="content__decrypt-block__input" class="content__input-block">
-                    <div class="input-block__field-row">
-                        <label for="decryptText">Текст для расшифровки</label>
-                        <textarea type="text" placeholder="Введите текст" id="decryptText"></textarea>
+                <form>
+                    <div id="content__decrypt-block__input" class="content__input-block">
+                        <div class="input-block__field-row">
+                            <label for="decryptText">Текст для расшифровки</label>
+                            <textarea type="text" placeholder="Введите текст" id="decryptText"></textarea>
+                        </div>
                     </div>
-                </div>
-                <div id="content__decrypt-block__decrypt" class="content__input-block input-block--minor">
-                    <div class="input-block__field-row">
-                        <!-- <label for="cipherSalt_decrypt">Соль для шифра</label> -->
-                        <textarea type="text" placeholder="Введите текст" id="cipherSalt_decrypt" class="cipher-salt-input"></textarea>
+                    <div id="content__decrypt-block__decrypt" class="content__input-block input-block--minor">
+                        <div class="input-block__field-row">
+                            <!-- <label for="cipherSalt_decrypt">Соль для шифра</label> -->
+                            <textarea type="text" placeholder="Введите текст" id="cipherSalt_decrypt" class="cipher-salt-input"></textarea>
+                        </div>
+                        <div class="content__input-block__block-slide">
+                            <!-- <i class="fa fa-chevron-down"></i> -->
+                            <svg class="input-block__block-slide__icon-arrow" width="1em" height="1em" viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1 4L5 8L9 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+                            Соль для шифра
+                        </div>
                     </div>
-                    <div class="content__input-block__block-slide">
-                        <!-- <i class="fa fa-chevron-down"></i> -->
-                        <svg class="input-block__block-slide__icon-arrow" width="1em" height="1em" viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1 4L5 8L9 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
-                        Соль для шифра
+                    <div id="content__decrypt-block__key" class="content__input-block input-block--minor">
+                        <div class="input-block__field-row">
+                            <!-- <label for="cipherSalt">Ключ для шифра</label> -->
+                            <textarea type="text" placeholder="Введите текст" id="cipher-key--decrypt"></textarea>
+                        </div>
+                        <div class="content__input-block__block-slide">
+                            <!-- <i class="fa fa-chevron-down"></i> -->
+                            <svg class="input-block__block-slide__icon-arrow" width="1em" height="1em" viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1 4L5 8L9 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+                            Ключ для шифра
+                        </div>
                     </div>
-                </div>
-                <div id="content__decrypt-block__key" class="content__input-block input-block--minor">
-                    <div class="input-block__field-row">
-                        <!-- <label for="cipherSalt">Ключ для шифра</label> -->
-                        <textarea type="text" placeholder="Введите текст" id="cipher-key--decrypt"></textarea>
+                    <div id="content__decrypt-block__result"></div>
+                    <div class="content-block__btn-block">
+                        <button type="button" id="content__decrypt-block__decrypt-btn" class="content__input-block__submit-btn">Расшифровать</button>
+                        <button type="reset" class="content__encrypt-block__encrypt-clear">Очистить</button>
                     </div>
-                    <div class="content__input-block__block-slide">
-                        <!-- <i class="fa fa-chevron-down"></i> -->
-                        <svg class="input-block__block-slide__icon-arrow" width="1em" height="1em" viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1 4L5 8L9 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
-                        Ключ для шифра
-                    </div>
-                </div>
-                <div id="content__decrypt-block__result"></div>
-                <button type="button" id="content__decrypt-block__decrypt-btn" class="content__input-block__submit-btn">Расшифровать</button>
+                </form>
             </div>
         </div>
         <div id="content__encrypt-block__result">   

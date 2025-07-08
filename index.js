@@ -409,7 +409,7 @@ function clearDecryptText()
 
 
 //Шифрование текста
-document.getElementById('content__encrypt-block__encrypt-btn').addEventListener('click', async function () {
+document.getElementById('content__encrypt-block__encrypt-submit').addEventListener('click', async function () {
     let encryptText = document.getElementById('encryptText').value.trim(),
         encryptFakeLength = document.getElementById('cipherLength').value,
         resultCipherCount = document.getElementById('cipherCount').value || 1,
