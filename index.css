@@ -404,6 +404,8 @@ textarea{
 
 
 #cipher-content{
+  margin: 60px 0;
+
 
     & .result-text-block{
       transition: 0.3s;
@@ -447,9 +449,21 @@ textarea{
         margin: 10px;
         box-shadow: 0 0 5px 3px grey;
         /* padding-bottom: 50px; */
-        background: transparent;
+        background: #fffdeb;
         position: relative;
         
+        &:before{
+          z-index: -1;
+          position: absolute;
+          top: -45px;
+          left: 50px;
+          font-size: 1.2rem;
+          border: 2px solid #c6c6c6;
+          color: black;
+          padding: 10px;
+          border-radius: 5px;
+        }
+
         &>form{
           /* position: relative; */
           height: 100%;
@@ -507,6 +521,7 @@ textarea{
         & .content-block__btn-block{
           /* position: absolute;
           bottom: 10px; */
+          position: relative;
 
           &>.content__encrypt-block__encrypt-clear{
             background: #fffdeb;
@@ -595,7 +610,12 @@ textarea{
 
       &>#cipher-content__encrypt-block{
           color: white;
-          /* flex-basis: 50%; */
+          position: relative;
+
+          &:before{
+            content: "Шифрование";
+            background: #eeeefe;
+          } 
 
           &>#content__encrypt-block__result{
             overflow-y: scroll;
@@ -671,6 +691,11 @@ textarea{
       }
 
       & #cipher-content__decrypt-block{
+
+        &:before{
+          content: "Расшифровка";
+          background: #fff1de;
+        }
 
         & .content__input-block{
           box-shadow: 0px 4px 6px 1px #564022;
