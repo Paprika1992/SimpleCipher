@@ -458,7 +458,7 @@ textarea{
           top: -45px;
           left: 50px;
           font-size: 1.2rem;
-          border: 2px solid #c6c6c6;
+          /* border: 2px solid #c6c6c6; */
           color: black;
           padding: 10px;
           border-radius: 5px;
