@@ -470,8 +470,7 @@ textarea{
           display: flex;
             flex-direction: column;
             align-content: space-between;
-            
-            justify-content: space-between;
+            justify-content: flex-start;
 
           &>.content__input-block{
             padding: 10px;
@@ -522,6 +521,7 @@ textarea{
           /* position: absolute;
           bottom: 10px; */
           position: relative;
+          margin-top: auto;
 
           &>.content__encrypt-block__encrypt-clear{
             background: #fffdeb;
@@ -685,7 +685,7 @@ textarea{
             z-index: 9;
             background: var(--color_blue_minor);
             background: #7474ab;
-            transform: translateY(-25px);
+            transform: translateY(-10px);
 
             /* &>.input-block__field-row{
               height: 0;
@@ -697,7 +697,7 @@ textarea{
             z-index: 8;
             /* transform: translateY(-100%); */
             background: #a9a9d5;
-            transform: translateY(-50px);
+            transform: translateY(-20px);
             /* background: var(--color_blue_minor); */
 
              &>.input-block__field-row{

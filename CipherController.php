@@ -363,6 +363,8 @@ class CipherController
     }
 
 
+    
+
     #Гаврилов
     //ПРОВЕРЬ КАЖДУЮ ПРОВЕРКУ ВНУТРИ МЕТОДА
     /**
@@ -378,19 +380,10 @@ class CipherController
         $cipherKey_second = mb_substr($cipherKey, $cipherLengh);
         $cipherKey_first_arr = preg_split('//u', $cipherKey_first, -1, PREG_SPLIT_NO_EMPTY);
         $cipherKey_second_arr = preg_split('//u', $cipherKey_second, -1, PREG_SPLIT_NO_EMPTY);
-
-        // if (!$this->checkInvalidChars($cipherKey_first, SimpleCipher::getFakeCipherKey()) || !$this->checkInvalidChars($cipherKey_second, SimpleCipher::getFakeCipherKey())) {
-        //     // var_dump('da1');
-        //     return false;
-        // }
-
         //Каждый ключ должен быть конкретной длины (как фейковый ключ, сформированный на основании одного из реальных ключей)
         if (count(array_unique($cipherKey_first_arr)) !== $cipherLengh || mb_strlen($cipherKey) !== $cipherLengh * 2 || count(array_unique($cipherKey_second_arr)) !== $cipherLengh) {
             return false;
         }
-
-        //Правильно ли я понимаю, что с помощью base_64 можно закодировать любой символ в сочетание латинских букв и чисел? спецсимвол, например ‰ или китайский иероглиф или эмодзи?
-
         //Проверяем расстояние Хэмминга. Какое количество символов одного массива символов ключа находится на тех же позициях, что и символы второго массива символов ключа
         $HammingDistance = 0;
         foreach ($cipherKey_first_arr as $symbKey => $symb){
@@ -398,13 +391,10 @@ class CipherController
                 $HammingDistance++;
             }
         }
-
         if ($HammingDistance / $cipherLengh > 0.3) {
-            // var_dump('da3');
             return false;
         }
-
-        //Проверяем пересечение биграмм ключей шифра. Неважно на какой позиции они находятся в двух ключах, но если биграмм больше 25% - считаем, что ключи недостаточно отличаются
+        //Проверяем пересечение биграмм ключей шифра. Неважно на какой позиции они находятся в двух ключах, но если биграмм больше 25% от количества биграмм в шифре ВСЕГО, считаем, что ключи недостаточно отличаются
         $bigrammCipherKeyArr = [];
         $n = 0;
         while ($n < $cipherLengh) {
@@ -413,12 +403,9 @@ class CipherController
             }
             $n = $n + 2;
         }
- 
         if (count($bigrammCipherKeyArr) / ($cipherLengh / 2) > 0.25) {
-            // var_dump('da4');
             return false;
         }
-
         return true;
     }
     

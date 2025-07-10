@@ -378,6 +378,7 @@ function getPrivateData (data)
 //ПРИ КЛИКЕ ПО КНОПКЕ "РАСШИФРОВАТЬ" НЕМНОГО ВЫДВИГАТЬ И ПОДСВЕЧИВАТЬ ВЫБРАННЫЙ ЭЛЕМЕНТ  
 
 //Клик по кнопке расшифровать напротив каждого результата шифрования
+//ПЕРЕПИСАТЬ КЛИК ПО КНОПКЕ ДЕШИФРОВАТЬ, НАЗНАЧИВ СЛУШАТЕЛЬ ДЛЯ КАЖДОЙ КНОПКИ ПО КОЛЛЕКЦИИ
 document.addEventListener('click', function(event) {
   if (event.target.classList.contains('content__encrypt-block__result__parent__call-decrypt')) {
     
@@ -389,6 +390,10 @@ document.addEventListener('click', function(event) {
     //document.getElementById('content__decrypt-block__input__decrypt').click()
 
         clearDecryptText();
+
+    document.getElementById('cipher-content__decrypt-block').scrollIntoView({
+        behavior: 'smooth'
+    });
 
   }
     //prevResulst = document.querySelector('.content__decrypt-block__result__parent');
@@ -539,7 +544,10 @@ document.getElementById('content__encrypt-block__encrypt-submit').addEventListen
 
         encryptErrArr = [...new Set(encryptErrArr)];
         console.log(encryptErrArr)
-        // console.log(encryptPromisesArr)
+
+    document.getElementById('content__encrypt-block__result').scrollIntoView({
+        behavior: 'smooth'
+    });
 })
 
 const navigationElem = document.querySelectorAll('.navigation__block__title');
