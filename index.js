@@ -602,7 +602,7 @@ document.getElementById('api-get-cipher-key').addEventListener('click', () => {
 //#Гаврилов
 //НАВЕСЬ ФУНКЦИИ-ОБРАБОТЧИКИ ПРЯМО В HTML ЭЛЕМЕНТЫ, НАПРИМЕР НА АТРИБУТ ONCHANGE  
 
-const sliderCollection = Array.from(document.querySelectorAll('.content__input-block__block-slide'));
+//const sliderCollection = Array.from(document.querySelectorAll('.content__input-block__block-slide'));
 
 let encrpytSlidersCollection = document.querySelectorAll("#cipher-content__encrypt-block .content__input-block__block-slide"),
     decryptSlidersCollection = document.querySelectorAll("#cipher-content__decrypt-block .content__input-block__block-slide"),
@@ -628,14 +628,34 @@ decryptSlidersCollection.forEach(function(el, index) {
     el.addEventListener('click', slideBlock(index))   
 })
 
-//Разворачивание слайдера
+//Работа со слайдером
 function slideBlock(index) 
 {
-    //Возвращаем замыкание, в котором получаем параметр события клика (event) и, ориентируясь на него, раскрываем или скрываем такой же блок, но в соседнем разделе (если слайдер нашат в блоке шифровании - раскрываем тот же блок в разделе дешифрования и наоборот) 
+    //Возвращаем замыкание, в котором получаем параметр события клика (event) и, ориентируясь на него, раскрываем или скрываем такой же блок, но в соседнем разделе (если слайдер нажат в блоке шифровании - раскрываем тот же блок в разделе дешифрования и наоборот) 
     return function(event) {
-        let siblingBlock = event.currentTarget.closest('#cipher-content__encrypt-block') ? decryptSlidersCollection : encrpytSlidersCollection
-        let sliderParentBlock = event.currentTarget.parentElement;
+        let parentBlock,
+            siblingBlock = event.currentTarget.closest('#cipher-content__encrypt-block') ? decryptSlidersCollection : encrpytSlidersCollection,
+            sliderParentBlock = event.currentTarget.parentElement;
+        parentBlock = siblingBlock[index].closest('.input-block--minor').id
         if (sliderParentBlock.classList.contains('visible')) {
+            let sliderField = document.querySelector(`#${sliderParentBlock.id}` + " textarea"),
+                siblingSliderField = document.querySelector(`#${siblingBlock[index].closest('.input-block--minor').id}` + " textarea")
+            if (sliderField.value.length) {
+                sliderField.classList.add('shake')
+                setTimeout( () => {
+                    sliderField.classList.remove('shake')
+                }, 1000)
+
+                return;
+            } 
+            if (siblingSliderField.value.length) {
+                siblingSliderField.classList.add('shake')
+                setTimeout( () => {
+                    siblingSliderField.classList.remove('shake')
+                }, 1000)
+
+                return;
+            }
             sliderParentBlock.classList.remove('visible')
             siblingBlock[index].parentElement.classList.remove('visible')
         } else {

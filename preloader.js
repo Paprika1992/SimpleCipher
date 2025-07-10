@@ -15,7 +15,7 @@ function preloader__show()
 {
     preloaderBlock.classList.add('visible')
     sapphireShine = setInterval(function()
-    {   console.log('here')
+    {   
         let activeBlocks = document.querySelectorAll('.triangle.triangle-colored');
         if (activeBlocks.length) {
             activeBlocks[0].classList.remove('triangle-colored')
@@ -34,7 +34,7 @@ function preloader__show()
         // triangleBlocks[coloredBLockNum].innerHTML = "<div class='triangle-text'>" + symbolsArr[Math.floor(Math.random() * symbolsArr.length)] + "</div>";
         triangleBlocks[coloredBLockNum].classList.add('triangle-colored')
         prevSapphireColor = coloredBLockNum;
-    }, 300)
+    }, 200)
 }
 
 function preloader__hide()
