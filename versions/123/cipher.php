@@ -12,8 +12,6 @@ ini_set('xdebug.var_display_max_depth', -1); // без ограничения г
 ini_set('xdebug.var_display_max_children', -1); // без ограничения количества элементов
 ini_set('xdebug.var_display_max_data', -1); // без ограничения длины строк
 
-//TODO
-//проверь на уникальность все символы и подумай какие спецсимволы можно добавить
 
 class SimpleCipher
 {
@@ -535,28 +533,39 @@ class SimpleCipher
 	}
 
 
-
+	/**
+	 * Метод трансформирует пользовательскую соль, основываясь на пользовательском ключе
+	 *
+	 * @param array $userKeyArr массив двух пользовательских ключей
+	 * @return void
+	 */
 	private function transformSaltByUserKey(array $userKeyArr): void
 	{
+		//Вычленяем латинские символы и цифры из первого и второго ключей 
 		$firstClearUserKey = $this->getStrArr(preg_replace('/[^0-9a-zA-Z]/', '', $userKeyArr[0]));
 		$secondClearUserKey = $this->getStrArr(preg_replace('/[^0-9a-zA-Z]/', '', $userKeyArr[1]));
-
+		//Цикл замены в соли символов, встречающихся в 1м ключе символами, встречающимся во 2м ключе
+		$shift = 1;		//Переменная нужна для того, чтобы с помощью нее учитывать расположение символов в массивах при совершении замены в соли. Без этойп переменной если пара символов в двух ключах перемещалась на другую позицию, но относительно друг друга оставалась на одной и той же позиции, фактического запутывания соли не происходило.
 		foreach ($firstClearUserKey as $symbKey => $symbVal){
 			$this->salt = str_replace($symbVal, '*', $this->salt);
-			$this->salt = str_replace($secondClearUserKey[$symbKey], $symbVal, $this->salt);
-			$this->salt = str_replace('*', $secondClearUserKey[$symbKey], $this->salt);
+			$shift = ($symbKey + $shift >= count($secondClearUserKey) ? $shift - count($secondClearUserKey) : $shift);
+			$this->salt = str_replace($secondClearUserKey[$symbKey + $shift], $symbVal, $this->salt);
+			$this->salt = str_replace('*', $secondClearUserKey[$symbKey + $shift], $this->salt);
+			$shift++;
 		}
 	}
 
 
-
+	/**
+	 * Метод возвращает число, основанное на позиционировании символов в ключах относительно друг друга. Уникальное число будет суммироваться с хэшом соли и таким образом преобразовывать ее
+	 *
+	 * @param array $userKeyArr массив ключей шифра
+	 * @return integer
+	 */
 	private function getUserKeySymbSumm(array $userKeyArr): int
 	{
-		$saltArr = $this->getStrArr($this->salt);
 		$firstClearUserKey = $this->getStrArr(preg_replace('/[0-9a-zA-Z]/', '', $userKeyArr[0]));
 		$secondClearUserKey = $this->getStrArr(preg_replace('/[0-9a-zA-Z]/', '', $userKeyArr[1]));
-
-		var_dump($userKeyArr);
 
 		$resultSum = 0;
 
@@ -568,14 +577,17 @@ class SimpleCipher
 		// }
 		//$secondUserKeyArr = $this->getStrArr($userKeyArr[1]);
 		foreach ($firstClearUserKey as $symbKey => $symbVal){
+			$secondSymbKey = array_search($symbVal, $secondClearUserKey);
 			// if (preg_match('/[a-zA-Z0-9]/', $symbVal)) {
 				// var_dump($symbVal);
 				//Получаем разницу между позициями найденного символа во втором массиве и в первом. На этой позиции во втором пользовательском ключе будет находиться символ, заменяющий символ из первого пользовательского ключа в соли
-				$symbDiff = array_search($symbVal, $secondClearUserKey) - $symbKey;
+				$symbDiff = $secondSymbKey - $symbKey;
 				//Если разница отрицательная, выводим ее в плюс
 				$symbDiff = (int)str_replace('-', '', $symbDiff);
-
+				
 				$resultSum += $symbDiff;
+
+				$resultSum = ($resultSum + ($symbKey % 2 === 0 ? $secondSymbKey : $symbKey));
 
 				$resultSum = ($symbKey % 2 === 0 ? pow($resultSum * 3.14, 2) : sqrt($resultSum / 3.14));
 				// $replaceSymb = $secondClearUserKey[$symbDiff];
@@ -591,7 +603,7 @@ class SimpleCipher
 			// }
 		}
 
-		var_dump($resultSum);
+		// var_dump($resultSum);
 		$resultSum = str_replace('.', '', substr($resultSum . "", 0, 11));
 		// var_dump($resultSum . "");
 		// $symbArrDiff = array_map(function($el){return ;});
@@ -2075,14 +2087,10 @@ $saltNew = $salt;
 	#Гаврилов
 	//ПОПРОБУЙ ТУТ СИНТАКСИЧЕСКИЕ ОШИБКИи, ОШИБКИ ПАРСИНГА ПО КОДУ И ОБРАТИСЬ С ОПЕРАЦИЕЙ ШИФРОВАНИЯ ИЗ ИНТЕФЕЙСА. ВО-ПЕРВЫХ, ОШИБКА ДОЛЖНА ЗАЛОГИРОВАТЬСЯ, ВО ВТОРЫХ ДЕЛАТЕЛЬНО, ЧТОБЫ В КОНСОЛИ НЕ БЫЛО ВИДНО, ЧТО ЗА ОШИБКА (УБРАТЬ ЗАГОЛОВКИ ОТОБРАЖЕНИЯ ОШИБОК?), В ТРЕТЬИХ ПОЛЬЗОВАТЕЛЬ ДОЛЖЕН ПОЛУЧИТЬ КОРРЕКТНЫЙ ОТВЕТ. ПРИ ШИФРОВАНИИ ОШИКУ, ПРИ ДЕШИФРОВКЕ ОШИБКУ ИЛИ ПРОСТО КРИВОЙ ШИФР? ЧТО БЕЗОПАСНЕЕ?
 
-	// die();
-	$testCipher = (new SimpleCipher($cipherText, $salt))->encryptText(50, $userKey);
-	echo '<pre>'; var_dump($testCipher); echo'</pre>';
-	$decryptText = (new SimpleCipher($testCipher, $salt))->decryptText($userKey);
-	echo '<pre>'; var_dump($decryptText); echo'</pre>';
-
-
-
+	// $testCipher = (new SimpleCipher($cipherText, $salt))->encryptText(50, $userKey);
+	// echo '<pre>'; var_dump($testCipher); echo'</pre>';
+	// $decryptText = (new SimpleCipher($testCipher, $salt))->decryptText($userKey);
+	// echo '<pre>'; var_dump($decryptText); echo'</pre>';
 
 	//ПРОБЛЕМА КЛЮЧА. ЕСЛИ УИТЫВАТЬ ТОЛЬКО ОТНОСИТЕЛЬНУЮ ПОЗИЦИЮ В СИМВОЛАХ МЕЖДУ КЛЮЧАМИ, МОЖНО НАТКНУТЬСЯ НА КОЛЛИЗИЮ. НАПРИМЕР, ТЫ ПРОВЕРЯЕШЬ ОТНОСИТЕЛЬНУЮ ПОЗИЦИЮ ОДИНАКОВЫХ СПЕЦСИМВОЛОВ МЕЖДУ СОБОЙ В КЛЮЧАХ. ЕСЛИ У СПЕЦСИМВОЛОВ ОДИНАКОВАЯ ПОЗИЦИЯ В КЛЮЧАХ И ИХ ПОМЕНЯТЬ МЕСТАМИ С ДРУГИМИ СПЕЦСИМВОЛАМИ, НАПРИМЕР БЫЛО [1]*=>1, _=>5, [2]*=>1, _=>8, СТАЛО [1]_=>1, *=>5, [2]_=>1, *=>8 - РАСШИФРОВКА ПРОИЗОЙДЕТ
 	//ВАРИАНТЫ РЕШЕНИЯ - ПРИ ПОЛУЧЕНИИ КЛЮЧА ПРИ ШИФРОВАНИИ ФОРМИРОВАТЬ МАССИВ СПЕЦСИМВОЛОВ И КИРИЛЛИЦЫ, ВЗЯТЫХ ИЗ ПОЛЬЗ КЛЮЧА И ИСПОЛЬЗОВАТЬ ИНДЕКСЫ (ПОЗИЦИИ) ПРИ ТРАНСФОРМАЦИИ СОЛИ. ТОГДА ПРИ ПОДМЕНЕ. ЛИБО ЕСЛИ РАЗНИЦА В ПОЗИЦИЯХ РАВНА 0 - КАКИМ-ТО ОБРАЗОМ ЕЕ МЕНЯТЬ, ОПЯТЬ ЖЕ, УЧИТЫВАЯ ИНДЕКС ЭЛЕМЕНТОВ В МАССИВЕ. ИСПОЛЬЗОВАТЬ КОМБИНИРОВАННЫЙ ПОДХОД?
@@ -2113,9 +2121,9 @@ $saltNew = $salt;
 	// 	$s++;
 	// }
 
-	if ($decryptText !== $cipherText) {
-		var_dump('ОШИПКА!');
-	}
+	// if ($decryptText !== $cipherText) {
+	// 	var_dump('ОШИПКА!');
+	// }
 //  	$n++;
 // }
 
