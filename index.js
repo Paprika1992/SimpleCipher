@@ -283,18 +283,18 @@ function getCipherKey () {
 
 
 //Генерация соли для шифра
-document.getElementById('api-get-cipher-salt').addEventListener('click', async function(){
+document.getElementById('api-get-cipher-salt').addEventListener('click', async function()
+{
     let cipherSaltRqst = await getCipherSalt(),
         cipherSalt
     if (cipherSaltRqst.err) {
         alert(cipherSaltRqst.err)
         
         return;
-    } 
+    }
     cipherSalt = cipherSaltRqst.cipherSalt
-    console.log(cipherSalt)
-
     document.getElementById('cipherSalt').value = cipherSalt;
+    checkInputValueDiff(cipherSaltCollection)
 })
 
 
@@ -585,12 +585,8 @@ document.getElementById('api-get-cipher-key').addEventListener('click', () => {
         }).then(resultJson => {
             resultJson.json()
             .then(result => {
-                console.log(result)
                 document.getElementById('cipherKey').value = result.cipherKey;
-                // getCipherKeyFields.forEach( field => {
-                //     console.log(field)
-                //     field.value = result.cipherKey
-                // })
+                checkInputValueDiff(cipherKeyCollection)
             }).catch( () => {
                 console.log('net');
             })
@@ -602,7 +598,7 @@ document.getElementById('api-get-cipher-key').addEventListener('click', () => {
 //#Гаврилов
 //НАВЕСЬ ФУНКЦИИ-ОБРАБОТЧИКИ ПРЯМО В HTML ЭЛЕМЕНТЫ, НАПРИМЕР НА АТРИБУТ ONCHANGE  
 
-const sliderCollection = Array.from(document.querySelectorAll('.content__input-block__block-slide'));
+//const sliderCollection = Array.from(document.querySelectorAll('.content__input-block__block-slide'));
 
 let encrpytSlidersCollection = document.querySelectorAll("#cipher-content__encrypt-block .content__input-block__block-slide"),
     decryptSlidersCollection = document.querySelectorAll("#cipher-content__decrypt-block .content__input-block__block-slide"),
@@ -628,14 +624,34 @@ decryptSlidersCollection.forEach(function(el, index) {
     el.addEventListener('click', slideBlock(index))   
 })
 
-//Разворачивание слайдера
+//Работа со слайдером
 function slideBlock(index) 
 {
-    //Возвращаем замыкание, в котором получаем параметр события клика (event) и, ориентируясь на него, раскрываем или скрываем такой же блок, но в соседнем разделе (если слайдер нашат в блоке шифровании - раскрываем тот же блок в разделе дешифрования и наоборот) 
+    //Возвращаем замыкание, в котором получаем параметр события клика (event) и, ориентируясь на него, раскрываем или скрываем такой же блок, но в соседнем разделе (если слайдер нажат в блоке шифровании - раскрываем тот же блок в разделе дешифрования и наоборот) 
     return function(event) {
-        let siblingBlock = event.currentTarget.closest('#cipher-content__encrypt-block') ? decryptSlidersCollection : encrpytSlidersCollection
-        let sliderParentBlock = event.currentTarget.parentElement;
+        let parentBlock,
+            siblingBlock = event.currentTarget.closest('#cipher-content__encrypt-block') ? decryptSlidersCollection : encrpytSlidersCollection,
+            sliderParentBlock = event.currentTarget.parentElement;
+        parentBlock = siblingBlock[index].closest('.input-block--minor').id
         if (sliderParentBlock.classList.contains('visible')) {
+            let sliderField = document.querySelector(`#${sliderParentBlock.id}` + " textarea"),
+                siblingSliderField = document.querySelector(`#${siblingBlock[index].closest('.input-block--minor').id}` + " textarea")
+            if (sliderField.value.length) {
+                sliderField.classList.add('shake')
+                setTimeout( () => {
+                    sliderField.classList.remove('shake')
+                }, 1000)
+
+                return;
+            } 
+            if (siblingSliderField.value.length) {
+                siblingSliderField.classList.add('shake')
+                setTimeout( () => {
+                    siblingSliderField.classList.remove('shake')
+                }, 1000)
+
+                return;
+            }
             sliderParentBlock.classList.remove('visible')
             siblingBlock[index].parentElement.classList.remove('visible')
         } else {
@@ -644,6 +660,31 @@ function slideBlock(index)
         }  
     }    
 }
+
+
+const cipherSaltCollection = document.querySelectorAll('.cipher-salt-input');
+Array.from(cipherSaltCollection).forEach( el => {
+    el.addEventListener('input', () => checkInputValueDiff(cipherSaltCollection))
+})
+const cipherKeyCollection = document.querySelectorAll('.cipher-key-input');
+Array.from(cipherKeyCollection).forEach( el => {
+    el.addEventListener('input', () => checkInputValueDiff(cipherKeyCollection))
+})
+
+
+/**
+ * Метод сверки значений между инпутами формы шифрования и дешифрования. Если значения различаются, инпут дешифрования подсвечивается
+ * @param {array} collection коллекция элементов, в которых проверяется разница значений
+ */
+function checkInputValueDiff (collection)
+{
+    if (collection[0].value !== collection[1].value) {
+        collection[1].classList.add('input-value-diff')
+    } else {
+        collection[1].classList.remove('input-value-diff')
+    }
+}
+
 
 //Копирование и вставка значения из поля в блоке шифрования в поле дешифровки
 function insertValue(index) 
@@ -655,6 +696,7 @@ function insertValue(index)
             return;
         }
         decryptTextareaCollection[index].value = event.currentTarget.closest('.input-block__field-row').children[0].value
+        checkInputValueDiff(event.currentTarget.closest('#content__encrypt-block__salt') ? cipherSaltCollection : cipherKeyCollection)
     }
 }
 

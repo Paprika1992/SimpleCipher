@@ -552,10 +552,11 @@ textarea{
 
               &>.content__input-block__block-slide{
                 cursor: pointer;
-                /* transition: 0.3s; */
+                opacity: 0.3;
+                transition: 0.2s;
 
                 &:hover{
-
+                  opacity: 1;
                   /* &>.input-block__block-slide__icon-arrow{
                     transform: translateY(6px);
                   } */
@@ -572,6 +573,7 @@ textarea{
 
                 &>.cipher-salt-input{
                   height: 80px;
+
                 }
 
                 &>.fa-refresh{
@@ -583,6 +585,17 @@ textarea{
               & textarea {
                 height: 50px;
                 resize: vertical;
+
+                &.input-value-diff{
+                  box-shadow: inset 0px 0px 4px 4px #c37272;
+                }
+              }
+
+              &.visible{
+
+                &>.content__input-block__block-slide{
+                  opacity: 1;
+                }
               }
            }  
 
@@ -595,6 +608,17 @@ textarea{
              &.field-row--two-fields{
                 grid-template-columns: repeat(2, 1fr 2fr);
              } 
+
+             &>textarea{
+              transition: 0.5s;
+
+              &.shake{
+                animation-name: shakeTextarea;
+                animation-duration: 0.5s;
+                animation-iteration-count: 1;
+                animation-timing-function: ease-in-out;
+              }
+             }
           }  
         }
 
@@ -719,11 +743,13 @@ textarea{
       & #content__decrypt-block__decrypt{
         background: #fdddb3;
         z-index: 9;
+        transform: translateY(-10px);
       }
 
       & #content__decrypt-block__key{
         background: #fff1de;
         z-index: 8;
+        transform: translateY(-15px);
       }
 
     }
@@ -788,6 +814,33 @@ textarea{
           width: 0;
         }
       }
+
+  @keyframes shakeTextarea{
+    0% {
+      transform: translateX(0);
+    }
+    15% {
+      transform: translateX(10px);
+    }
+    30% {
+      transform: translateX(-10px);
+    }
+    45% {
+      transform: translateX(10px);
+    }
+    60% {
+      transform: translateX(-10px);
+    }
+    75% {
+      transform: translateX(5px);
+    }
+    90% {
+      transform: translateX(-5px);
+    }
+    100% {
+      transform: translateX(0);
+    }
+  }
 
    @keyframes shineSymb{
         from {
