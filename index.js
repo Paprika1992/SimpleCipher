@@ -283,18 +283,18 @@ function getCipherKey () {
 
 
 //Генерация соли для шифра
-document.getElementById('api-get-cipher-salt').addEventListener('click', async function(){
+document.getElementById('api-get-cipher-salt').addEventListener('click', async function()
+{
     let cipherSaltRqst = await getCipherSalt(),
         cipherSalt
     if (cipherSaltRqst.err) {
         alert(cipherSaltRqst.err)
         
         return;
-    } 
+    }
     cipherSalt = cipherSaltRqst.cipherSalt
-    console.log(cipherSalt)
-
     document.getElementById('cipherSalt').value = cipherSalt;
+    checkInputValueDiff(cipherSaltCollection)
 })
 
 
@@ -585,12 +585,8 @@ document.getElementById('api-get-cipher-key').addEventListener('click', () => {
         }).then(resultJson => {
             resultJson.json()
             .then(result => {
-                console.log(result)
                 document.getElementById('cipherKey').value = result.cipherKey;
-                // getCipherKeyFields.forEach( field => {
-                //     console.log(field)
-                //     field.value = result.cipherKey
-                // })
+                checkInputValueDiff(cipherKeyCollection)
             }).catch( () => {
                 console.log('net');
             })
@@ -665,6 +661,31 @@ function slideBlock(index)
     }    
 }
 
+
+const cipherSaltCollection = document.querySelectorAll('.cipher-salt-input');
+Array.from(cipherSaltCollection).forEach( el => {
+    el.addEventListener('input', () => checkInputValueDiff(cipherSaltCollection))
+})
+const cipherKeyCollection = document.querySelectorAll('.cipher-key-input');
+Array.from(cipherKeyCollection).forEach( el => {
+    el.addEventListener('input', () => checkInputValueDiff(cipherKeyCollection))
+})
+
+
+/**
+ * Метод сверки значений между инпутами формы шифрования и дешифрования. Если значения различаются, инпут дешифрования подсвечивается
+ * @param {array} collection коллекция элементов, в которых проверяется разница значений
+ */
+function checkInputValueDiff (collection)
+{
+    if (collection[0].value !== collection[1].value) {
+        collection[1].classList.add('input-value-diff')
+    } else {
+        collection[1].classList.remove('input-value-diff')
+    }
+}
+
+
 //Копирование и вставка значения из поля в блоке шифрования в поле дешифровки
 function insertValue(index) 
 {
@@ -675,6 +696,7 @@ function insertValue(index)
             return;
         }
         decryptTextareaCollection[index].value = event.currentTarget.closest('.input-block__field-row').children[0].value
+        checkInputValueDiff(event.currentTarget.closest('#content__encrypt-block__salt') ? cipherSaltCollection : cipherKeyCollection)
     }
 }
 

@@ -573,6 +573,7 @@ textarea{
 
                 &>.cipher-salt-input{
                   height: 80px;
+
                 }
 
                 &>.fa-refresh{
@@ -584,6 +585,10 @@ textarea{
               & textarea {
                 height: 50px;
                 resize: vertical;
+
+                &.input-value-diff{
+                  box-shadow: inset 0px 0px 4px 4px #c37272;
+                }
               }
 
               &.visible{
