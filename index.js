@@ -375,8 +375,6 @@ function getPrivateData (data)
 }
 
 
-//ПРИ КЛИКЕ ПО КНОПКЕ "РАСШИФРОВАТЬ" НЕМНОГО ВЫДВИГАТЬ И ПОДСВЕЧИВАТЬ ВЫБРАННЫЙ ЭЛЕМЕНТ  
-
 //Клик по кнопке расшифровать напротив каждого результата шифрования
 //ПЕРЕПИСАТЬ КЛИК ПО КНОПКЕ ДЕШИФРОВАТЬ, НАЗНАЧИВ СЛУШАТЕЛЬ ДЛЯ КАЖДОЙ КНОПКИ ПО КОЛЛЕКЦИИ
 document.addEventListener('click', function(event) {
@@ -529,7 +527,7 @@ document.getElementById('content__encrypt-block__encrypt-submit').addEventListen
                 callDecryptButton.classList.add('content__encrypt-block__result__parent__call-decrypt')
                 callDecryptButton.setAttribute('type', 'button');
                 encryptTextBlock.textContent = encryptText.encryptText
-                callDecryptButton.textContent = "Расшифровать"
+                callDecryptButton.textContent = "Дешифровать"
                 childEncryptBlock.appendChild(callDecryptButton);
                 childEncryptBlock.appendChild(encryptTextBlock);
                 
@@ -539,15 +537,14 @@ document.getElementById('content__encrypt-block__encrypt-submit').addEventListen
                     encryptResultBlock.appendChild(childEncryptBlock)
                 }, 100 * index);
             });
+            document.getElementById('content__encrypt-block__result').scrollIntoView({
+                behavior: 'smooth'
+            });
         }, 500);
     // })
 
         encryptErrArr = [...new Set(encryptErrArr)];
         console.log(encryptErrArr)
-
-    document.getElementById('content__encrypt-block__result').scrollIntoView({
-        behavior: 'smooth'
-    });
 })
 
 const navigationElem = document.querySelectorAll('.navigation__block__title');

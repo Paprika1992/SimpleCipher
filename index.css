@@ -717,7 +717,7 @@ textarea{
       & #cipher-content__decrypt-block{
 
         &:before{
-          content: "Расшифровка";
+          content: "Дешифрование";
           background: #fff1de;
         }
 
