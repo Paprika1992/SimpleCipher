@@ -176,3 +176,7 @@
 2025-07-12 06:23:20 E_WARNING Cannot modify header information - headers already sent by (output started at C:\upload_files\OSPanel\domains\cipher\CipherController.php:542) в файле C:\upload_files\OSPanel\domains\cipher\CipherController.php на 533 
 2025-07-12 06:32:16 E_WARNING Cannot modify header information - headers already sent by (output started at C:\upload_files\OSPanel\domains\cipher\CipherController.php:542) в файле C:\upload_files\OSPanel\domains\cipher\CipherController.php на 533 
 2025-07-12 06:34:59 E_WARNING Cannot modify header information - headers already sent by (output started at C:\upload_files\OSPanel\domains\cipher\CipherController.php:544) в файле C:\upload_files\OSPanel\domains\cipher\CipherController.php на 535 
+2025-07-12 09:26:08 E_NOTICE Undefined offset: 0 в файле C:\upload_files\OSPanel\domains\cipher\versions\123\cipher.php на 534 
+2025-07-12 09:26:44 E_NOTICE Undefined offset: 0 в файле C:\upload_files\OSPanel\domains\cipher\versions\123\cipher.php на 534 
+2025-07-12 09:27:09 E_NOTICE Undefined offset: 0 в файле C:\upload_files\OSPanel\domains\cipher\versions\123\cipher.php на 534 
+2025-07-12 09:30:30 E_WARNING Cannot modify header information - headers already sent by (output started at C:\upload_files\OSPanel\domains\cipher\CipherController.php:456) в файле C:\upload_files\OSPanel\domains\cipher\CipherController.php на 522 

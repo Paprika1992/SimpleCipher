@@ -200,6 +200,8 @@ class CipherController
     }
 
 
+    #Гаврилов
+    //ПРОВЕРЬ, ТАКОГО КОЛИЧЕСТВА ФЕЙКОВЫХ СИМВОЛОВ ТОЧНО ХВАТИТ? НАПРИМЕР НА СВОИХ ДЛИННЫХ СООБЩЕНИЯХ В ТЕЛЕГЕ
     /**
      * Метод проводит валидацию текста перед его шифрованием, например, на наличие нераспознанных символов
      *
@@ -210,9 +212,6 @@ class CipherController
     {
         return $fakeLength[0] < 900;
     }
-
-
-    // function validate
 
 
     /**
@@ -228,7 +227,6 @@ class CipherController
             'errorMsg' => null,
             'responseCode' => 200,
         ];
-        //$rqstParams = json_decode(file_get_contents('php://input'));
         if (array_key_exists($routeName, $this->routes) !== false) {
             if ($_SERVER['REQUEST_METHOD'] !== $this->routes[$routeName]['method']) {
                 $checkRouteArr['result'] = false;
@@ -368,7 +366,7 @@ class CipherController
         if ($HammingDistance / $cipherLengh > 0.3) {
             return false;
         }
-        //Проверяем пересечение биграмм ключей шифра. Неважно на какой позиции они находятся в двух ключах, но если биграмм больше 25% от количества биграмм в шифре ВСЕГО, считаем, что ключи недостаточно отличаются
+        //Проверяем пересечение биграмм ключей шифра. Неважно на какой позиции они находятся в двух ключах, но если совпадающих в двух ключах биграмм больше 25% от количества биграмм в любом ключе ВСЕГО, считаем, что ключи недостаточно отличаются
         $bigrammCipherKeyArr = [];
         $n = 0;
         while ($n < $cipherLengh) {
@@ -395,10 +393,8 @@ class CipherController
     public function getEncryptText(string $encryptText, int $fakeLength, ?string $userCipherKey = null): void
     {
         require_once ("./versions/" . $this->cipherVer . "/cipher.php");
+        $this->cipherObj = new SimpleCipher();
         $resultCipher = null;
-        #Гаврилов
-        //ВЫНЕСТИ СОЗДАНИЕ ЭКЗЕМЛПРЯА КЛАССА ШИФРОВАНИЯ В КОНСТРУКТОР ВСЕ ТАКИ
-        $this->cipherObj = new SimpleCipher($encryptText, $this->cipherSalt);
         if ($userCipherKey) {
             //При передаче ключа необходимо обязательно передавать соль
             if (!$this->cipherSalt) {
@@ -416,7 +412,7 @@ class CipherController
                 return;
             }
         }
-        $resultCipher = $this->cipherObj->encryptText($fakeLength, $userCipherKey);
+        $resultCipher = $this->cipherObj->encryptText($encryptText, $fakeLength, $this->cipherSalt, $userCipherKey);
         $this->returnResponse([
             'encryptText' => $resultCipher,
         ]);
@@ -425,27 +421,10 @@ class CipherController
 
     #Гаврилов
     //НА ДЕМОНСТРАЦИОННОЙ СТРАНИЦЕ ДОЛЖЕН БЫТЬ АЛЕРТ ЕСЛИ ВАЛИДАЦИЯ НЕ ПРОШЛА
-    /**
-     * Метод валидирует шифруемый текст на наличие нешифруемых символов, проводя поиск по ним в одном из ключей шифра текущей версии
-     *
-     * @param string $text шифруемый текст
-     * @param string $fakeCipherKey фейковый ключ актуальной версии шифра, сформированный на основе одного из реальных ключей шифра
-     * @return bool
-     */
-    // private function checkInvalidChars(string $text, string $fakeCipherKey)
-    // {
-    //     $cipherValidSymbArr = preg_split('//u', $fakeCipherKey, -1, PREG_SPLIT_NO_EMPTY);
-    //     $encryptUniqueSymbArr = array_unique(preg_split('//u', $text, -1, PREG_SPLIT_NO_EMPTY));
-    //     $getInvalidSymbols = empty(array_diff($encryptUniqueSymbArr, $cipherValidSymbArr));
 
-    //     return $getInvalidSymbols;
-    // }
 
     #Гаврилов
     //ПОПРОБОВАТЬ ДОБАВИТЬ ПЕРЕНОС СТРОКИ И ПЕРЕНОС КАРЕТКИ В СИМВОЛЫ ШИФРА?
-
-    #Гаврилов
-    //ДОБАВЬ ИКОНКУ КОПИРОВАНИЯ СОЛИ И КЛЮЧА В СОСЕДНИЙ ИНПУТ ИЗ ИНПУТА, ГДЕ ОН БЫЛ СГЕНЕРИРОВАН
 
     /**
      * Метод получения зашифрованного сообщения
@@ -455,20 +434,36 @@ class CipherController
     public function getDecryptText(string $decryptText, ?string $userCipherKey = null): void
     {
         $this->decryptText = $decryptText;
-        //При передаче ключа необходимо обязательно передавать соль
-        if ($userCipherKey && !$this->cipherSalt) {
-            $this->returnResponse([
-            ], 400, 'The salt must be passed along with the key');
 
-            return;
-        }
+        #Гаврилов
+        //ВЫНЕСТИ ОПРЕДЕЛЕНИЕ ПОЛЬЗОВАТЕЛЬСКОГО КЛЮЧА В КОНСТРУКТОР И ПРИСВАИВАТЬ СВОЙСТВУ КЛАССА? ПО АНАЛОГИИ С ПОЛЬЗОВАТЕЛЬСКОЙ СОЛЬЮ
 
         $this->cipherVer = CipherVersion::getVersion($this->decryptText);
         #Гаврилов
         //ПРОВЕРКА СУЩЕСТВУЕТ ЛИ ФАЙЛЫ. Если не существует, просто возвращаем кривой ответ
         require_once ("./versions/" . $this->cipherVer . "/cipher.php");
-        $this->cipherObj = new SimpleCipher($this->decryptText, $this->cipherSalt);
-        $testCipher =  $this->cipherObj->decryptText($userCipherKey);
+        $this->cipherObj = new SimpleCipher();
+
+        if ($userCipherKey) {
+            //При передаче ключа необходимо обязательно передавать соль
+            if (!$this->cipherSalt) {
+                $this->returnResponse([
+                ], 400, 'The salt must be passed along with the key');
+
+                return;
+            }
+            if (!$this->validateCipherKey($userCipherKey)) {
+                $this->returnResponse(
+                    ['decryptText' => $this->getRandomText($decryptText)]
+                );
+
+                return;
+            }
+        }
+        
+
+        
+        $testCipher =  $this->cipherObj->decryptText($this->decryptText, $this->cipherSalt, $userCipherKey);
 
         $this->returnResponse(
             ['decryptText' => $testCipher]
