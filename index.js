@@ -33,13 +33,6 @@ setTimeout( () => {
     document.getElementById('app-name').classList.add('shift');    
 }, 700)
 
-
-/**
- * Массив интервалов, которые накапливаются при отображени фейковых символов в описании приложения на стартовой странице
- */
-// let allIntervals = []
-
-
 setTimeout( () => {
     //Трансформируем название приложения CipherSapphire => Cipphire
     document.getElementById('app-name--cipher').children[1].classList.add('hide');
@@ -128,14 +121,20 @@ document.getElementById('feedback-submit').addEventListener('click', function ()
 })
 
 
-//Дешифровка текста
+//Дешифрование текста
 document.getElementById('content__decrypt-block__decrypt-btn').addEventListener('click', async function () {
     let decryptText = document.getElementById('decryptText').value,
         decryptSalt = document.getElementById('cipherSalt_decrypt').value ?? null,
         cipherKey = document.getElementById('cipher-key--decrypt').value
 
     if (!decryptText.length) {
-        alert('пусто')
+        alert('Дешифруемый текст пустой')
+
+        return;
+    }
+    if (cipherKey && !decryptSalt) {
+        alert('При передаче ключа обязательно передавать соль')
+
         return;
     }
     setTimeout(() => {
@@ -143,7 +142,6 @@ document.getElementById('content__decrypt-block__decrypt-btn').addEventListener(
     }, 300);
     
     let decryptResultBlock = document.getElementById('content__decrypt-block__result')
-    // decryptResultBlock.textContent = '';
 
     clearDecryptText();
 
@@ -245,6 +243,7 @@ document.getElementById('page-background').addEventListener('click', function() 
 })
 
 
+//Получение соли для шифрования
 function getCipherSalt () {
     return fetch('./api/createCipherSalt', {
         method: "GET",
@@ -263,6 +262,7 @@ function getCipherSalt () {
     )
 }
 
+//Получение ключа для шифрования
 function getCipherKey () {
     return fetch('./api/getCipherKey', {
         method: "GET",
@@ -429,6 +429,12 @@ document.getElementById('content__encrypt-block__encrypt-submit').addEventListen
     if (resultCipherCount > 20) {
         alert('Максимальная количество итоговых шифров 20')
         
+        return;
+    }
+
+    if (cipherKey && !encryptSalt) {
+        alert('При передаче ключа обязательно передавать соль')
+
         return;
     }
 

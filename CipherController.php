@@ -3,7 +3,7 @@
 class CipherController
 {
     /**
-     * @var int версия алгоритма шифрования. Прописывается последняя версия актуальная (на случай если текст шифруется)
+     * @var int версия текущего алгоритма шифрования. Прописывается последняя версия актуальная (на случай если текст шифруется, в случае дешифрования версия берется из шифра)
      */
     private $cipherVer = 123;
     /**
@@ -30,10 +30,6 @@ class CipherController
      * @var object экземпляр класса шифровальщика;
      */
     private $cipherObj;
-    /**
-     * @var string фейковый ключ для валидации шифруемой строки на наличие неподходящих символов ЗАПРАШИВАТЬ ПЕРВЫЙ КЛЮЧ ИЗ АКТУАЛЬНОЙ ВЕРСИИ ШИФРА, ПЕРЕМЕШИВАТЬ ЕГО И ВОЗВРАЩАТЬ. ДАЛЬШЕ УЖЕ ПРОВОДИТ ВАЛИДАЦИЮ
-     */
-    private $fakeKey;
     /**
      * @var array $routes списки доступных роутов api
      * TODO
@@ -76,11 +72,9 @@ class CipherController
                 ],
             ]
         ],
-        //ODd59g756б0≠39©ш28v2084пXгqqf]ЕydyЧ|YoO 41_TIbc114h
         //TODO
         //ПЕРЕИМЕНУЙ НА DECRYPTTEXT
         'getDecryptText' => [
-            //'methodName' => 'getDecryptText',
             'method' => 'POST',
             'methodParams' => [
                 'text' => [
@@ -104,9 +98,6 @@ class CipherController
                 ],
             ]
         ],
-
-        #Гаврилов
-        //РЕАЛИЗОВАТЬ МЕХАНИКУ СЖАТОГО ШИФРОВАНИЯ. ЕСЛИ ПЕРЕДАЕТСЯ ЗАГОЛОВОК СЖАТОГО ШИФРОВАНИЯ, ИСПОЛЬЗУЕТСЯ ПРОВЕРКА НА НАЛИЧИЕ НЕВАЛИДНЫХ СИМВОЛОВ И ТОГДА КОЛИЧЕСТВО СИМВОЛОВ В ИТОГОВОМ ШИФРЕ СНИЗИТСЯ В 3 РАЗА, НО МОЖНО БУДЕТ ШИФРОВАТЬ ТОЛЬКО СИМВОЛЫ, НАХОДЯЩИЕСЯ В КЛЮЧЕ (латиница, кирилица, цифры, некоторые спецсимволы)
 
         #Гаврилов
         //при изменении текста в поле текст для шифра рассчитывай итоговое количество в поле желаемая длина шифра, умножая количество символов на 4 и прибавляя полезную нагрузку + несколько символов, чтобы полезную нагрузку нельзя было вычислить
@@ -151,10 +142,7 @@ class CipherController
     /**
      * Конструктор
      *
-     * @param string $cipherSalt Соль для шифрования
-     * @param string $encryptText Текст для шифрования
-     * @param integer $fakeLength Желаемая длина шифра
-     * @param string $decryptText Текст для расшифрования
+     * @param string $action выполняемое действие
      */
     public function __construct(string $action)
     {
@@ -196,24 +184,8 @@ class CipherController
                     $this->postFeedback();
                     break;
             }
-        }
-
-        die();
-
-
-        
-        //$this->cipherVer = $decryptText ? CipherVersion::getCipherVersion($decryptText) : $this->cipherVer;
-        #Гаврилов
-        //ПРОВЕРКА СУЩЕСТВУЕТ ЛИ СКРИПТ С ТАКОЙ ВЕРСИЕЙ. еСЛИ НЕТ - СООБЩЕНИЕ ОБ ОШИБКЕ РАЗРАБАМ И СООБЩЕНИЕ БЕЗ УКАЗАНИЯ НА ВЕРСИЮ ДЛЯ ПОЛЬЗОВАТЕЛЕЙ
-        //require_once ("./cipher_ver" . $this->cipherVer . ".php");
-
-        //$encryptText = $this->getEncryptText();
-
-        
+        }        
     }
-
-    #Гаврилов
-    //ПЕРЕДАВАТЬ С ШИФРОВАНИЕМ И ДЕШИФРОВКОЙ ЕЩЕ ОДИН ПАРАМЕТР "ДЕМОНСТРАЦИОННАЯ СТРАНИЦА": FALSE\TRUE. ПЕРЕДАВАТЬ ЕГО ТОЛЬКО С ДЕМОНСТРАЦИОННОЙ СТРАНИЦЫ. ЕСЛИ ПЕРЕДАЕТСЯ TRUE - ДЕЛАТЬ ПОЛЕ С СОЛЬЮ НЕОБЯЗАТЕЛЬНЫМ ДЛЯ ПЕРЕДАЧИ. МОЖНО ЛИ КАК-ТО ПРОВЕРЯТЬ ОТКУДА ИДЕТ ЗАПРОС ПО IP НАПРИМЕР?, ЧТОБЫ ПОЛЬЗОВАТЕЛЬ НЕ МОГ ПОДСТАВИТЬ ЭТОТ ЗАГОЛОВОК, ОТПРАВЛЯЯ СВОЙ ЗАПРОС СО СВОЕГО СЕРВЕРА
     
 
     /**
@@ -238,6 +210,9 @@ class CipherController
     {
         return $fakeLength[0] < 900;
     }
+
+
+    // function validate
 
 
     /**
@@ -424,8 +399,14 @@ class CipherController
         #Гаврилов
         //ВЫНЕСТИ СОЗДАНИЕ ЭКЗЕМЛПРЯА КЛАССА ШИФРОВАНИЯ В КОНСТРУКТОР ВСЕ ТАКИ
         $this->cipherObj = new SimpleCipher($encryptText, $this->cipherSalt);
-
         if ($userCipherKey) {
+            //При передаче ключа необходимо обязательно передавать соль
+            if (!$this->cipherSalt) {
+                $this->returnResponse([
+                ], 400, 'The salt must be passed along with the key');
+
+                return;
+            }
             if (!$this->validateCipherKey($userCipherKey)) {
                 $this->returnResponse([
                     'encryptText' => null,
@@ -435,19 +416,7 @@ class CipherController
                 return;
             }
         }
-        
-
-
-        // if (!$this->checkInvalidChars($encryptText, SimpleCipher::getFakeCipherKey())) {
-        //     $this->returnResponse([
-        //         'encryptText' => null,
-        //     ], 400, 'The text contains invalid characters');
-
-        //     return;
-        // }
-
         $resultCipher = $this->cipherObj->encryptText($fakeLength, $userCipherKey);
-        
         $this->returnResponse([
             'encryptText' => $resultCipher,
         ]);
@@ -485,22 +454,25 @@ class CipherController
      */
     public function getDecryptText(string $decryptText, ?string $userCipherKey = null): void
     {
-        // var_dump('da');
         $this->decryptText = $decryptText;
-        
+        //При передаче ключа необходимо обязательно передавать соль
+        if ($userCipherKey && !$this->cipherSalt) {
+            $this->returnResponse([
+            ], 400, 'The salt must be passed along with the key');
+
+            return;
+        }
+
         $this->cipherVer = CipherVersion::getVersion($this->decryptText);
         #Гаврилов
-        //ПРОВЕРКА СУЩЕСТВУЕТ ЛИ ФАЙЛЫ
+        //ПРОВЕРКА СУЩЕСТВУЕТ ЛИ ФАЙЛЫ. Если не существует, просто возвращаем кривой ответ
         require_once ("./versions/" . $this->cipherVer . "/cipher.php");
         $this->cipherObj = new SimpleCipher($this->decryptText, $this->cipherSalt);
         $testCipher =  $this->cipherObj->decryptText($userCipherKey);
 
-        // var_dump($testCipher);
-
         $this->returnResponse(
             ['decryptText' => $testCipher]
         );
-
     }
 
 
