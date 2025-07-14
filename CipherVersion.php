@@ -28,8 +28,6 @@ class CipherVersion
 		$pattern = $versionNumberArr[0];
 		//Получаем флаг реверса 
 		$reverseLettersArr = (($versionNumberArr[1] % 2 === 0) ? 0 : 1);
-		//$cipherKeyNum = $versionNumberArr[2];
-		//var_dump($cipherKeyNum);
 		if (!($reverseLettersArr % 2 === 0)) {
 			$lettersArr = array_combine(array_keys($lettersArr), array_reverse(array_values($lettersArr)));
 		}
@@ -46,16 +44,6 @@ class CipherVersion
 				$version = (string)$lettersArr[$letterArr[1]] . (string)$lettersArr[$letterArr[2]];
 				break;
 		}
-		//Определяем ключ конкретного шифра, беря последнюю цифру из версии алгоритма
-		// $this->cipherKey = $this->cipherKeyStorage[substr($version, -1)];
-		// $this->cipherKey_second = $this->cipherKeyStorage[substr($version, -1) == (count($this->cipherKeyStorage) - 1) ? 0 : substr($version, -1) + 1];
-
-		// $versionArr['cipherVersion'] = (int)$version;
-		// $versionArr['cipherKey'] = $cipherKeyNum;
-
-		// return $versionArr;
-
 		return (int)$version;
 	}
-
 }
