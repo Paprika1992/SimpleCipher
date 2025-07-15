@@ -120,7 +120,7 @@ class SimpleCipher
 	 * @var string путь до файлов с ключами шифра
 	 */
 	private static $keyFilesPath = __DIR__ . "./cipherKeys/";
-
+	private $CONF_allLettersArr;
 
 	public function __construct()
 	{
@@ -217,6 +217,8 @@ class SimpleCipher
 	 */
 	public function encryptText(string $openText, int $resultCipherLength = 50, ?string $userSalt, ?string $userCipherKey = null): string
 	{
+		require("./../../config.php");
+		$this->CONF_allLettersArr = $CONF_lettersArr;
 		$this->encrypt = true;
 		$this->text = $openText;
 		$this->salt = $userSalt;
@@ -261,7 +263,7 @@ class SimpleCipher
 		preg_match_all('/[0-9]/', $userCipherKeyArr[0], $userCipherKeyNumArr);
 		//Определяем какой ключ шифра будем передавать для версии. Если используется соль, передаем фейковый ключ. Если при этом используется пользовательский ключ, передаем первую цифру из него. При парсинге версии будем сверять первую цифру из пользовательского ключа и цифру ключа шифра из указателя. Если они не совпадают - произошла подмена
 		$versionCipherKeyPart = $this->salt ? $cipherKeyIndex_fake : $cipherKeyIndex;
-		$versionCipherKeyPart = !empty($userCipherKeyArr[0]) ? $userCipherKeyNumArr[0] : $versionCipherKeyPart;
+		$versionCipherKeyPart = !empty($userCipherKeyArr[0]) ? $userCipherKeyNumArr[0][0] : $versionCipherKeyPart;
 		//версия приложения в зашифрованном виде
 		$encryptVersion = $this->setVersion($versionCipherKeyPart);
 		$this->windowSizeSecond = $this->getRandNum(floor(pow($this->matrixDepth, 2) / 2), 12);
@@ -1146,6 +1148,13 @@ class SimpleCipher
     }
 
 
+
+	public static function getThirdNum($args)
+	{
+	  #body
+	}
+
+
 	/**
 	 * Метод формирования версии конкретного шифра. Версия текущего работающего алгоритма/скрипта фиксирована и прописывается в свойстве класса $this->version, метод ниже определяет каким образом версия конкретного шифра будет сформирована/зашифрована для помещения в полезную нагрузку
 	 * Версия состоит из 6ти символов: 3 числа (номерная версия шифра) + 3 буквы (ПАРАМЕТРЫ формирования итоговой версии шифра) версии, на основании которых все элементы версии будут перемешаны
@@ -1157,12 +1166,15 @@ class SimpleCipher
 	{
 		/*Паттерн преобразования цифр версии в буквы. Цифры версии будут преобразованы в буквы, ориентируясь на массив [a=>0, b=>1...]. Версия всегда состоит из 3х символов
 		Ниже результаты применения паттерна на примере версии 123 (в скобках буквы, которые будут возвращены вместо цифр в случае НЕ реверсивного массива букв). Например, версия 123 в случае паттерна №1 будет преобразована в бвг:
+		ГАВРИЛОВ
+		ПЕРЕПИШИ ОПИСАНИЕ ЭТОГО МЕТОДА ПОД НОВУЮ ЛОГИКУ
 		№1 - 1(б)_2(в)_3(г)
 		№2 - 12(л)_3(г)_rand
 		№3 - 1(б)_23(ц)_rand
 		№4 - rand_12(л)_3(г)
 		№5 - rand_1(б)_23(ц)*/
 		$pattern = $this->getRandNum(6);
+
 		#Гаврилов
 		//УДАЛИ
 		// $pattern = 2;
@@ -1172,12 +1184,15 @@ class SimpleCipher
 		//Флаг реверсивности (относится только к формированию версии, к реверсивности других параметров шифра отношения не имеет). Второе число в массиве параметров формирования версии. Если число четное - массив с буквами/цифрами, на основании которого цифры версии преобразуются в буквы, не реверсим, иначе реверсим. Дополнительный фактор запутывания
 		$reverseLettersArr = $this->getRandNum(10);
 		//Размер массива, содержащего оба массива букв кирилицы и латиницы в верхнем и нижнем регистре
-		$sizeOfAllLettersArr = count($this->lettersArr) * 2 - 1;
+		//$sizeOfAllLettersArr = count($this->lettersArr) * 2 - 1;
 		//Дополняем существующий массив кирилических и латинских букв в нижнем регистре теми же буквами в верхнем регистре, чтобы их значений хватило на максимально возможную позицию при выборе буквы из массива (99), например в версии 199, если сработает паттерн 1,[99]
-		$allLettersArr = array_merge($this->lettersArr, array_combine(array_map(function($el){return mb_strtoupper($el);}, array_keys($this->lettersArr)), array_map(function($el) use($sizeOfAllLettersArr) {return $sizeOfAllLettersArr - $el;}, $this->lettersArr)));
+		$allLettersArr = $this->CONF_allLettersArr;
+		// $allLettersArr = array_merge($this->lettersArr, array_combine(array_map(function($el){return mb_strtoupper($el);}, array_keys($this->lettersArr)), array_map(function($el) use($sizeOfAllLettersArr) {return $sizeOfAllLettersArr - $el;}, $this->lettersArr)));
 		if (!($reverseLettersArr % 2 === 0)) {
 			$allLettersArr = array_combine(array_keys($allLettersArr), array_reverse(array_values($allLettersArr)));
 		}
+		
+		// var_dump($allLettersArr);
 		//Бьем версию на массив цифр
 		$versionSymbArr = str_split((string)$cipherVersion);
 		//Массив цифр, участвующих в шифровании версии алгоритма
@@ -1185,10 +1200,12 @@ class SimpleCipher
 		//2 цифра - флаг реверсивности массива букв, на основании которого цифры версии будут преобразовываться в буквы. Например версия 123 [1,2,3] должна преобразоваться в буквы на основании массива [a,b,c]. Если флаг реверсивности 0 - версия будет abc, если 1 - cba
 		//3 цифра - индекс используемого ключа ишфрования. Если передается пользовательский ключ, значение фейковое
 		$cipherNumArr = [$pattern, $reverseLettersArr, $cipherKeyIndex];
-		var_dump(!($reverseLettersArr % 2 === 0));
+		// var_dump(!($reverseLettersArr % 2 === 0));
 		//Массив всех символов (буквы и цифры) версии, на основе которого будет сформирована итоговая строка с версией
 		$cipherSymbArr = [];
 		//Получаем цифры из ключа шифрования. Их порядок важен, так как он всегда разный и будет добавлять случайности
+		#Гаврилов
+		//ВМЕСТО КЛЮЧА ИСПОЛЬЗУЙ ЦИФРЫ ИЗ ХЭША НА ПОЛУЧЕННУЮ ВЕРСИЮ (123) ЭТУ ВЕРСИЮ ТЫ МОЖЕШЬ ПОЛУЧИТЬ, ВАЛИДИРУЯ ВЕРСИЮ ОТДЕЛЬНО ОТ ШИФРА и тем самым при валидации шифра ты не зависишь от ключа
 		preg_match_all('/[1-9]/', $this->cipherKey, $keyNumArr);
 		$keyNumArr = $keyNumArr[0];
 		#Гаврилов
