@@ -146,6 +146,8 @@ class SimpleCipher
 		shuffle($fakeCipherKey);
 		$fakeCipherKey = implode('', $fakeCipherKey);
 
+		// var_dump($fakeCipherKey);
+
 		return $fakeCipherKey;
 	}
 
@@ -217,7 +219,12 @@ class SimpleCipher
 	 */
 	public function encryptText(string $openText, int $resultCipherLength = 50, ?string $userSalt, ?string $userCipherKey = null): string
 	{
-		require("./../../config.php");
+		if (count(debug_backtrace()) > 1) {
+			require("./config.php");
+		} else {
+			require("./../../config.php");
+		}
+		
 		$this->CONF_allLettersArr = $CONF_lettersArr;
 		$this->encrypt = true;
 		$this->text = $openText;
@@ -257,13 +264,15 @@ class SimpleCipher
 		if ($this->salt) {
 			$this->saltHashSum = $this->getHashSalt() + $userCipherKeyHash;
 		}
-		#Гаврилов
-		//ПРОВЕРЬ РАБОТУ ПРОВЕРКИ НИЖЕ
-		//Получаем цифры из пользовательского ключа
-		preg_match_all('/[0-9]/', $userCipherKeyArr[0], $userCipherKeyNumArr);
 		//Определяем какой ключ шифра будем передавать для версии. Если используется соль, передаем фейковый ключ. Если при этом используется пользовательский ключ, передаем первую цифру из него. При парсинге версии будем сверять первую цифру из пользовательского ключа и цифру ключа шифра из указателя. Если они не совпадают - произошла подмена
 		$versionCipherKeyPart = $this->salt ? $cipherKeyIndex_fake : $cipherKeyIndex;
-		$versionCipherKeyPart = !empty($userCipherKeyArr[0]) ? $userCipherKeyNumArr[0][0] : $versionCipherKeyPart;
+		if ($userCipherKey) {
+			#Гаврилов
+			//ПРОВЕРЬ РАБОТУ ПРОВЕРКИ НИЖЕ
+			//Получаем цифры из пользовательского ключа
+			preg_match_all('/[0-9]/', $userCipherKeyArr[0], $userCipherKeyNumArr);
+			$versionCipherKeyPart = $userCipherKeyNumArr[0][0];
+		}
 		//версия приложения в зашифрованном виде
 		$encryptVersion = $this->setVersion($versionCipherKeyPart);
 		$this->windowSizeSecond = $this->getRandNum(floor(pow($this->matrixDepth, 2) / 2), 12);
@@ -550,12 +559,12 @@ class SimpleCipher
 		$shiftCipherKeyParams_arr = array_map(function($el){return (int)$el;}, $shiftCipherKeyParams_arr);
 		//Очищаем сегмент с 1й частью указателя на длину открытого сообщения от спецсимволов - №19% => 19
 		$realLength_first = mb_substr($realLengthMatch_first[0], 1, mb_strlen($realLengthMatch_first[0]) - 2);
-		//Получаем сегмент со 2й частью указателя на длину открытого сообщения
-		preg_match('/([a-zа-ё0-9]{0,' . $this->vectorLength . '})([^a-zа-ё0-9]{1}[0-9]*[^a-zа-ё0-9]{1})([a-zа-ё0-9]{0,' . $this->vectorLength . '})([a-zа-ё0-9]{6})$/ui', $this->text, $realLengthMatch_second);
+		//Получаем сегмент со 2й частью указателя на длину открытого сообщения (куда входит и указатель на версию)
+		preg_match('/([a-zа-ё0-9]{0,' . $this->vectorLength . '})([^a-zа-ё0-9]{1}[0-9]*[^a-zа-ё0-9]{1})([a-zа-ё0-9]{0,' . $this->vectorLength . '})([a-zа-ё0-9]{5})$/ui', $this->text, $realLengthMatch_second);
 		//Очищаем сегмент со 2й частью указателя на длину открытого сообщения
 		//Вычитаем двойку из длины второго указателя на длину открытого сообщения, чтобы получить реальную длину указателя без жвух спецсимволов вокруг, которые ее обрамляют
 		$realLength_second = mb_substr($realLengthMatch_second[2], 1, mb_strlen($realLengthMatch_second[2]) - 2);
-		//Получаем отрезок, содержаший: версию алгоритма (6 символов), 2ю часть указателя на длину открытого сообщения (длина $realLengthMatch_second[1]), второй вектор инициализации (2 символа)
+		//Получаем отрезок, содержаший: версию алгоритма (5 символов), 2ю часть указателя на длину открытого сообщения (длина $realLengthMatch_second[1]), второй вектор инициализации (2 символа)
 		$vectorSecond = mb_substr($realLengthMatch_second[1] . $realLengthMatch_second[3], -$this->vectorLength);
 		$initVector_num_second = $this->getVector($vectorSecond, 'hor');
 		//Теперь очищаем от полезной нагрузки, связанной с версией алгоритма, 2й частью указателя на длину открытого сообщения сообщения и вторым вектором инициализации
@@ -574,7 +583,7 @@ class SimpleCipher
 			//Получаем цифры из пользовательского ключа
 			preg_match_all('/[0-9]/', $userCipherKeyArr[0], $userCipherKeyNumArr);
 			//В случае использования пользовательского ключа, в качестве цифры с ключом версии в указатель при шифровании помещалась первая цифра из пользовательского ключа вместо номера одноо из реальных ключей шифра. При дешифровании сверяем эту цифру с первой цифрой из пользовательского ключа. Если она не совпадает - она была заменена, ломаем шифр
-			if ($userCipherKeyNumArr[0] !== $cipherKeyIndex) {
+			if ((int)$userCipherKeyNumArr[0][0] !== $cipherKeyIndex) {
 				return $this->getFakeText();
 			}
 		}
@@ -993,7 +1002,7 @@ class SimpleCipher
 		$resultCipherText = $vectorFirst . $matrixParam_resultString . $cipherText . $transformСipherVer . $cipherVersionPointer;
 
 		#Гаврилов
-		//ПОЛЬЗОВАТЕЛЬ МОЖЕТ ТАК СЛОМАТЬ СТРОКУ, ЧТО РЕГУЛЯРКА ПРИ РАСШИФРОВКЕ НЕ ОБРАБОТАЕТСЯ (НАПРИМЕР, ОЖИДАЕТСЯ 6 СИМВОЛОВ В КОНЦЕ, А ОНА ЗАСУНЕТ 7). ТОГДА TRYCATCH И ВОЗВРАЩЕНИЕ РАНДОМНЫХ ЗНАЧЕНИЙ. ПОТЕСТИ
+		//ПОЛЬЗОВАТЕЛЬ МОЖЕТ ТАК СЛОМАТЬ СТРОКУ, ЧТО РЕГУЛЯРКА ПРИ РАСШИФРОВКЕ НЕ ОБРАБОТАЕТСЯ (НАПРИМЕР, ОЖИДАЕТСЯ 5 СИМВОЛОВ В КОНЦЕ, А ОНА ЗАСУНЕТ 7). ТОГДА TRYCATCH И ВОЗВРАЩЕНИЕ РАНДОМНЫХ ЗНАЧЕНИЙ. ПОТЕСТИ
 
 		return $resultCipherText;
 	}
@@ -1137,7 +1146,7 @@ class SimpleCipher
 	private function getCipherKey(): int
     {
 		//Вся информация по версии шифра находится в последних 6ти символах
-		$cipherVersionInfo = mb_substr($this->text, -6);
+		$cipherVersionInfo = mb_substr($this->text, -5);
       	$numberArr = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
 		$versionSymbArr = preg_split('//u', $cipherVersionInfo, -1, PREG_SPLIT_NO_EMPTY);
 		//Вычленяем числа из строки с шифром
@@ -1146,13 +1155,6 @@ class SimpleCipher
 
 		return $cipherKeyNum;
     }
-
-
-
-	public static function getThirdNum($args)
-	{
-	  #body
-	}
 
 
 	/**
@@ -1173,7 +1175,7 @@ class SimpleCipher
 		№3 - 1(б)_23(ц)_rand
 		№4 - rand_12(л)_3(г)
 		№5 - rand_1(б)_23(ц)*/
-		$pattern = $this->getRandNum(6);
+		$pattern = $this->getRandNum(7);
 
 		#Гаврилов
 		//УДАЛИ
@@ -1206,72 +1208,97 @@ class SimpleCipher
 		//Получаем цифры из ключа шифрования. Их порядок важен, так как он всегда разный и будет добавлять случайности
 		#Гаврилов
 		//ВМЕСТО КЛЮЧА ИСПОЛЬЗУЙ ЦИФРЫ ИЗ ХЭША НА ПОЛУЧЕННУЮ ВЕРСИЮ (123) ЭТУ ВЕРСИЮ ТЫ МОЖЕШЬ ПОЛУЧИТЬ, ВАЛИДИРУЯ ВЕРСИЮ ОТДЕЛЬНО ОТ ШИФРА и тем самым при валидации шифра ты не зависишь от ключа
-		preg_match_all('/[1-9]/', $this->cipherKey, $keyNumArr);
-		$keyNumArr = $keyNumArr[0];
+		// preg_match_all('/[1-9]/', $this->cipherKey, $keyNumArr);
+		// $keyNumArr = $keyNumArr[0];
 		#Гаврилов
 		//ПОСЛЕ РЕАЛИЗАЦИИ ВЕРСИИ ПРОВЕРЬ НА СОТНЯХ ГЕРЕНАЦИЯХ ШИФРА ПРИ ПЕРЕДАЧИ ОДНОГО И ТОГО ЖЕ КЛЮЧА. ВЕРСИЯ БУДЕТ ВСЕГДА ОДНА И ТА ЖЕ? С ОДНИМИ И ТЕМИ ЖЕ БУКВАМИ И ЦИФРАМИ. ТОГДА НУЖНО ХОТЯ БЫ ДОБАВИТЬ ПАТТЕРНОВ (3 БУКВЫ ПОДРЯД, 3 ЦИФРЫ ПОДРЯД И НАОБОРОТ)
 		//Определяем 3ье число, которые будет добавляться в указатель на версию алгоритма. Ранее добавлялось рандомное число, из-за чего при его подмене, шифр не ломался. Используем цифры текущей версии алгоритма, плюс задействуем цифры из ключа шифрования
-		$thirdNumber = (int)$versionSymbArr[0] + (int)$versionSymbArr[1] * (int)$versionSymbArr[2] / (int)$keyNumArr[0] + (int)$keyNumArr[1] * (int)$keyNumArr[2] / (int)$keyNumArr[3] * (int)$keyNumArr[4];
-		$thirdNumber = str_replace(['.', '-'], ['', ''], $thirdNumber);
-		//Для корректного определения 3ьего числа в указателе на версию нам нужно 5 цифр. Если число слишком маленькое (меньше 5 цифр), просто берем последние 2 числа
-		if (strlen($thirdNumber < 5)) {
-			$thirdNumber = substr($thirdNumber, -2);
-		} else {
-			//первое слагаемое
-			$firstTerm = substr($thirdNumber, -2);
-			//второе слагаемое
-			$secondTerm = substr($thirdNumber, -4, 2);
-			//указатель на оператор (складывание или вычитание)
-			$operatorNum = substr($thirdNumber, -5, 1);
-			//на основе выбранного оператора либо складываем первое и второе слагаемое, либо вычитаем их
-			$thirdNumber = ($operatorNum % 2 !== 0 ? $firstTerm + $secondTerm : $firstTerm - $secondTerm);
-			$n = 1;
-			//Если 3ье число получилось слишком маленьким, добавляем к нему цифру пока не станет положительным
-			if ($thirdNumber < 0) {
-				while ($thirdNumber < 0) {
-					$thirdNumber = $thirdNumber + $operatorNum * $n;
-					$n++;
-				}
-			} 
-			//Если 3ье число получилось слишком большим, вычитаем из него цифру пока не станет меньше длины массива с буквами
-			if ($thirdNumber >= count($allLettersArr)) {
-				while ($thirdNumber >= count($allLettersArr)) {
-					$thirdNumber = $thirdNumber - $operatorNum * $n;
-					$n++;
-				}
-			}
-		}
+		// $thirdNumber = (int)$versionSymbArr[0] + (int)$versionSymbArr[1] * (int)$versionSymbArr[2] / (int)$keyNumArr[0] + (int)$keyNumArr[1] * (int)$keyNumArr[2] / (int)$keyNumArr[3] * (int)$keyNumArr[4];
+		// $thirdNumber = str_replace(['.', '-'], ['', ''], $thirdNumber);
+		// //Для корректного определения 3ьего числа в указателе на версию нам нужно 5 цифр. Если число слишком маленькое (меньше 5 цифр), просто берем последние 2 числа
+		// if (strlen($thirdNumber < 5)) {
+		// 	$thirdNumber = substr($thirdNumber, -2);
+		// } else {
+		// 	//первое слагаемое
+		// 	$firstTerm = substr($thirdNumber, -2);
+		// 	//второе слагаемое
+		// 	$secondTerm = substr($thirdNumber, -4, 2);
+		// 	//указатель на оператор (складывание или вычитание)
+		// 	$operatorNum = substr($thirdNumber, -5, 1);
+		// 	//на основе выбранного оператора либо складываем первое и второе слагаемое, либо вычитаем их
+		// 	$thirdNumber = ($operatorNum % 2 !== 0 ? $firstTerm + $secondTerm : $firstTerm - $secondTerm);
+		// 	$n = 1;
+		// 	//Если 3ье число получилось слишком маленьким, добавляем к нему цифру пока не станет положительным
+		// 	if ($thirdNumber < 0) {
+		// 		while ($thirdNumber < 0) {
+		// 			$thirdNumber = $thirdNumber + $operatorNum * $n;
+		// 			$n++;
+		// 		}
+		// 	} 
+		// 	//Если 3ье число получилось слишком большим, вычитаем из него цифру пока не станет меньше длины массива с буквами
+		// 	if ($thirdNumber >= count($allLettersArr)) {
+		// 		while ($thirdNumber >= count($allLettersArr)) {
+		// 			$thirdNumber = $thirdNumber - $operatorNum * $n;
+		// 			$n++;
+		// 		}
+		// 	}
+		// }
 		//Ниже мы определеяем порядок размещения букв и цифр, которые будут участвовать в шифровании версии алгоритма (в зависимости от паттерна, определенного выше). Буквы означают цифры шифра. Например, версия алгоритма 123 в буквенном выражении "fpa" 
 		switch ($pattern) {
 			case 1:
-				$cipherSymbArr = array_map(function($el) use($allLettersArr) {return array_search((int)$el, $allLettersArr);}, $versionSymbArr);
+				// $cipherSymbArr = array_map(function($el) use($allLettersArr) {return array_search((int)$el, $allLettersArr);}, $versionSymbArr);
+				$cipherSymbArr[] = array_search((int)$versionSymbArr[0], $allLettersArr);
+				$cipherSymbArr[] = array_search((int)($versionSymbArr[1] . $versionSymbArr[2]), $allLettersArr);
 				break;
 			case 2:
 				$cipherSymbArr[] = array_search((int)$versionSymbArr[0], $allLettersArr);
-				$cipherSymbArr[] = array_search((int)($versionSymbArr[1] . $versionSymbArr[2]), $allLettersArr);
-				$cipherSymbArr[] = array_flip($allLettersArr)[$thirdNumber];
+				$cipherSymbArr[] = array_search((int)($versionSymbArr[2] . $versionSymbArr[1]), $allLettersArr);
+				// $cipherSymbArr[] = array_flip($allLettersArr)[$thirdNumber];
 				break;
 			case 3:
-				$cipherSymbArr[] = array_search((int)($versionSymbArr[0] . $versionSymbArr[1]), $allLettersArr);
-				$cipherSymbArr[] = array_search((int)$versionSymbArr[2], $allLettersArr);
-				$cipherSymbArr[] = array_flip($allLettersArr)[$thirdNumber];
+				// $cipherSymbArr[] = array_flip($allLettersArr)[$thirdNumber];
+				$cipherSymbArr[] = array_search((int)($versionSymbArr[2] . $versionSymbArr[0]), $allLettersArr);
+				$cipherSymbArr[] = array_search((int)$versionSymbArr[1], $allLettersArr);
+				// $cipherSymbArr[] = array_flip($allLettersArr)[$thirdNumber];
 				break;
 			case 4:
-				$cipherSymbArr[] = array_flip($allLettersArr)[$thirdNumber];
+				$cipherSymbArr[] = array_search((int)($versionSymbArr[2] . $versionSymbArr[1]), $allLettersArr);
 				$cipherSymbArr[] = array_search((int)$versionSymbArr[0], $allLettersArr);
-				$cipherSymbArr[] = array_search((int)($versionSymbArr[1] . $versionSymbArr[2]), $allLettersArr);
+				// $cipherSymbArr[] = array_search((int)($versionSymbArr[0] . $versionSymbArr[2]), $allLettersArr);
+				// $cipherSymbArr[] = array_search((int)$versionSymbArr[1], $allLettersArr);
+				// $cipherSymbArr[] = array_flip($allLettersArr)[$thirdNumber];
 				break;
 			case 5:
-				$cipherSymbArr[] = array_flip($allLettersArr)[$thirdNumber];
-				$cipherSymbArr[] = array_search((int)($versionSymbArr[0] . $versionSymbArr[1]), $allLettersArr);
-				$cipherSymbArr[] = array_search((int)$versionSymbArr[2], $allLettersArr);
+				// $cipherSymbArr[] = array_flip($allLettersArr)[$thirdNumber];
+				$cipherSymbArr[] = array_search((int)$versionSymbArr[1], $allLettersArr);
+				$cipherSymbArr[] = array_search((int)($versionSymbArr[0] . $versionSymbArr[2]), $allLettersArr);
 				break;
+			case 6:
+				// $cipherSymbArr[] = array_flip($allLettersArr)[$thirdNumber];
+				$cipherSymbArr[] = array_search((int)$versionSymbArr[1], $allLettersArr);
+				$cipherSymbArr[] = array_search((int)($versionSymbArr[2] . $versionSymbArr[0]), $allLettersArr);
+				break;
+			// case 7:
+			// 	// $cipherSymbArr[] = array_search((int)($versionSymbArr[1] . $versionSymbArr[0]), $allLettersArr);
+			// 	// $cipherSymbArr[] = array_search((int)$versionSymbArr[2], $allLettersArr);
+			// 	// $cipherSymbArr[] = array_flip($allLettersArr)[$thirdNumber];
+			// 	break;
+			// case 8:
+			// 	// $cipherSymbArr[] = array_search((int)($versionSymbArr[1] . $versionSymbArr[2]), $allLettersArr);
+			// 	// $cipherSymbArr[] = array_search((int)$versionSymbArr[0], $allLettersArr);
+			// 	// $cipherSymbArr[] = array_flip($allLettersArr)[$thirdNumber];
+			// 	break;
+			// case 9:
+			// 	// $cipherSymbArr[] = array_flip($allLettersArr)[$thirdNumber];
+			// 	// $cipherSymbArr[] = array_search((int)($versionSymbArr[2] . $versionSymbArr[1]), $allLettersArr);
+			// 	// $cipherSymbArr[] = array_search((int)$versionSymbArr[0], $allLettersArr);
+			// 	break;
 		}
 		$resultVersionArr = [];
 		/*Цикл ниже должен объединить массив цифр и массив букв таким образом, чтобы относительная последовательность символов в итоговом массиве совпадала с последовательностью символов входящих в него подмасивов. Например, в случае объединения двух массивов [1, 2, 3] и ['a', 'b', 'c']
 		Подходящие результаты [1, 2, 3, 'a', 'b', 'c'] или [1, 'a', 'b', 'c', 2, 3] или ['a', 'b', 1, 2, 'c', 3]
 		Неподходящие результаты: [3, 2, 'a', 'b', 'c', 1] или [1, 'a', 2, 'c', 3, 'b']
-		Это позволит, получив 6 символов, вычленить из них отдельно буквы и отдельно цифры в ТОМ же порядке, в каком они были объединены*/
+		Это позволит, получив 5 символов, вычленить из них отдельно буквы и отдельно цифры в ТОМ же порядке, в каком они были объединены*/
 		$n = true;
 		while($n)
 		{
@@ -1291,8 +1318,6 @@ class SimpleCipher
 			}
 		}
 		$resultVersion = implode('', $resultVersionArr); 
-
-		var_dump($resultVersion);
 
 		return $resultVersion;
 	}
@@ -1638,10 +1663,10 @@ $saltNew = $salt;
 	#Гаврилов
 	//ПОПРОБУЙ ТУТ СИНТАКСИЧЕСКИЕ ОШИБКИи, ОШИБКИ ПАРСИНГА ПО КОДУ И ОБРАТИСЬ С ОПЕРАЦИЕЙ ШИФРОВАНИЯ ИЗ ИНТЕФЕЙСА. ВО-ПЕРВЫХ, ОШИБКА ДОЛЖНА ЗАЛОГИРОВАТЬСЯ, ВО ВТОРЫХ ДЕЛАТЕЛЬНО, ЧТОБЫ В КОНСОЛИ НЕ БЫЛО ВИДНО, ЧТО ЗА ОШИБКА (УБРАТЬ ЗАГОЛОВКИ ОТОБРАЖЕНИЯ ОШИБОК?), В ТРЕТЬИХ ПОЛЬЗОВАТЕЛЬ ДОЛЖЕН ПОЛУЧИТЬ КОРРЕКТНЫЙ ОТВЕТ. ПРИ ШИФРОВАНИИ ОШИКУ, ПРИ ДЕШИФРОВКЕ ОШИБКУ ИЛИ ПРОСТО КРИВОЙ ШИФР? ЧТО БЕЗОПАСНЕЕ?
 
-	$testCipher = (new SimpleCipher())->encryptText($cipherText, 167, $salt, $userKey);
-	echo '<pre>'; var_dump($testCipher); echo'</pre>';
-	$decryptText = (new SimpleCipher())->decryptText($testCipher, $salt, $userKey);
-	echo '<pre>'; var_dump($decryptText); echo'</pre>';
+	// $testCipher = (new SimpleCipher())->encryptText($cipherText, 167, $salt, $userKey);
+	// echo '<pre>'; var_dump($testCipher); echo'</pre>';
+	// $decryptText = (new SimpleCipher())->decryptText($testCipher, $salt, $userKey);
+	// echo '<pre>'; var_dump($decryptText); echo'</pre>';
 
 
 	// $newSaltArr = preg_split('//u', $salt, -1, PREG_SPLIT_NO_EMPTY);

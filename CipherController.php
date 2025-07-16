@@ -286,12 +286,18 @@ class CipherController
     public function getCipherKey(): void
     {
         require_once ("./versions/" . $this->cipherVer . "/cipher.php");
-        $firstKeyArr = $secondKeyArr = preg_split('//u', SimpleCipher::getFakeCipherKey(), -1, PREG_SPLIT_NO_EMPTY);
-        shuffle($firstKeyArr);
-        shuffle($secondKeyArr);
+        //$firstKeyArr = $secondKeyArr = preg_split('//u', SimpleCipher::getFakeCipherKey(), -1, PREG_SPLIT_NO_EMPTY);
+        $firstKeyArr = SimpleCipher::getFakeCipherKey();
+        $secondKeyArr = SimpleCipher::getFakeCipherKey();
+        // shuffle($firstKeyArr);
+        // shuffle($secondKeyArr);
+
+        // var_dump($firstKeyArr);
 
         #Гаврилов
         //ПЕРЕПИШИ ВСЕ МЕТОДЫ preg_split('//u', SimpleCipher::getFakeCipherKey(), -1, PREG_SPLIT_NO_EMPTY) на отдельный метод, ПЕРЕНЕСИ МЕТОД GETSTRARR ИЗ CIPHER.PHP
+
+        $resultKey = $firstKeyArr . $secondKeyArr;
 
         $this->returnResponse(
             ['cipherKey' => $resultKey]

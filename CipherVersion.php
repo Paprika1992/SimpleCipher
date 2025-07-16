@@ -16,7 +16,7 @@ class CipherVersion
 		#Гаврилов
 		//ВНИЗУ ДУБЛИРОВАНИЕ УБЕРИ
 		self::$lettersArr = $CONF_lettersArr;
-    	$versionString = mb_substr($cipherText, -6);
+    	$versionString = mb_substr($cipherText, -5);
 		//Массив кирилических и латинских букв и цифр, которые участвовали в формировании версии
 		$lettersArr = self::$lettersArr;
 		#Гаврилов
@@ -34,19 +34,29 @@ class CipherVersion
 		if (!($reverseLettersArr % 2 === 0)) {
 			$lettersArr = array_combine(array_keys($lettersArr), array_reverse(array_values($lettersArr)));
 		}
+		//Получаем цифры указателя на версию, чтобы из них собрать итоговую версию
+		$versionNumbers = str_split($lettersArr[$letterArr[0]] . $lettersArr[$letterArr[1]]);
 		switch ($pattern) {
 			case 1:
-				$version = implode('', array_map(function($el) use($lettersArr) {return $lettersArr[$el];}, $letterArr));
+				$version = implode('', $versionNumbers);
 				break;
 			case 2:
+				$version = $versionNumbers[0] . $versionNumbers[2] . $versionNumbers[1];
+				break;
 			case 3:
-				$version = (string)$lettersArr[$letterArr[0]] . (string)$lettersArr[$letterArr[1]];
+				$version = $versionNumbers[1] . $versionNumbers[2] . $versionNumbers[0];
 				break;
 			case 4:
+				$version = $versionNumbers[2] . $versionNumbers[1] . $versionNumbers[0];
+				break;
 			case 5:
-				$version = (string)$lettersArr[$letterArr[1]] . (string)$lettersArr[$letterArr[2]];
+				$version = $versionNumbers[1] . $versionNumbers[0] . $versionNumbers[2];
+				break;
+			case 6:
+				$version = $versionNumbers[2] . $versionNumbers[0] . $versionNumbers[1];
 				break;
 		}
+
 		return (int)$version;
 	}
 }
