@@ -75,7 +75,6 @@ function descriptionRandSymbols()
         setTimeout( () => {
             clearRandomSymb();
             //Очищаем все накопившиеся интервалы заполнения описания рандомными символами
-            //allIntervals.forEach( interval => clearInterval(interval) )
             clearInterval(randomSymbInterval);
         }, 2000);
 }
@@ -156,7 +155,6 @@ document.getElementById('content__decrypt-block__decrypt-btn').addEventListener(
             'content-type': 'application/json'
         }
     });
-    // let decryptResponse = await response.json()
 
     
     /**
@@ -175,28 +173,13 @@ document.getElementById('content__decrypt-block__decrypt-btn').addEventListener(
         }, 1000)
     })
     
-    //ОШИБКА РОУТИНГА
-    // if (decryptResponse.errorMsg) {
-    //     decryptErrMsgArr.push('Ошибка обращения к серверу: ' + decryptResponse.errorMsg)
-
-    //     return; 
-    // }
-    //ВОЗВРАЩЕННЫЙ КОД ОШИБКИ
     if (!response.ok) {
-        // if (decryptResponse.errMsg) {
-        //     decryptErrMsgArr.push(decryptResponse.errMsg)
-        // } else {
             //Если код ошибки не успешный, при этом передается кастомный текст ошибки
             if (response.headers.get('X-Error-Msg')) {
                 decryptErrMsgArr.push(response.headers.get('X-Error-Msg'))
             } else {
                 decryptErrMsgArr.push('Код ошибки: ' + decryptResponse.status)
             }
-        //}
-            
-            //decryptErrMsgArr.push('Код ошибки: ' + decryptResponse.status)
-            console.log(decryptErrMsgArr)
-
             return;
     } else {
        if (response.headers.get('X-Error-Msg')) {
@@ -204,15 +187,12 @@ document.getElementById('content__decrypt-block__decrypt-btn').addEventListener(
         } 
     }
 
-    console.log(decryptErrMsgArr)
     
     //#Гаврилов
     //ПРОВЕРЯЙ ВОЗВРАЩЕНИЕ ТЕКСТА ОШИБКИ ПОСЛЕ КАСТОМНОЙ ПРОВЕКИ НА ШИФРОВАНИИ И НА ДЕШИФРОВАНИИ, ПОКА ЧТО НА ШИФРОВАНИИ ТЫ ПРОВЕРЯЕШЬ ТОЛЬКО СТАТУСЫ 400 500, ОШИБКИ ПАРСИНГА JSON И ОШИБКИ ОБРАЩЕНИЯ К СЕРВЕРУ  
 
     //ГАВРИЛОВ
     //ПОДУМАТЬ НА КАКОЙ КОД ОРИЕНТИРОВАТЬСЯ, ЧТОБЫ ПРОДОЛЖАТЬ ИСПОЛНЕНИЕ СКРИПТА (В ОСТАЛЬНЫХ СЛУЧАЯХ ДОЛЖНЫ ЧТО-ТО ПОКАЗЫВАТЬ,Я ОШИБКУ КАКУЮ-ТО)
-    // if (response.status !== 404) {
-        // console.log(decryptResponse);
         setTimeout( () => {
             let childEncryptBlock = document.createElement('div'),
                     encryptTextBlock = document.createElement('div');
@@ -224,10 +204,6 @@ document.getElementById('content__decrypt-block__decrypt-btn').addEventListener(
                 childEncryptBlock.appendChild(encryptTextBlock);
                 decryptResultBlock.appendChild(childEncryptBlock);
         }, 1100)
-    //} 
-    // else {
-
-    // }
 })
 
 
@@ -244,8 +220,9 @@ document.getElementById('page-background').addEventListener('click', function() 
 
 
 //Получение соли для шифрования
-function getCipherSalt () {
-    return fetch('./api/createCipherSalt', {
+function getCipherSalt () 
+{
+    return fetch('./api/getCipherSalt', {
         method: "GET",
     }).then( 
         promise => {
@@ -256,14 +233,13 @@ function getCipherSalt () {
             } else {
                 return promise.json()
             }
-            //Проверяем есть ли ошибка в выполнении ендпоинта
-            //return {errMsg: promise.headers.get('X-Error-Msg')} || promise.json()
         }   
     )
 }
 
 //Получение ключа для шифрования
-function getCipherKey () {
+function getCipherKey () 
+{
     return fetch('./api/getCipherKey', {
         method: "GET",
     }).then( 
@@ -275,8 +251,6 @@ function getCipherKey () {
             } else {
                 return promise.json()
             }
-            //Проверяем есть ли ошибка в выполнении ендпоинта
-            //return {errMsg: promise.headers.get('X-Error-Msg')} || promise.json()
         }   
     )
 }
@@ -308,14 +282,12 @@ document.getElementById('copy-cipher-salt').addEventListener('click', function()
 })
 
 
-
 //Получение соли к шифру
 document.getElementById('getSalt').addEventListener('click', getPrivateData('getSalt'))
 document.getElementById('getKey').addEventListener('click', getPrivateData('getKey'))
 
 function getPrivateData (data) 
 {
-
     return async function (event, privateData = data) {
     let parentBlock = event.currentTarget.closest('.section-private-data').id;
     console.log(parentBlock)
@@ -345,21 +317,11 @@ function getPrivateData (data)
     privateDataResultBlock.classList.add('visible')
     privateDataResultText.textContent = userPrivateData
     timerTextBlock.innerHTML = (privateData == 'getSalt' ? 'Соль будет удалена ' : 'Ключ будет удален ') + ' через <span>' + privateDataTimerCount + '<span>';
-
-    // private-data__timer-block__text
-    // document.getElementById('salt-timer-block__text').innerHTML = 'Секретный ключ будет удален через <span>' + privateDataTimerCount + '<span>';
-
-    // private-data__result__result-text
-    // document.getElementById('cipher-salt__text-block').innerHTML = userPrivateData;
-    //document.getElementById('salt-timer-block__text').innerHTML = 'Секретный ключ будет удален через <span>' + privateDataTimerCount + '<span>';
     timerAnimationBlock.classList.add('saltCounterStart')
 
     setTimeout(function(){
         privateDataResultBlock.classList.remove('visible')
-        //document.getElementById('GetCipherSalt').classList.remove('visible');
         privateDataResultText.textContent = "";
-        //document.getElementById('cipher-salt__text-block').innerHTML = "";
-        //document.getElementById('salt-timer-block__text').innerHTML = "";
         timerTextBlock.innerHTML = "";
         event.target.classList.remove('get-data');
         timerAnimationBlock.classList.remove('saltCounterStart')
@@ -377,7 +339,8 @@ function getPrivateData (data)
 
 //Клик по кнопке расшифровать напротив каждого результата шифрования
 //ПЕРЕПИСАТЬ КЛИК ПО КНОПКЕ ДЕШИФРОВАТЬ, НАЗНАЧИВ СЛУШАТЕЛЬ ДЛЯ КАЖДОЙ КНОПКИ ПО КОЛЛЕКЦИИ
-document.addEventListener('click', function(event) {
+document.addEventListener('click', function(event) 
+{
   if (event.target.classList.contains('content__encrypt-block__result__parent__call-decrypt')) {
     
     let encryptText = event.target.nextSibling.textContent,
@@ -385,7 +348,6 @@ document.addEventListener('click', function(event) {
         decryptTextInput = document.getElementById('decryptText');
     decryptTextInput.value = encryptText;
     //Не запускаем сразу дешифрование, так как возможно нужно ввести соль
-    //document.getElementById('content__decrypt-block__input__decrypt').click()
 
         clearDecryptText();
 
@@ -394,7 +356,6 @@ document.addEventListener('click', function(event) {
     });
 
   }
-    //prevResulst = document.querySelector('.content__decrypt-block__result__parent');
 });
 
 
@@ -445,8 +406,6 @@ document.getElementById('content__encrypt-block__encrypt-submit').addEventListen
     }
 
 
-    console.log(encryptFakeLength);
-
     //Если есть предыдущие результаты шифрования - очищаем их
     if (prevResulst.length) {
         for (let encryptIndex = 0; encryptIndex < prevResulst.length; encryptIndex++){
@@ -459,7 +418,6 @@ document.getElementById('content__encrypt-block__encrypt-submit').addEventListen
     let encryptResponseArr = [];
     let response;
 
-    // new Promise(function(resolve, reject){
         for (let index = 1; index <= resultCipherCount; index++) {
             encryptResponseArr.push(fetch('./api/getEncryptText', {
                 method: "POST",
@@ -474,7 +432,6 @@ document.getElementById('content__encrypt-block__encrypt-submit').addEventListen
                 }
             }))
         }
-    // }) 
 
     let encryptPromisesArr = [];
     let encryptErrArr = [];
@@ -517,18 +474,13 @@ document.getElementById('content__encrypt-block__encrypt-submit').addEventListen
 
     //ЕСЛИ МАССИВ С ОШИБКАМИ НЕ ПУСТОЙ ВЫВОДИ СООБЩЕНИЕ ПОЛЬЗОВАТЕЛЮ, А ТАКЖЕ ОБРАЙЩАЙСЯ К ЕНДПОИНТУ С ЗАПИСЬЮ ИНФОРМАЦИИ ОБ ОШИБКЕ
     let encryptResultBlock = document.getElementById('content__encrypt-block__result')
-    // encryptPromisesArr.forEach(elem => {
         setTimeout(() => {
-            // console.log(encryptResponse)
-            // console.log(encryptResponse.encryptText);
             encryptResultBlock.textContent = '';
             encryptPromisesArr.forEach((encryptText, index) => {
-                //console.log(encryptText)
                 let childEncryptBlock = document.createElement('div'),
                     encryptTextBlock = document.createElement('div'),
                     callDecryptButton = document.createElement('button');
                 childEncryptBlock.classList.add('content__encrypt-block__result__parent', 'result-text-block')
-                // childEncryptBlock.classList.add('result-text-field')
                 encryptTextBlock.classList.add('content__block__result__text')
                 callDecryptButton.classList.add('content__encrypt-block__result__parent__call-decrypt')
                 callDecryptButton.setAttribute('type', 'button');
@@ -536,9 +488,6 @@ document.getElementById('content__encrypt-block__encrypt-submit').addEventListen
                 callDecryptButton.textContent = "Дешифровать"
                 childEncryptBlock.appendChild(callDecryptButton);
                 childEncryptBlock.appendChild(encryptTextBlock);
-                
-                //console.log(childEncryptBlock)
-                
                 setTimeout(() => {
                     encryptResultBlock.appendChild(childEncryptBlock)
                 }, 100 * index);
@@ -547,7 +496,6 @@ document.getElementById('content__encrypt-block__encrypt-submit').addEventListen
                 behavior: 'smooth'
             });
         }, 500);
-    // })
 
         encryptErrArr = [...new Set(encryptErrArr)];
         console.log(encryptErrArr)
@@ -556,7 +504,8 @@ document.getElementById('content__encrypt-block__encrypt-submit').addEventListen
 const navigationElem = document.querySelectorAll('.navigation__block__title');
 
 //Навешиваем обработчик клика на иконку слайдера, "разворачивающего" соседний блок
-navigationElem.forEach((elem) => {
+navigationElem.forEach((elem) => 
+{
     elem.addEventListener('click', () => {
         let showClass = elem.parentElement.classList.contains('show');
         navigationElem.forEach((allElem) => {
@@ -586,11 +535,11 @@ Array.from(document.querySelectorAll('.slider-arrow')).forEach( (el) => {
 })
 
 
-//let getCipherKeyFields = Array.from(document.querySelectorAll('.cipher-key-field'));
 /**
  * Получение ключа для шифра 
  */
-document.getElementById('api-get-cipher-key').addEventListener('click', () => {
+document.getElementById('api-get-cipher-key').addEventListener('click', () => 
+{
         fetch('./api/getCipherKey', {
             method: "GET"
         }).then(resultJson => {
@@ -609,7 +558,6 @@ document.getElementById('api-get-cipher-key').addEventListener('click', () => {
 //#Гаврилов
 //НАВЕСЬ ФУНКЦИИ-ОБРАБОТЧИКИ ПРЯМО В HTML ЭЛЕМЕНТЫ, НАПРИМЕР НА АТРИБУТ ONCHANGE  
 
-//const sliderCollection = Array.from(document.querySelectorAll('.content__input-block__block-slide'));
 
 let encrpytSlidersCollection = document.querySelectorAll("#cipher-content__encrypt-block .content__input-block__block-slide"),
     decryptSlidersCollection = document.querySelectorAll("#cipher-content__decrypt-block .content__input-block__block-slide"),
@@ -710,5 +658,3 @@ function insertValue(index)
         checkInputValueDiff(event.currentTarget.closest('#content__encrypt-block__salt') ? cipherSaltCollection : cipherKeyCollection)
     }
 }
-
-

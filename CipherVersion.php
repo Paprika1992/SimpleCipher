@@ -1,9 +1,16 @@
 <?php
 
+/**
+ * Класс для работы с версией алгоритма
+ */
 class CipherVersion
 {
-	// private static $lettersArr = ['а'=>0, 'б'=>1, 'в'=>2, 'г'=>3, 'д'=>4, 'е'=>5, 'ё'=>6, 'ж'=>7, 'з'=>8, 'и'=>9, 'й'=>10, 'к'=>11, 'л'=>12, 'м'=>13, 'н'=>14, 'о'=>15, 'п'=>16, 'р'=>17, 'с'=>18, 'т'=>19, 'у'=>20, 'ф'=>21, 'х'=>22, 'ц'=>23, 'ч'=>24, 'ш'=>25, 'щ'=>26, 'ъ'=>27, 'ы'=>28, 'ь'=>29, 'э'=>30, 'ю'=>31, 'я'=>32, 'z'=>58, 'y'=>57, 'x'=>56, 'w'=>55, 'v'=>54, 'u'=>53, 't'=>52, 's'=>51, 'r'=>50, 'p'=>49, 'q'=>48, 'o'=>47, 'n'=>46, 'm'=>45, 'l'=>44, 'k'=>43, 'j'=>42, 'i'=>41,'h'=>40, 'g'=>39, 'f'=>38, 'e'=>37, 'd'=>36, 'c'=>35, 'b'=>34, 'a'=>33];
+	/**
+	 * @var array фиксированный массив кирилических и латинских букв в верхнем и нижнем регистрах
+	 */
 	private static $lettersArr;
+
+
 	/**
 	 * Метод получает из зашифрованного текста версию алгоритма
 	 *
@@ -13,21 +20,17 @@ class CipherVersion
 	public static function getVersion(string $cipherText): int
 	{
 		require("./config.php");
-		#Гаврилов
-		//ВНИЗУ ДУБЛИРОВАНИЕ УБЕРИ
 		self::$lettersArr = $CONF_lettersArr;
     	$versionString = mb_substr($cipherText, -5);
 		//Массив кирилических и латинских букв и цифр, которые участвовали в формировании версии
 		$lettersArr = self::$lettersArr;
-		#Гаврилов
-		//ПЕРЕПИШИ ПОД РЕГУЛЯРКУ PREG_MATCH_ALL /[0-9]/
 		$numberArr = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
 		$versionSymbArr = preg_split('//u', $versionString, -1, PREG_SPLIT_NO_EMPTY);
 		//Вычленяем числа из строки с версией
 		$versionNumberArr  = array_values(array_intersect($versionSymbArr, $numberArr));
 		//Вычленяем буквы из строки с версией
 		$letterArr  = array_values(array_diff($versionSymbArr, $numberArr));
-		//Определяем паттерн размещения
+		//Определяем паттерн формирования
 		$pattern = $versionNumberArr[0];
 		//Получаем флаг реверса 
 		$reverseLettersArr = (($versionNumberArr[1] % 2 === 0) ? 0 : 1);
@@ -56,7 +59,6 @@ class CipherVersion
 				$version = $versionNumbers[2] . $versionNumbers[0] . $versionNumbers[1];
 				break;
 		}
-
 		return (int)$version;
 	}
 }
