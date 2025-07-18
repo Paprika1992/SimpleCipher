@@ -236,10 +236,8 @@ textarea{
 
   &>.navigation__block{
     flex: 1;
-    /* flex-basis: 33%; */
-    /* position: relative; */
 
-    &.show{
+    &.visible{
       opacity: 1;
 
       &>.navigation__block__title{
@@ -252,15 +250,10 @@ textarea{
     }
 
     &:not(:first-of-type){
-
-      /* &>.navigation__block__title{ */
-        border-left: 2px solid grey;
-      /* } */
+      border-left: 2px solid grey;
     }
 
     &>.navigation__block__title{
-      /* background: lightblue; */
-      /* color: grey; */
       height: 100px;
       transition: 0.3s;
       cursor: pointer;
@@ -387,12 +380,12 @@ textarea{
       }
     }
 
-    &.show>.navigation__block__content{
+    &.visible>.navigation__block__content{
       transform: translateY(-5px);
       visibility: visible;
       transition: 0.3s;
     }
-    &.show>.navigation__block__title{
+    &.visible>.navigation__block__title{
       transform: translateY(5px);
       color: white;
       background: var(--color_blue_main);
