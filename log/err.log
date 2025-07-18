@@ -186,3 +186,33 @@
 2025-07-14 09:09:45 E_NOTICE Undefined offset: 0 в файле C:\upload_files\OSPanel\domains\cipher\CipherVersion.php на 28 
 2025-07-15 07:49:37 E_WARNING Cannot modify header information - headers already sent by (output started at C:\upload_files\OSPanel\domains\cipher\CipherController.php:416) в файле C:\upload_files\OSPanel\domains\cipher\CipherController.php на 503 
 2025-07-15 09:57:15 E_NOTICE Undefined variable: resultKey в файле C:\upload_files\OSPanel\domains\cipher\CipherController.php на 297 
+2025-07-16 09:27:19 E_WARNING require(./../../config.php): failed to open stream: No such file or directory в файле C:\upload_files\OSPanel\domains\cipher\versions\123\cipher.php на 220 
+2025-07-16 09:28:40 E_WARNING require(./../../config.php): failed to open stream: No such file or directory в файле C:\upload_files\OSPanel\domains\cipher\versions\123\cipher.php на 220 
+2025-07-16 09:29:03 E_WARNING require(./../../config.php): failed to open stream: No such file or directory в файле C:\upload_files\OSPanel\domains\cipher\versions\123\cipher.php на 221 
+2025-07-16 09:31:06 E_WARNING require(./../../config.php): failed to open stream: No such file or directory в файле C:\upload_files\OSPanel\domains\cipher\versions\123\cipher.php на 221 
+2025-07-16 09:32:34 E_WARNING require(./../../config.php): failed to open stream: No such file or directory в файле C:\upload_files\OSPanel\domains\cipher\versions\123\cipher.php на 221 
+2025-07-16 09:33:58 E_NOTICE Undefined variable: resultKey в файле C:\upload_files\OSPanel\domains\cipher\CipherController.php на 297 
+2025-07-16 09:36:05 E_WARNING Cannot modify header information - headers already sent by (output started at C:\upload_files\OSPanel\domains\cipher\CipherController.php:293) в файле C:\upload_files\OSPanel\domains\cipher\CipherController.php на 506 
+2025-07-16 09:36:59 E_WARNING Cannot modify header information - headers already sent by (output started at C:\upload_files\OSPanel\domains\cipher\versions\123\cipher.php:149) в файле C:\upload_files\OSPanel\domains\cipher\CipherController.php на 506 
+2025-07-16 09:37:27 E_NOTICE Array to string conversion в файле C:\upload_files\OSPanel\domains\cipher\CipherController.php на 296 
+2025-07-16 09:38:10 E_NOTICE Array to string conversion в файле C:\upload_files\OSPanel\domains\cipher\CipherController.php на 298 
+2025-07-16 09:39:27 E_NOTICE Array to string conversion в файле C:\upload_files\OSPanel\domains\cipher\CipherController.php на 298 
+2025-07-16 09:42:10 E_WARNING require_once(./versions/893/cipher.php): failed to open stream: No such file or directory в файле C:\upload_files\OSPanel\domains\cipher\CipherController.php на 424 
+2025-07-16 09:42:22 E_WARNING require_once(./versions/115/cipher.php): failed to open stream: No such file or directory в файле C:\upload_files\OSPanel\domains\cipher\CipherController.php на 424 
+2025-07-16 09:42:30 E_WARNING require_once(./versions/336/cipher.php): failed to open stream: No such file or directory в файле C:\upload_files\OSPanel\domains\cipher\CipherController.php на 424 
+2025-07-16 09:42:39 E_WARNING require_once(./versions/231/cipher.php): failed to open stream: No such file or directory в файле C:\upload_files\OSPanel\domains\cipher\CipherController.php на 424 
+2025-07-17 07:13:40 E_WARNING require_once(./versions/613/cipher.php): failed to open stream: No such file or directory в файле C:\upload_files\OSPanel\domains\cipher\CipherController.php на 422 
+2025-07-17 07:13:45 E_WARNING require_once(./versions/511/cipher.php): failed to open stream: No such file or directory в файле C:\upload_files\OSPanel\domains\cipher\CipherController.php на 422 
+2025-07-17 07:15:52 E_NOTICE Undefined offset: 10 в файле C:\upload_files\OSPanel\domains\cipher\versions\123\cipher.php на 202 
+2025-07-17 07:16:31 E_NOTICE Undefined offset: 0 в файле C:\upload_files\OSPanel\domains\cipher\versions\123\cipher.php на 669 
+2025-07-17 07:16:46 E_NOTICE Undefined offset: 0 в файле C:\upload_files\OSPanel\domains\cipher\versions\123\cipher.php на 669 
+2025-07-17 07:18:16 E_NOTICE Undefined offset: 0 в файле C:\upload_files\OSPanel\domains\cipher\versions\123\cipher.php на 669 
+2025-07-17 07:18:41 E_NOTICE Undefined offset: 0 в файле C:\upload_files\OSPanel\domains\cipher\versions\123\cipher.php на 669 
+2025-07-17 07:19:21 E_NOTICE Undefined offset: 0 в файле C:\upload_files\OSPanel\domains\cipher\versions\123\cipher.php на 669 
+2025-07-17 07:20:56 E_NOTICE Undefined offset: 0 в файле C:\upload_files\OSPanel\domains\cipher\versions\123\cipher.php на 669 
+2025-07-17 07:21:13 E_NOTICE Undefined index: � в файле C:\upload_files\OSPanel\domains\cipher\versions\123\cipher.php на 707 
+2025-07-17 07:29:45 E_NOTICE Undefined variable: opa3 в файле C:\upload_files\OSPanel\domains\cipher\CipherController.php на 302 
+2025-07-17 07:30:31 E_NOTICE Undefined variable: opa3 в файле C:\upload_files\OSPanel\domains\cipher\CipherController.php на 302 
+2025-07-17 08:24:32 E_WARNING Cannot modify header information - headers already sent by (output started at C:\upload_files\OSPanel\domains\cipher\CipherController.php:409) в файле C:\upload_files\OSPanel\domains\cipher\CipherController.php на 499 
+2025-07-17 08:24:47 E_WARNING Cannot modify header information - headers already sent by (output started at C:\upload_files\OSPanel\domains\cipher\CipherController.php:409) в файле C:\upload_files\OSPanel\domains\cipher\CipherController.php на 499 
+2025-07-17 08:54:39 E_WARNING Cannot modify header information - headers already sent by (output started at C:\upload_files\OSPanel\domains\cipher\CipherController.php:405) в файле C:\upload_files\OSPanel\domains\cipher\CipherController.php на 501 
