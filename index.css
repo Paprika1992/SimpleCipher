@@ -201,7 +201,7 @@ textarea{
     }
   }
 
-  & #app-name--sapphire{
+  & #app-name--cipphire{
     color: var(--color_blue_main);
 
     &>span:first-child{
@@ -359,7 +359,6 @@ textarea{
                   padding: 5px;
                   background: #f6e7d0;
                   color: black;
-                  /* transform: translateY(-5px); */
 
                   & .navigation__how-to-use__description__field-name{
                     color: white;
@@ -374,9 +373,6 @@ textarea{
                   }
 
                   &>.slider-content{
-                    /* height: auto;
-                    visibility: visible; */
-                    /* transform: translateY(5px); */
                     display: block;
                   }
                 }
@@ -477,7 +473,6 @@ textarea{
             position: relative;
 
             &.visible{
-              /* transform: translateY(0)!important; */
 
               &>.input-block__field-row{
                 height: auto!important;
@@ -651,7 +646,6 @@ textarea{
             position: relative;
 
             &.visible{
-              /* transform: translateY(0)!important; */
 
               &>.input-block__field-row{
                 height: auto!important;
@@ -660,17 +654,8 @@ textarea{
 
               & .content__input-block__block-slide{
 
-                &:hover{
-
-                  /* &>.input-block__block-slide__icon-arrow{
-                    transform: translateY(-3px) rotate(180deg);
-                  } */
-                }
-
                 &>.input-block__block-slide__icon-arrow{
                   transform: translateY(3px) rotate(180deg);
-                  /* padding-left: 10px;
-                  padding-right: 0px; */
                 }
               }
 

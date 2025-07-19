@@ -1,60 +1,52 @@
-//УБЕРИ ШИРОКИЕ СИМВОЛЫ И БУКВЫ И ЗАМЕНИ ИХ УЗКИМИ И ТТОГДА НЕ ПОНАДОБИТСЯ СДВИГАТЬ БУКВЫ ОТНОСИТЕЛЬНО ЦЕНТРА ЭЛЕМЕНТА
-let symbolsArr = '§rzC?I~К)чМSyJiТО<}÷g€мP0НbNУ≠x9#ц^Ёn?AЦfRj`и]©qlD+в1еаубsПvi-ЛF%HЭ3X_K>ha&тфоГ:π$сЗL!С5kVd(*EQWY'.split('');
+    //Перечень символов, которые будут отображаться в кристалле
+const SymbolsArr = '§rzC?I~К)чМSyJiТО<}÷g€мP0НbNУ≠x9#ц^Ёn?AЦfRj`и]©qlD+в1еаубsПvi-ЛF%HЭ3X_K>ha&тфоГ:π$сЗL!С5kVd(*EQWY'.split(''),
+    //Контейнер с прелоадером
+    PreloaderBlock = document.getElementById('preloader-container'),
+    //Коллекция треугольников в кристалле
+    TriangleBlocks = document.querySelectorAll('.triangle')
 
-//sapphire
-//cipher
-//sappher, ciphire
 
-let triangleBlocks = document.querySelectorAll('.triangle')
-
-const preloaderBlock = document.getElementById('preloader-container'),
-        triangles = document.querySelectorAll('.triangle');
-let sapphireShine,
+let sapphireShineInterval,  //Интервал сияния кристалла
     prevSapphireColor = null;
 function preloader__show()
 {
-    preloaderBlock.classList.add('visible')
-    sapphireShine = setInterval(function()
-    {   
+    PreloaderBlock.classList.add('visible')
+    sapphireShineInterval = setInterval( () => {   
         let activeBlocks = document.querySelectorAll('.triangle.triangle-colored');
+        //Каждую итерацию интервала убираем эффект сияния с треугольника кристалла
         if (activeBlocks.length) {
             activeBlocks[0].classList.remove('triangle-colored')
-            //triangleBlocks[0].firstElementChild.classList.remove('visible')
-            //activeBlocks[0].firstElementChild.innerHTML = "";
         }
+        //Определяем порядковый номер треугольника для сияния
         let coloredBLockNum = Math.floor(Math.random() * 8);
+        //Фиксируем порядковый номер кристалла для синия для следующей итерации анимации. Ниже описано зачем
         if (!prevSapphireColor) {
             prevSapphireColor = coloredBLockNum;
+        //Если следующий треугольник кристалла, который должен сиять тот же, что и в предыдущей итерации, принудительно меняем его, чтобы не было такого, что несколько итераций анимации сияют одни и те же треугольники кристалла. Это выглядит некрасиво
         } else if (prevSapphireColor == coloredBLockNum) {
-            coloredBLockNum = (coloredBLockNum == triangleBlocks.length -1 ? coloredBLockNum - 1 : coloredBLockNum + 1);
+            coloredBLockNum = (coloredBLockNum == TriangleBlocks.length -1 ? coloredBLockNum - 1 : coloredBLockNum + 1);
         }
-        
-        triangleBlocks[coloredBLockNum].firstElementChild.classList.add('visible')
-        triangleBlocks[coloredBLockNum].firstElementChild.innerHTML = symbolsArr[Math.floor(Math.random() * symbolsArr.length)];
-        // triangleBlocks[coloredBLockNum].innerHTML = "<div class='triangle-text'>" + symbolsArr[Math.floor(Math.random() * symbolsArr.length)] + "</div>";
-        triangleBlocks[coloredBLockNum].classList.add('triangle-colored')
+        //Анимация плавного исчезновения текст в треугольнике кристалла
+        TriangleBlocks[coloredBLockNum].firstElementChild.classList.add('visible')
+        //Отрисовываем в треугольнике случайный символ
+        TriangleBlocks[coloredBLockNum].firstElementChild.innerHTML = SymbolsArr[Math.floor(Math.random() * SymbolsArr.length)];
+        //Класс с анимацией сияния треугольников кристалла
+        TriangleBlocks[coloredBLockNum].classList.add('triangle-colored')
         prevSapphireColor = coloredBLockNum;
     }, 200)
 }
 
+
+//Скрываем прелоадер и чистим его от анимации сияния, символов, убираем класс сияния 
 function preloader__hide()
 {
-    clearInterval(sapphireShine);
-    for (let index = 0; index < triangleBlocks.length; index++) {
-        triangles[index].classList.remove('triangle-colored')
-        triangles[index].firstElementChild.classList.remove('visible')
-        triangles[index].firstElementChild.innerHTML = ''
+    clearInterval(sapphireShineInterval);
+    for (let index = 0; index < TriangleBlocks.length; index++) {
+        TriangleBlocks[index].classList.remove('triangle-colored')
+        TriangleBlocks[index].firstElementChild.classList.remove('visible')
+        TriangleBlocks[index].firstElementChild.innerHTML = ''
     }
-    preloaderBlock.classList.remove('visible')
+    PreloaderBlock.classList.remove('visible')
 }
 
 export {preloader__show, preloader__hide};
-
-//Гаврилов
-//ВЕРХНИЕ ТРЕУГОЛЬНИКИ НЕ "СВЕРКАЮТ" ТОЛЬКО НИЖНИЕ ПОЧЕМУ-ТО
-
-//#Гаврилов
-//В ПРЕЛОАДЕРЕ НЕ ДОЛЖНЫ ПОВТОРЯТЬСЯ КРИСТАЛЫ, КОТОРЫЕ СВЕРКАЮТ. КАЖДУ ИТЕРАЦИЮ "СВЕРКАНИЯ" ОНИ ДОЛЖНЫ ОТЛИЧАТЬСЯ
-
-
-
