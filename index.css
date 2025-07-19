@@ -228,7 +228,7 @@ textarea{
   display: flex;
     /* gap: 10px; */
     justify-content: space-around;
-  width: 700px;
+  width: 1000px;
   margin: auto;
   /* margin-bottom: 50px; */
   z-index: 100;
@@ -284,6 +284,13 @@ textarea{
 
         & .navigation__content__section__description{
           text-align: justify;
+        }
+
+        &#navigation__block__content__general-info{
+
+          & a{
+            color: #b2b2ff !important;
+          }
         }
 
         &#navigation__block__content__how-to-use{

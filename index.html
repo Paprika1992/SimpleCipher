@@ -44,6 +44,24 @@
     <div id="page-background"></div>
     <nav id="page__navigation">
         <div class="navigation__block">
+            <div class="navigation__block__title">Общая информация</div>
+            <div class="navigation__block__content" id="navigation__block__content__general-info">
+                <div class="navigation__content__section">
+                    Cipphire - алгоритм <a href="https://ru.wikipedia.org/wiki/Симметричные_криптосистемы" target="_blank">симметричного шифрования</a>, созданный в академических целях силами одного разработчика. Сервис не собирает, не хранит и не передает никаких личных или персонализированных данных пользователя. Сервис не использует, а значит, не зависит, ни от каких сторонних библиотек, фреймворков, наборов иконок и т.д. Технологический стек: php, javascript (НУЖНО ЛИ УТОЧНИТЬ, ЧТО PURE ИЛИ VANILLA)
+                </div>
+                <div class="navigation__content__section" id="feedback-fields-block">
+                <h4>Преимущества алгоритма Cipphire</h4> на примере 100000 итераций шифрования фразы: "LOREM TUDA SYDA" (без фейковых символов, использующихся для достижения заданной длины текста) :
+                    <ul>
+                        <li>На 100000+ итераций шифрования (без передачи соли или ключа) не выявлено ни одной коллизии</li>
+                        <li>На 100000+ итераций попыток подобрать коллизию к сгенерированной соли для успешного дешифрования не выявлено ни одной</li>
+                        <li>На 100000+ итераций попыток подобрать коллизию к сгенерированному ключу для успешного дешифрования не выявлено ни одной</li>
+                        <li><a href="https://ru.wikipedia.org/wiki/Информационная_энтропия" target="_blank">Уровень энтропии</a>: РЕЗУЛЬТАТЫ ТЕСТОВ БИНАРНЫМ ФАЙЛОМ</li>
+                        <li><a href="https://ru.wikipedia.org/wiki/Лавинный_эффект" target="_blank">Лавинный эффект</a>: при замене любого символа в шифре, соли или ключе успешного дешифрования не происходит</li>
+                    </ul>
+                </div>
+            </div>
+        </div> 
+        <div class="navigation__block">
             <div class="navigation__block__title">Как пользоваться сервисом</div>
             <div class="navigation__block__content" id="navigation__block__content__how-to-use">
                 <div class="navigation__content__section">
@@ -73,7 +91,7 @@
                 <div class="navigation__content__section">
                     <div class="navigation__content__section__step-num">2</div>
                     <div class="navigation__content__section__step-description">
-                        После нажатия на кнопку <span class="navigation__how-to-use__description__field-name">Зашифровать</span> сгенерируются шифры. Напротив каждого из них будет кнопка <span class="navigation__how-to-use__description__field-name">Дешифровать</span>. Нажав на ее, шифр прольется в поле <span class="navigation__how-to-use__description__field-name">Текст для дешифрования</span> в блоке Дешифровки.
+                        После нажатия на кнопку <span class="navigation__how-to-use__description__field-name">Зашифровать</span> сгенерируются шифры. Напротив каждого из них будет кнопка <span class="navigation__how-to-use__description__field-name">Дешифровать</span>. Нажав на ее, шифр прольется в поле <span class="navigation__how-to-use__description__field-name">Текст для дешифрования</span> в блоке Дешифрования.
                         <br>В нем же есть кнопка <span class="navigation__how-to-use__description__field-name">Дешифровать</span>. Нажав на ее, алгоритм отобразит исходное сообщение
                     </div>
                 </div>
@@ -81,7 +99,7 @@
                     <div class="navigation__content__section__step-num">3</div>
                     <div class="navigation__content__section__step-description">
                         Соль для шифра предназначена для обеспечения стойкости шифров к взлому. Она гарантирует, что даже в случае заполучения потенциальным злоумышленником зашифрованных сообщений, их не получится дешифровать, не зная соли (вероятность подобрать соль менее 0.00000000001%).
-                        <br>Для генерации соли используй endpoint <span class="navigation__how-to-use__description__field-name">api/getCipherSalt</span>(подробнее в разделе навигации API), нажми на иконку <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="25" height="25" viewBox="0,0,256,256"><g fill="#ffffff" fill-rule="nonzero" stroke="none" stroke-width="1" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10" stroke-dasharray="" stroke-dashoffset="0" font-family="none" font-weight="none" font-size="none" text-anchor="none" style="mix-blend-mode: normal"><g transform="scale(10.66667,10.66667)"><path d="M7,5c-3.84545,0 -7,3.15455 -7,7c0,3.84545 3.15455,7 7,7c2.77499,0 5.08941,-1.6853 6.27148,-4h2.72852v3h6v-3h2v-6h-1h-9.71289c-1.11451,-2.32444 -3.44795,-4 -6.28711,-4zM7,7c2.28025,0 4.09251,1.421 4.75586,3.32813l0.23242,0.67188h10.01172v2h-2v3h-2v-3h-5.98242l-0.24805,0.63477c-0.75942,1.94073 -2.60543,3.36523 -4.76953,3.36523c-2.75455,0 -5,-2.24545 -5,-5c0,-2.75455 2.24545,-5 5,-5zM7,9c-1.64501,0 -3,1.35499 -3,3c0,1.64501 1.35499,3 3,3c1.64501,0 3,-1.35499 3,-3c0,-1.64501 -1.35499,-3 -3,-3zM7,11c0.56413,0 1,0.43587 1,1c0,0.56413 -0.43587,1 -1,1c-0.56413,0 -1,-0.43587 -1,-1c0,-0.56413 0.43587,-1 1,-1z"></path></g></g></svg> напротив поля <span class="navigation__how-to-use__description__field-name">Ключ для шифра</span> формы основной страницы или на кнопку ниже <span class="navigation__how-to-use__description__field-name">Получить соль</span>.
+                        <br>Для генерации соли используй endpoint <span class="navigation__how-to-use__description__field-name">api/getCipherSalt</span> (подробнее в разделе навигации API), нажми на иконку <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="25" height="25" viewBox="0,0,256,256"><g fill="#ffffff" fill-rule="nonzero" stroke="none" stroke-width="1" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10" stroke-dasharray="" stroke-dashoffset="0" font-family="none" font-weight="none" font-size="none" text-anchor="none" style="mix-blend-mode: normal"><g transform="scale(10.66667,10.66667)"><path d="M7,5c-3.84545,0 -7,3.15455 -7,7c0,3.84545 3.15455,7 7,7c2.77499,0 5.08941,-1.6853 6.27148,-4h2.72852v3h6v-3h2v-6h-1h-9.71289c-1.11451,-2.32444 -3.44795,-4 -6.28711,-4zM7,7c2.28025,0 4.09251,1.421 4.75586,3.32813l0.23242,0.67188h10.01172v2h-2v3h-2v-3h-5.98242l-0.24805,0.63477c-0.75942,1.94073 -2.60543,3.36523 -4.76953,3.36523c-2.75455,0 -5,-2.24545 -5,-5c0,-2.75455 2.24545,-5 5,-5zM7,9c-1.64501,0 -3,1.35499 -3,3c0,1.64501 1.35499,3 3,3c1.64501,0 3,-1.35499 3,-3c0,-1.64501 -1.35499,-3 -3,-3zM7,11c0.56413,0 1,0.43587 1,1c0,0.56413 -0.43587,1 -1,1c-0.56413,0 -1,-0.43587 -1,-1c0,-0.56413 0.43587,-1 1,-1z"></path></g></g></svg> напротив поля <span class="navigation__how-to-use__description__field-name">Ключ для шифра</span> формы в блоке Шифрование или на кнопку ниже <span class="navigation__how-to-use__description__field-name">Получить соль</span>.
                         <div class="section-private-data" id="section-private-data--salt-block">
                             <button type="button" id="getSalt">Получить соль</button>
                             <!--TODO идентификато ниже не должен быть с заглавной буквы-->
@@ -103,7 +121,7 @@
                                     <li>Не используй соль, которую придумал сам, это не безопасно!</li>
                                     <li>При работе с алгоритмом с <b>демонстрационной страницы</b> (где ты сейчас находишься) указывать соль не обязательно. Однако, при использовании api, ресурс будет требовать ее передачу.</li>
                                     <li>Очевидно, ту же соль, что была передана при шифровании, необходимо передать и при дешифровке для получения исходного сообщения. Можно использовать одну и ту же соль для неограниченного количества операций шифрования/дешифрования.</li>
-                                    <li>И наконец, храни соль отдельно от шифров, которые были зашифрованы с ее помощью.</li>
+                                    <li>И наконец, храни соль отдельно от шифров, которые были получены с ее помощью.</li>
                                 </ol>
                             </div>
                         </div>
@@ -114,7 +132,7 @@
                     <div class="navigation__content__section__step-num">4</div>
                     <div class="navigation__content__section__step-description">
                         Ключ является необязательным параметром, который имеет схожее значение с солью и еще на несколько порядков усиливает стойкость шифра к взлому. Если соль - это сейф, который защищает твой зашифрованный текст, ключ - это еще один сейф внутри.
-                        <br>К ключу применяются те же условия, которые описаны в подразделе Несколько важных уточнений для Соли выше, кроме того, что ключ необязательно формировать и передавать при работе с api
+                        <br>К ключу применяются те же условия, которые описаны в подразделе <i>Несколько важных уточнений</i> для Соли выше, кроме того, что ключ необязательно формировать и передавать при работе с api
                         <br>Для генерации ключа воспользуйся api ендпоинтом <span class="navigation__how-to-use__description__field-name">api/getCipherKey</span> (подробнее в разделе навигации API), нажми на иконку <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="25" height="25" viewBox="0,0,256,256"><g fill="#ffffff" fill-rule="nonzero" stroke="none" stroke-width="1" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10" stroke-dasharray="" stroke-dashoffset="0" font-family="none" font-weight="none" font-size="none" text-anchor="none" style="mix-blend-mode: normal"><g transform="scale(10.66667,10.66667)"><path d="M7,5c-3.84545,0 -7,3.15455 -7,7c0,3.84545 3.15455,7 7,7c2.77499,0 5.08941,-1.6853 6.27148,-4h2.72852v3h6v-3h2v-6h-1h-9.71289c-1.11451,-2.32444 -3.44795,-4 -6.28711,-4zM7,7c2.28025,0 4.09251,1.421 4.75586,3.32813l0.23242,0.67188h10.01172v2h-2v3h-2v-3h-5.98242l-0.24805,0.63477c-0.75942,1.94073 -2.60543,3.36523 -4.76953,3.36523c-2.75455,0 -5,-2.24545 -5,-5c0,-2.75455 2.24545,-5 5,-5zM7,9c-1.64501,0 -3,1.35499 -3,3c0,1.64501 1.35499,3 3,3c1.64501,0 3,-1.35499 3,-3c0,-1.64501 -1.35499,-3 -3,-3zM7,11c0.56413,0 1,0.43587 1,1c0,0.56413 -0.43587,1 -1,1c-0.56413,0 -1,-0.43587 -1,-1c0,-0.56413 0.43587,-1 1,-1z"></path></g></g></svg> напротив поля <span class="navigation__how-to-use__description__field-name">Соль для шифрования</span> формы основной страницы или на кнопку ниже <span class="navigation__how-to-use__description__field-name">Получить ключ</span>
                         <div class="section-private-data" id="section-private-data--key-block">
                             <button type="button" id="getKey">Получить ключ</button>
@@ -556,7 +574,7 @@
                     <path d="M8 1L15 14H1L8 1Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
                     <path d="M8 6V9M8 11V11.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
                 </svg>
-            
+            <!-- ГАВРИЛОВ. ПРОВЕРЬ ТЕКСТ НИЖЕ -->
             <div id="footer-content__notification">Приложение разработано в академических целях. Любое использование для нарушения закона (МОЖЕТ С ПРОТИВОЗАКОННЫМИ ЦЕЛЯМИ?) запрещено</div>
            
                 <svg width="1.5em" height="1.5em" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">

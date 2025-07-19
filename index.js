@@ -129,8 +129,12 @@ document.getElementById('page-background').addEventListener('click', function() 
 })
 
 
-function getPrivateData_rqst (data) {
-    return fetch((data == 'salt' ? './api/getCipherSalt' : './api/getCipherKey'), {
+/**
+ * Метод получения персональных приватных данных для шифрования
+ * @param {string} privateData генерируемое значение 
+ */
+function getPrivateData_rqst (privateData) {
+    return fetch((privateData == 'salt' ? './api/getCipherSalt' : './api/getCipherKey'), {
         method: "GET",
     }).then( 
         promise => {
@@ -143,46 +147,6 @@ function getPrivateData_rqst (data) {
         }   
     )
 }
-
-
-/**
- * Получение соли для шифрования
- */
-// function getCipherSalt () 
-// {
-//     return fetch('./api/getCipherSalt', {
-//         method: "GET",
-//     }).then( 
-//         promise => {
-//             if (promise.status !== 200) {
-//                 let errMsg = 'Error'
-//                 return {err: errMsg + ": " + promise.headers.get('X-Error-Msg')} || true
-//             } else {
-//                 return promise.json()
-//             }
-//         }   
-//     )
-// }
-
-
-/**
- * Получение ключа для шифрования
- */
-// function getCipherKey () 
-// {
-//     return fetch('./api/getCipherKey', {
-//         method: "GET",
-//     }).then( 
-//         promise => {
-//             if (promise.status !== 200) {
-//                 let errMsg = 'Error'
-//                 return {err: errMsg + ": " + promise.headers.get('X-Error-Msg')} || true
-//             } else {
-//                 return promise.json()
-//             }
-//         }   
-//     )
-// }
 
 
 /**
@@ -276,26 +240,24 @@ function slideBlock(index)
  * Метод получения приватных данных для шифрования: ключ/соль 
  * @param {string} data название генерируемого значения соль/ключ
  */
-function getPrivateData (data) 
+function getPrivateData (privateData) 
 {
-    return async function (event, privateData = data) {
+    return async function (event, privateDataAction = privateData) {
         //Если клик происходит во время отсчета до исчезновения соли/ключа
         if (event.target.classList.contains('get-data')) {
             return;
         }
         let parentBlock = event.currentTarget.closest('.section-private-data').id,
-            privateDataRqst = (privateData == 'cipherSalt' ? await getPrivateData_rqst('salt') : await getPrivateData_rqst('key')),
+            privateDataRqst = (privateDataAction == 'cipherSalt' ? await getPrivateData_rqst('salt') : await getPrivateData_rqst('key')),
             userPrivateData
         if (privateDataRqst.err) {
             alert(privateDataRqst.err)
             
             return;
         }
-        userPrivateData = (privateData == 'cipherSalt' ? privateDataRqst.cipherSalt : privateDataRqst.cipherKey)
+        userPrivateData = (privateDataAction == 'cipherSalt' ? privateDataRqst.cipherSalt : privateDataRqst.cipherKey)
         //Пока идет счетчик для копирования, нельзя запустить генерацию нового значения
         event.target.classList.add('get-data');
-        console.log(event)
-        console.log(event.currentTarget)
         //Счетчик удаление сгенерированного значения
         let privateDataTimerCount = 7,
             timerTextBlock = document.querySelector(`#${parentBlock} .private-data__timer-block .private-data__timer-block__text`),
@@ -304,7 +266,7 @@ function getPrivateData (data)
             privateDataResultText = document.querySelector(`#${parentBlock} .private-data__result .private-data__result__text`);
         privateDataResultBlock.classList.add('visible')
         privateDataResultText.textContent = userPrivateData
-        timerTextBlock.innerHTML = (privateData == 'cipherSalt' ? 'Соль будет удалена ' : 'Ключ будет удален ') + ' через <span>' + privateDataTimerCount + '<span>';
+        timerTextBlock.innerHTML = (privateDataAction == 'cipherSalt' ? 'Соль будет удалена ' : 'Ключ будет удален ') + ' через <span>' + privateDataTimerCount + '<span>';
         timerAnimationBlock.classList.add('saltCounterStart')
         //Через промежуток времени удаляем сгенерированное значение, скрываем соответствующие элементы со страницы
         setTimeout(function(){
@@ -318,13 +280,11 @@ function getPrivateData (data)
         //Интвервал, отсчитывающий время таймера перед удалением сгенерированного значения
         let privateDataInterval = setInterval(function(){
             privateDataTimerCount--;
-            timerTextBlock.innerHTML = (privateData == 'cipherSalt' ? 'Соль будет удалена ' : 'Ключ будет удален ') + ' через <span>' + privateDataTimerCount + '<span>';
+            timerTextBlock.innerHTML = (privateDataAction == 'cipherSalt' ? 'Соль будет удалена ' : 'Ключ будет удален ') + ' через <span>' + privateDataTimerCount + '<span>';
         }, 1000)
     }
 }
 
-//#Гаврилов
-//МОЖНО ОБЪЕДИНИТЬ ДВА МЕТОДА НИЖЕ В ОДИН
 
 //Генерация соли для шифра
 document.getElementById('api-get-cipher-salt').addEventListener('click', async () => {
@@ -402,7 +362,14 @@ document.getElementById('content__decrypt-block__decrypt-btn').addEventListener(
         }
     });
 
+    //Гаврилов
+    //ПОЧИСТИ PRELOADER.JS
+
     
+    //#Гаврилов
+    //ВЫЯВИ повторяющиеся DOCUMENGETELEMENTBYID в переменную на верх скрипта
+
+
     /**
      * Массив с ошибками запроса дешифрования
      * @type array
