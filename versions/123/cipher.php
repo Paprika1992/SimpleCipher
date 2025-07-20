@@ -2,8 +2,6 @@
 
 mb_internal_encoding("UTF-8");
 
-#Гаврилов
-//НА ПРОДОВСКОЙ ВЕРСИИ УБЕРИ НАСТРОЙКИ НИЖЕ 
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
@@ -15,22 +13,6 @@ ini_set('xdebug.var_display_max_data', -1); // без ограничения д�
 
 class SimpleCipher
 {
-	/**
-	 * @var array массив ключей шифра, которые будут использоваться в зависимости от 3ей цифры в версии алогоритма
-	 */
-	// private $cipherKeyStorage = [
-	// 	0 => 'Sт⇔цVяСН@KИЮВr[5"Z:t*П}÷OmoЕЯврЗ08()ы4§чЙ9ГДУWэ7ишЛvcщАEH~ЖЩ!Iдеaлb/%3ОFу1`М-пёYюШsqJ©;LC_xЫQ\P.zp=ьGdЦy2аз×жX+ nhЬ€NЪм>kХб,{#AфR^]Т6ФРuКЁъБг|efоi≠wMкUπTЭн$jg<&хйЧ№?BсDl',
-	// 	1 => '}tлз0sWyк1пЕ%N×\с3LеЯДXу:дTЙцw€мE?)о№G|]pPвщFπIг`rz6хkeЬOj8эяВuDZ>ШьSКМh$Э4аИУЁ2Щ*Рmx@Uрш©и"Т=vъ#(QФн[i≠l<Ъ;Г+П5Jч⇔Зф§coБYёХЫ~Лbы.йVОтq^C,СЦKd{ M_gHб&А7aRю/НЧf÷Ю-A9Ж!Bnж',
-	// 	2 => 'йЧо83з]МылlK≠©;d0eW1wэYЖh4v+xЪ>аГ9{ШЙн*bуюCИФЕoпёХвБzУТyЮЫ€ЛНiV÷⇔X?геgК~#Q"Ашa)AЁSт&J§75`%хСкjr(|ВFB:sRжLмTG@ф/t^П×яОMqЩ,ZH}ЯЭ2Nд._u[O<иъ=\Dpцч$πPEсЗ IРfЬUcnЦkбрД6щ!m-ь№',
-	// 	3 => 'T&π[03eшМэnВoqГДNX2в{П)о÷4д!Биs<€Ы]B`же}>9hарщKг#%k5Шaiь©PЁl(ЮmUHGQЗA*=№хФХЪЧЦRР+чLЭп"§О-~jwлrСgtO⇔АЬv8ЕxЙЯ\Dй×я/z≠SЖтЩ @ёНEF.Y$кZъИКV:?JбfзCc|Wuм1юц^ынуIpс7_yУЛb;,фd6MТ',
-	// 	4 => 'J;oeчэиЖ]"ЁцTwз7{ыфК3хГ+SюПzbИIЮОмkt!тUpвдРЫAViH?З4ХБvЛaЦоOGж2ruR%[C6ьXcMъёKL|sh ФЪE0DZ9FаУd№А}QЬYЧqЩШy(fейnуPлс)mбТЭНBС8В1ДМlЙгрЯяjнЕW5Ngx:пшкщ&*\^-=`~@#$_/,.<>©§π≠×÷€⇔',
-	// 	5 => '])2h8Т_гK:ИСoGсП4§щёЦSgЬГ&≠\wcЕrт€FJыyЮ©?aНlm@бндzшжЗх#.Ё~Вqef/$3ХеЧво№uЭь⇔vDБWQ7id|з=уФH`кj(юМTπ"k*0КЖяф×N[UЯVIRп1CиXр;%Z {}мчЛцpДЙ^O6лtЪYАL,ъEMPsОA!B÷эШЫx<а5-РУb+й>9nЩ',
-	// 	6 => ',пЙЩ@GRS]#YHМ$€цUчж5pхьl}©ЮъJgF94ф0шРНЖЗзЪ1мmto×юaЁны>uQ⇔ОэЯа3EВТ!БЬIу|XisBд"К8WD≠y/nтkС A<с{:оё`÷h-jлГfФqe.Ур~Е*ИTя2А+[x?P=бL%K6ЫrйO§№г;ЛcV)ДЦvwbZвк_^ПC&ХщMЧd(7\ШиNеzπЭ',
-	// 	7 => 'н)Ичph[:EзH"π&К71^фВLy©AGё]§ьRnbmэг!%NуЫO*М№3DYS#o{вЛI/ШЧ€ЁАwJ2Te5zПГ$VxЖl?-тQС `@б≠UX;цпО_ЕBлЭvж~÷и}БъdйсЙZ|рыЮа\оs8.uХю⇔FKP,WCЩхмcФfУЬqЦgщР×iТ<9шЪr0tяЯеЗДН(j6M+=кa>kд4',
-	// 	8 => 'B§)яе{Лf$,Ыщi№сВpМb.jlI*KудшСЯЦktzЙ>MЪкgnмx=47Wy^ehDФз÷;ё€ГЖъ(rZ×©~юХd%вэv08цc\л⇔й[_C#So`OЧчGОЕuп3m<т2FД гQEЩ&ы!ЁиA]оπЮЭУYPa+|Т"}L:@нVРЬН/ь-а?RБ6ЗUжШб1хрИJHs9XфП5NTw≠КqА',
-	// 	9 => 'ТS9NИz&оxMlзе!эпGL<yМБYRДf$v{КОч€akыЫq⇔=Лw/туJлHh#mё4~ЮOшб|CюTAШ0F?я*ъngЁГ(oXС5VЕн§Ьu[U@ b>Жф%,Пπ}8ЭЙФ2©PЩЪtХ:А_-хЗЧp÷I+и`6рщйrгс№sDмiьcкжУKBв≠E"eQН;d17^)ацдВ]\W3Z.Ц×ЯРj',
-
-
 	/**
 	 * @var string ключ шифра, который будет использоваться для построения первой матрицы
 	 */
@@ -132,8 +114,6 @@ class SimpleCipher
 	public function __construct()
 	{
 		require_once (__DIR__ . "./../../CipherVersion.php");
-		// $this->text = $text;
-		// $this->salt = $salt;
 		#Гаврилов
 		//ПЕРЕНЕСИ ДВА СВОЙСТВА НИЖЕ В МЕТОДА ШИФРОВАНИЯ, ДЕШИФРОВКИ, НЕ ОСТАВЛЯЙ В КОНТРОЛЛЕРЕ, ТАК КА КЕСТЬ СТАТИЧЕСКИЕ МЕТОДЫ КЛАССА, НЕ НАДО ПРИ КАЖДОМ ОБРАШЩЕНИИ К НИМ ЛАЗИТЬ ПО ФАЙЛОВОЙ СИСТЕМЕ, ЧТОБЫ ПОЛУЧАТЬ ФЕЙКОВЫЕ КЛЮЧИ
 		$this->version = array_reverse(explode('\\', __DIR__))[0];
@@ -152,8 +132,6 @@ class SimpleCipher
 		$fakeCipherKey = preg_split('//u', $fakeCipherKey, -1, PREG_SPLIT_NO_EMPTY);
 		shuffle($fakeCipherKey);
 		$fakeCipherKey = implode('', $fakeCipherKey);
-
-		// var_dump($fakeCipherKey);
 
 		return $fakeCipherKey;
 	}
@@ -274,8 +252,6 @@ class SimpleCipher
 		//Определяем какой ключ шифра будем передавать для версии. Если используется соль, передаем фейковый ключ. Если при этом используется пользовательский ключ, передаем первую цифру из него. При парсинге версии будем сверять первую цифру из пользовательского ключа и цифру ключа шифра из указателя. Если они не совпадают - произошла подмена
 		$versionCipherKeyPart = $this->salt ? $cipherKeyIndex_unTransform : $cipherKeyIndex;
 		if ($userCipherKey) {
-			#Гаврилов
-			//ПРОВЕРЬ РАБОТУ ПРОВЕРКИ НИЖЕ
 			//Получаем цифры из пользовательского ключа
 			preg_match_all('/[0-9]/', $userCipherKeyArr[0], $userCipherKeyNumArr);
 			$versionCipherKeyPart = $userCipherKeyNumArr[0][0];
@@ -382,8 +358,7 @@ class SimpleCipher
 		return $realStringLenght;
 	}
 
-	#Гаврилов
-	//ПЕРЕД РЕЛИЗОМ ПОМЕНЯЙ ФУНКЦИИ ХЭШИРОВАНИЯ НА АКТУАЛЬНЫЕ ДЛЯ АКТУАЛЬНОЙ ВЕРСИИ PHP
+
 	/**
 	 * Метод формирует хэш для заполнения отрезками из него пространство между символами исходного сообщения для достижения желаемой фейковой длины
 	 *
@@ -525,10 +500,6 @@ class SimpleCipher
 	}
 
 
-	#Гаврилов
-	//ЕСЛИ ПЕРЕДАВАТЬ ОДНУ И ТУ ЖЕ СОЛЬ И ОДИН И ТОТ ЖЕ КЛЮЧ ПРИ ШИФРОВАНИИ ОДНОЙ И ТОЙ ЖЕ СТРОКИ (БЕЗ ФЕЙКОВЫХ СИМВОЛОВ), КОГДА НАЧНУТСЯ КОЛИЗИИ? вЕДЬ КЛЮЧЕВЫЕ ПАРАМЕТРЫ ОДНИ И ТЕЖЕ. А ЕСЛИ ПЕРЕДАВАТЬ ТОЛЬКО ОДНУ И ТУ ЖЕ СОЛЬ С КЛЮЧАМИ АЛГОРИТМА?
-
-
 	/**
 	 * Метод дешифровки текста
 	 * @param string $cipherText зашифрованный текст для дешифрования
@@ -584,8 +555,6 @@ class SimpleCipher
 		}
 		$this->saltNumberSegments = $this->getSaltNumbersArr();
 		$cipherKeyIndex = $this->getCipherKey();
-		#Гаврилов
-		//ПРОВЕРЬ ПРОВЕРКУ НИЖЕ
 		if (!empty($userCipherKeyArr)) {
 			//Получаем цифры из пользовательского ключа
 			preg_match_all('/[0-9]/', $userCipherKeyArr[0], $userCipherKeyNumArr);
@@ -874,14 +843,6 @@ class SimpleCipher
 	}
 
 
-	#Гаврилов
-	//УДАЛИ ИЗ МЭДЖИКА СКРИПТ, КОГДА ПЕРЕДАЕШЬ ЕГО СЕБЕ НА КОМП
-
-	#Гаврилов
-	//ПОПРОБУЙ УКАЗАТЬ МАКСИМАЛЬНУЮ ДЛИНУ ТЕКСТА 1000
-	//ПОПРОБУЙ УКАЗАТЬ РЕАЛЬНЫЙ ТЕКСТ РОВНО 1000 СИМВОЛОВ И ФЕЙКОВУЮ ДЛИНУ 1000 / 0
-
-
 	/**
 	 * Метод заполняет фейковыми значениями шифруемый текст до достижения желаемой длины
 	 *
@@ -899,7 +860,6 @@ class SimpleCipher
 		while ($n < mb_strlen($interimCipherText))
 		{
 			$fakeSegmentsArr[$n] = mb_substr($cipherLengthHash, $fakeSymbSegmentLen * $n, $fakeSymbSegmentLen);
-
 			$n++;
 		}
 		$interimCipherTextArr = $this->getStrArr($interimCipherText);
@@ -1560,23 +1520,17 @@ $symbArr = ['z'=>58, 'y'=>57, 'x'=>56, 'w'=>55, 'v'=>54, 'u'=>53, 't'=>52, 's'=>
 	$symbArr[] = 7;
 	$symbArr[] = 8;
 	$symbArr[] = 9;
-
 	$symbArr = array_merge($symbArr, []);
 
-
-	#Гаврилов
-	//В РАЗДЕЛЕ API НАВЕРНОЕ НУЖНО НАПИСАТЬ В НАЧАЛЕ КАКАЯ ЧАСТЬ ЗАПРОСА ПРЕДШЕСТВУЕТ ЕНДПОИНТАМ? HTTPS://sIMPLEcIPHER/API/ENPOINT
-
-$cipherText = 'мама ra 1y^';
-// $cipherText = '1111111111111111111111111';
-$salt = 'NTI0M2FmNWEwOGU3NDY2YTc5MAFiMTEyOTdlNmY1NTQzY2Q4MzYzMmJkMTNiODRjOGI2YjY4NjEwYjNmM2NjZGJhOWY1NjRiYmU3OTEzZjdhZmIzNDExM2QwZTgwMjhkZDE1OTIwMDlhY2YxZjIxMDljNDA4MTllZjc3MmEzOTI';
-$userKey = '*OПр÷Гкцg+U~WВ€Cf7Я⇔ЖTIh">x.!ФaЩ3_\Е,С10≠Ёcл×:s VRDмчNnlSф2сяpЫ-Lтыщ©@=пУиёюЙэ6q(;πiE4шMОzу?[Jr№хk%<vШ9|^o}ДjзьаБЧHЪъte/d&ЭF]оAбнЦХ{ZНЗКPQKuеbАmвG#ТгyИ)5й§ЛЬжМwР`XYЮ8д$B*≠"K8Длв÷и$~i:{Пs;5oэl !h0⇔-тжшдяКYT_СЮZ#юЁЫъ,огЙu4VCQ2Гр§H%ХЧEAТmемфN@<6Э^/IЯvА\ЗкyнцπчtРё)МФSdОP№а[1?rЦИ×pLНБzЬRщcбУЪjх=зnШ&Oу`ЩЛawbпь|g]X9(F.BGJDйM}3©e7kЕU>сыWx+qfВ€Ж';
+$cipherText = 'Lorem ipsum dolor sit';
+$salt = 'NzkyOTgwNjRhNWI3ZjczNzJmODI5MDM4MjAyYzliZTNiNmM5ZWE0ZmZlNzc1NTQ1NjViMjYwYjVkZWM3ZTllYzU0YjI1ZTgwY2M4ODVmNjE5MjM0ZDcwZTU5YzlhYWIzMmNlYTU2NmFmMjg2MjkwN2U5YjQxYjllZmQ5ZDRjMDk';
+$userKey = 't€ы(lцК#г3x}dЩLп%j>!:z,Cъm Фйa?8-ЪZтbВэSуroIЖDcVяM|u×Ыeм[И≠ХFЦHУОTPГ@gsьлf<EЗ*W~ПQЛюNнЕд;7XY]в25ж⇔БфЁpЭiyЬТ0Р^А/KЧчG&"Rnз4аJ№р`хщ$1{6B§AUЙЯоhиё9сшНеСkπ+q_ЮД)©б=ШwМ÷.Oкv\дk6Й№щДйчwлX7[ SфN+RХ),}≠Л(хеf2ИёУюEКоLцOПxi8YjDЭAG©рB÷e%×>=vОЕ§Яа4ВяQmMыЦжсЩРIc"ЖoСуи€T:πn|ъЗ3!9Jнз5&Zэ*sвyu]0Ph@C`гм⇔r;кlWшЧt_q#Vaьб-?~1<$p{ТzЮГ^тdbgЁ/KАЫЬ.\НМHпFФUШБЪ';
 $userKey = null;
 $salt = null;
 //$testCipher = (new SimpleCipher($cipherText, $salt))->encryptText(40);
 $n = 1;
 $saltNew = $salt;
-// while ($n <= 500) {
+// while ($n <= 3000) {
 	// $randomNumb_pos = unpack("N", openssl_random_pseudo_bytes(4))[1] % (160 - 1) + 1;
 	// $randimNumb_symb = unpack("N", openssl_random_pseudo_bytes(4))[1] % (59 - 1) + 1;
 	// $saltArr = str_split($saltNew);
@@ -1592,10 +1546,7 @@ $saltNew = $salt;
 	// //}
 	// var_dump($n);
 
-	#Гаврилов
-	//ПОПРОБУЙ ТУТ СИНТАКСИЧЕСКИЕ ОШИБКИи, ОШИБКИ ПАРСИНГА ПО КОДУ И ОБРАТИСЬ С ОПЕРАЦИЕЙ ШИФРОВАНИЯ ИЗ ИНТЕФЕЙСА. ВО-ПЕРВЫХ, ОШИБКА ДОЛЖНА ЗАЛОГИРОВАТЬСЯ, ВО ВТОРЫХ ДЕЛАТЕЛЬНО, ЧТОБЫ В КОНСОЛИ НЕ БЫЛО ВИДНО, ЧТО ЗА ОШИБКА (УБРАТЬ ЗАГОЛОВКИ ОТОБРАЖЕНИЯ ОШИБОК?), В ТРЕТЬИХ ПОЛЬЗОВАТЕЛЬ ДОЛЖЕН ПОЛУЧИТЬ КОРРЕКТНЫЙ ОТВЕТ. ПРИ ШИФРОВАНИИ ОШИКУ, ПРИ ДЕШИФРОВКЕ ОШИБКУ ИЛИ ПРОСТО КРИВОЙ ШИФР? ЧТО БЕЗОПАСНЕЕ?
-
-	// $testCipher = (new SimpleCipher())->encryptText($cipherText, 167, $salt, $userKey);
+	// $testCipher = (new SimpleCipher())->encryptText($cipherText, 50, $salt, $userKey);
 	// echo '<pre>'; var_dump($testCipher); echo'</pre>';
 	// $decryptText = (new SimpleCipher())->decryptText($testCipher, $salt, $userKey);
 	// echo '<pre>'; var_dump($decryptText); echo'</pre>';
@@ -1627,17 +1578,6 @@ $saltNew = $salt;
 //  	$n++;
 // }
 
-	#Гаврилов
-	//ПРОВЕДИ ТЕСТИРОВАНИЕ КЛЮЧА И ШИФРА. ПЕРЕБИРАЙ СЛУЧАЙНЫЕ СОЛЬ И КЛЮЧ И ИЩИ КОЛЛИЗИИ, ПЕРЕБИРАЙ ОДИН СИМВОЛ В КЛЮЧЕ (меняя ее на любой другой по алфавиту) И ОДИН СИМВОЛ В СОЛИ И ИЩИ КОЛЛИЗИИ, А ТАКЖЕ ИЗМЕНЯЙ ПЕРВЫЙ, ВТОРОЙ (ПЕРВЫЙ СОХРАНЯЙ), ТРЕТИЙ (ВТОРОЙ СОХРАНЯЙ) и ищи коллизии
-	//НАПИШИ ГРАФИК ТЕСТИРОВАНИЯ И РАСПИШИ В НЕМ ЧТО ТЫ ТЕСТИРОВАЛ И КАКИЕ РЕЗУЛЬТАТЫ
 
 #Гаврилов
 //ПЕРЕПИСАТЬ ИСПОЛЬЗОВАНИЯ КЛЮЧА СЛЕДУЮЩИМ ОБРАЗОМ. БРАТЬ НЕ СУММУ ВСЕХ ЧИСЕЛ И ИЗ НЕЕ ВЫЧЛЕНЯТЬ ЦИФРЫ, А ГЕНЕРИТЬ СУММЫ ПО ОТРЕЗКАМ: СУММА ПЕРВЫХ ПЯТИ СИМВОЛОВ, СУММА ВТОРЫХ ПЯТИ СИМВОЛОВ И ТАК СКОЛЬКО НАДО. ТО ЕСТЬ, В КАЧЕСТВЕ КЛЮЧЕЙ ДЛЯ МАССИВА С СЕГМЕНТАМИ СИМВОЛОВ ПОЛЬЗОВАТЕЛЬСКОГО КЛЮЧА ИСПОЛЬЗОВАТЬ НЕ ПРОСТО ГОЛЫЕ ЦИФРЫ, А СОВОКУПНОСТЬ СИМВОЛОВ, СУММА КОТОРЫХ (СЛОЖИВ ИХ ПОЗИЦИИ) ИЛИ ПОСЛЕДНЕЕ ЧИСЛО ИЗ СУММЫ БУДЕТ БОЛЕЕ ЗАВИСИМЫМ ОТ ЛЮБЫХ ИЗМЕНЕНИЙ КЛЮЧА. С ДРУГОЙ СТОРОНЫ, ЕСЛИ МЫ СЕЙЧАС БЕРЕМ ЦИФРЫ ИЗ СТАТИЧЕСКИХ КЛЮЧЕЙ, НА НИХ НИКАК НЕЛЬЗЯ ПОВЛИЯТЬ, ПЕРЕДАВАЙ ДИНАМИЧЕСКИЙ ПОЛЬЗОВАТЕЛЬСКИЙ КЛЮЧ. ДОБАВИТЬ ЭТУ ЗАДАЧУ В БЭКЛОГ, ЕСЛИ БУДЕТ СЛОЖНО РЕАЛИЗОВЫВАТЬСЯ?
-
-#Гаврилов
-//НЕ СРАБАТЫВАЕТ
-//ФРАЗА - мама ra 1y^
-//ШИФР - Yzl82о397m0c28 36⇔l2120къ(ЖЁ!N*0ё?Х÷Б©ю№УСp$Y{47?2Y6в56ю
-//СОЛЬ - MTQ4YzMyMWEwOWM1NDRhM2Y0ZGUzOTkzMTk0YzVkMjgxOTZmOGU4NGFlZDJjN2ZhODMzNTU5YzM3ZjRmMzUzYzYyYjE1ODkxYTM5MmY2ZDE1MDJjNjExMTU4N2I1MGI5YzhhY2U5MWRjMGQyMzVkMWQwMzc5YmI5OTdhYWRlYmY
-//КЛЮЧ - YтdЛ≠жWънD6Gб/vA(&Б9?M-PZЧEряп ч÷XУ}Ш§ВцлОаЭ8[ПзVjUO=СЁекЩ|sπ`xЙu$Хhхгюм%иЦ1]ЪcА№;"!rN,BSЕ×J@p{эo*~€©.myТkРд#)йLK+<вФьFz>HЮ0ДКTI:шeу_iЖwfЯ3ИCgQ⇔фt\aq^сlЫоГR4b2nЬёыщМ7Н5ЗЫс4MHвЗь,нV9g г⇔2B(uЮDчEщWo/РNГ÷mzИXжекТХшL7v©ЯПA)яar*1cQ%илёKUw_ыSЛsд>nx^0Oъ#πо"pзGЖ~€БаО[§э×ЬqД№Ч-ЪпPf|тeJh:@+k=≠ZЭi3;юмфУ{й5`уМА8yY]tЁШj&ц<б?bФ\!dCI$СНЕЙх.6lКFTрЩRВ}Ц
-

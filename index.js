@@ -381,6 +381,7 @@ document.getElementById('content__decrypt-block__decrypt-btn').addEventListener(
             'content-type': 'application/json'
         }
     });
+
     let decryptResponse;
     try {
         //Текст с ошибкой при дешифровании
@@ -415,7 +416,7 @@ document.getElementById('content__decrypt-block__decrypt-btn').addEventListener(
         return;
     }
 
-    //Рендерим блок с результатом дешифрования и отображаем в нем расшифрованный текст
+    //Рендерим блок с результатом дешифрования и отображаем в нем дешифрованный текст
     setTimeout( () => {
         let childEncryptBlock = document.createElement('div'),
             encryptTextBlock = document.createElement('div');
@@ -436,7 +437,7 @@ document.getElementById('getSalt').addEventListener('click', getPrivateData('cip
 document.getElementById('getKey').addEventListener('click', getPrivateData('cipheKey'))
 
 
-//Клик по кнопке Расшифровать напротив каждого сгенерированного шифра. Не можем при рендеринге страницы навешивать обработчик, так как эти элементы не сгенерирован на этапе первичного рендеринга
+//Клик по кнопке Дешифровать напротив каждого сгенерированного шифра. Не можем при рендеринге страницы навешивать обработчик, так как эти элементы не сгенерирован на этапе первичного рендеринга
 document.addEventListener('click', event => {
   if (event.target.classList.contains('content__encrypt-block__result__parent__call-decrypt')) {
     PageElem__decryptText.value = event.target.nextSibling.textContent;

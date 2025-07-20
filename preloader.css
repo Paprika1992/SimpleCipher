@@ -57,14 +57,9 @@
                 &:nth-of-type(5){
                    transform: translateX(calc(0px - (var(--main_size) * 4 / 2 * 1px)));  
                 }
-                /* &:not(:first-of-type){
-                    transform: translateX(-50%);
-                } */
-                
 
                 &.triangle-up {
                     border-bottom: calc(var(--main_size) * 1px) solid var(--sapphire_color);
-                    /* border-bottom: 86.6px solid var(--sapphire_color); */
 
                     &>.triangle-text {
                         bottom: calc(0px - var(--main_size) * 0.9px);
@@ -73,7 +68,6 @@
                 }
 
                 &.triangle-down {
-                    /* border-top: 86.6px solid var(--sapphire_color); */
                     border-top: calc(var(--main_size) * 1px) solid var(--sapphire_color);
 
                     &>.triangle-text {
@@ -110,13 +104,11 @@
             border-right: calc(var(--main_size) * 0.8px) solid transparent;
             border-top: calc(var(--main_size) * 2px) solid var(--sapphire_color);
             left: calc(var(--main_size) * 0.7px);
-            /* top: 86.6px; */
             top: calc(var(--main_size) * 1px);
             z-index: 4;
 
             &>.triangle-text {
                 top: calc(0px - (var(--main_size) + var(--main_size)) * 0.7px);
-                /* left: -5px; */
                 left: calc(0px - var(--main_size) * 0.05px);
             }
         }
@@ -125,8 +117,6 @@
             border-left: calc(var(--main_size) * 1.5px) solid transparent;
             border-right: 0px solid transparent;
             border-top: calc(var(--main_size) * 2px) solid var(--sapphire_color);
-            /* left: 25px; */
-            /* top: 86.6px; */
             top: calc(var(--main_size) * 1px);
             z-index: 1;
 
@@ -140,9 +130,7 @@
             border-left: 0px solid transparent;
             border-right: calc(var(--main_size) * 1.5px) solid transparent;
             border-top: calc(var(--main_size) * 2px) solid var(--sapphire_color);
-            /* left: 175px; */
             left: calc(var(--main_size) * 1.5px);
-            /* top: 86.6px; */
             top: calc(var(--main_size) * 1px);
             z-index: 2;
 
