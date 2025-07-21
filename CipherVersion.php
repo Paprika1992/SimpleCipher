@@ -30,6 +30,7 @@ class CipherVersion
 		$versionNumberArr  = array_values(array_intersect($versionSymbArr, $numberArr));
 		//Вычленяем буквы из строки с версией
 		$letterArr  = array_values(array_diff($versionSymbArr, $numberArr));
+		// var_dump($letterArr);
 		//Определяем паттерн формирования
 		$pattern = $versionNumberArr[0];
 		//Получаем флаг реверса 

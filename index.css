@@ -12,9 +12,13 @@
 }
 
 body{
-  overflow: scroll;
+  overflow-y: scroll;
   font-family: system-ui;
   background: var(--color_background);
+  overflow-x: auto;
+  display: flex;
+    flex-direction: column;
+  height: 100vh;
 }
 
 button{
@@ -33,6 +37,15 @@ button{
   &:hover{
     background-color: #4b4b88;
   }
+}
+
+footer{
+  /* position: fixed;
+  bottom: 0; */
+  width: 100vw;
+  display: flex;
+    justify-content: center;
+  z-index: -1;
 }
 
 input,
@@ -110,6 +123,7 @@ textarea{
   transition: 0.3s;
   opacity: 0.5;
   color: grey;
+  width: 95%;
 
   &:hover{
     opacity: 1;
@@ -121,6 +135,7 @@ textarea{
   }
 
   &>#footer-content__notification{
+    text-align: center;
     align-self: center;
   }  
 }
@@ -136,6 +151,10 @@ textarea{
     gap: 30px;
   margin: 50px 0;
 
+  @media (max-width: 1000px) {
+    flex-direction: column;
+  }
+
   &>#app_description{
     display: flex;
       justify-content: center;
@@ -145,6 +164,11 @@ textarea{
     font-size: 1.7rem;
     transition: 0.3s;
     transform: translateX(10px);
+
+    @media (max-width: 1000px) {
+      width: auto;
+      font-size: 1.2rem;
+    }
 
     &.shift{
       opacity: 1;
@@ -174,6 +198,11 @@ textarea{
     font-size: 4rem;
     font-family: math;
 
+    @media (max-width: 1000px) {
+      font-size: 2.8rem;
+      justify-content: center;
+    }
+
     &.shift{
       opacity: 1;
       transform: translateX(0);
@@ -190,9 +219,11 @@ textarea{
 
   & #app-name--cipphire{
     color: var(--color_blue_main);
+    gap: 3px;
 
     &>span:first-child{
       width: 1.5em;
+      z-index: 1;
     }
   }
 
@@ -218,14 +249,25 @@ textarea{
   z-index: 100;
   position: relative;
 
+  @media (max-width: 1000px) {
+    width: auto;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
   &>.navigation__block{
     flex: 1;
+
+    @media (max-width: 1000px) {
+      flex-basis: 45%;
+    }
 
     &.visible{
       opacity: 1;
 
       &>.navigation__block__title{
         opacity: 1;
+        box-shadow: none;
       }
     }
 
@@ -237,6 +279,10 @@ textarea{
       border-left: 2px solid grey;
     }
 
+    @media (max-width: 1000px) {
+      border: none!important;
+    }
+
     &>.navigation__block__title{
       height: 100px;
       transition: 0.3s;
@@ -246,6 +292,14 @@ textarea{
       align-content: center;
       text-align: center;
       opacity: 0.6;
+
+      @media (max-width: 1000px) {
+        background: #eeeefe;
+        border-radius: 10px;
+        font-size: 1rem;
+        height: 50px;
+        box-shadow: 0px 0px 10px 0px #d0d0d0 inset;
+      }
 
       &:hover{
         opacity: 1;
@@ -264,6 +318,7 @@ textarea{
         left: 0;
         max-height: 500px;
         overflow-y: scroll;
+        z-index: 1;
 
         & .navigation__content__section__description{
           text-align: justify;
@@ -361,6 +416,11 @@ textarea{
       transform: translateY(-5px);
       visibility: visible;
       transition: 0.3s;
+
+      @media (max-width: 1000px) {
+        height: 90vh;
+      }
+
     }
     &.visible>.navigation__block__title{
       transform: translateY(5px);
@@ -407,6 +467,11 @@ textarea{
       z-index: 2;
       background: transparent;
 
+      @media (max-width: 1000px) {
+        flex-direction: column;
+        gap: 40px;
+      }
+
       & #decrypt-result-text{
         background: var(--color_blue_minor);
         color: white;
@@ -421,6 +486,10 @@ textarea{
         /* padding-bottom: 50px; */
         background: #fffdeb;
         position: relative;
+
+        @media (max-width: 1000px) {
+          width: 100%;
+        }
         
         &:before{
           z-index: -1;
@@ -715,7 +784,6 @@ textarea{
 
     
   &>#content__encrypt-block__result{
-    /* background: orange; */
     padding: 10px;
 
     &>.content__encrypt-block__result__parent{
@@ -723,6 +791,13 @@ textarea{
         gap: 15px;
         align-items: center;
       margin: 10px 0;
+
+      @media (max-width: 1000px) {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 5px;
+        margin-bottom: 30px;
+      }
     }
   }
 }
@@ -837,7 +912,7 @@ textarea{
 
   & .endpoint__container__uri{
     font-size: 1.3rem;
-    width: 75%;
+    width: 100%;
     position: sticky;
     top: -10px;
     margin: 10px 0;
@@ -858,6 +933,11 @@ textarea{
       border-right: 2px solid var(--color_orange_main);
       color: #bcbcbc;
       font-size: 1.1rem;
+
+      @media (max-width: 1000px) {
+        font-size: 0.9rem;
+        flex-basis: 50%;
+      }
     }
     &>.endpoint__container__param__description{
       flex-basis: 80%;
@@ -889,6 +969,10 @@ textarea{
 	border: none;
 	margin-bottom: 20px;
   border-collapse: collapse;
+
+  @media (max-width: 1000px) {
+    width: 150vw;
+  }
 
   & th{
     font-weight: bold;
@@ -930,12 +1014,6 @@ textarea{
     &>td{
       border-bottom: 2px solid var(--color_orange_main);
     }
-    /* background: #7373b6; */
   }
-  /* & tr td:first-child {
-    border-radius: 8px 0 0 8px;
-  }
-  & tr td:last-child {
-    border-radius: 0 8px 8px 0;
-  } */
 }
+

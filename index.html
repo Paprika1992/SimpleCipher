@@ -4,12 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <link rel="stylesheet" href="./index.css">
-    <link rel="stylesheet" href="./preloader.css">
-    <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"> -->
+    <link rel="stylesheet" href="./index.css?ver=153">
+    <link rel="stylesheet" href="./preloader.css?ver=126" >
 </head>
 <body>
-     <div id="preloader-container">
+    <div id="preloader-container">
         <div id="container__sapphire">
             <div id="sapphire__upper-triangles-block">
                 <div class="triangle triangle--small triangle-up">
@@ -28,17 +27,15 @@
                     <div class='triangle-text'></div>
                 </div>
             </div>
-            <!-- <div id="sapphire__down-triangles-block"> -->
-                <div class="triangle triangle-big--center">
-                    <div class='triangle-text'></div>
-                </div>
-                <div class="triangle triangle-big--left">
-                    <div class='triangle-text'></div>
-                </div>
-                <div class="triangle triangle-big--right">
-                    <div class='triangle-text'></div>
-                </div>
-            <!-- </div> -->
+            <div class="triangle triangle-big--center">
+                <div class='triangle-text'></div>
+            </div>
+            <div class="triangle triangle-big--left">
+                <div class='triangle-text'></div>
+            </div>
+            <div class="triangle triangle-big--right">
+                <div class='triangle-text'></div>
+            </div>
         </div>
     </div>
     <div id="page-background"></div>
@@ -47,12 +44,12 @@
             <div class="navigation__block__title">Общая информация</div>
             <div class="navigation__block__content" id="navigation__block__content__general-info">
                 <div class="navigation__content__section">
-                    Cipphire - алгоритм <a href="https://ru.wikipedia.org/wiki/Симметричные_криптосистемы" target="_blank">симметричного шифрования</a>, созданный в академических целях силами одного разработчика. Сервис не собирает, не хранит и не передает никаких личных или персонализированных данных пользователя. Сервис не использует, а значит, не зависит, ни от каких сторонних библиотек, фреймворков, наборов иконок и т.д. Технологический стек: php, javascript (НУЖНО ЛИ УТОЧНИТЬ, ЧТО PURE ИЛИ VANILLA)
+                    <span class="attention_text">Cipphire</span> - алгоритм <a href="https://ru.wikipedia.org/wiki/Симметричные_криптосистемы" target="_blank">симметричного шифрования</a>, созданный в академических целях силами одного разработчика. Сервис не собирает, не хранит и не передает никаких личных или персонализированных данных. Сервис не использует сторонние библиотеки, фреймворки, наборы иконок и т.д. Технологический стек: нативный PHP + JavaScript
                 </div>
                 <div class="navigation__content__section" id="feedback-fields-block">
-                <h4>Преимущества алгоритма Cipphire:</h4><i>на примере 100 000 итераций шифрования фразы: "Lorem ipsum dolor sit" (без фейковых символов, использующихся для достижения желаемой длины текста):</i>
+                <h3>Преимущества алгоритма Cipphire:</h3><i>на примере шифрования фразы: "Lorem ipsum dolor sit" (без фейковых символов, использующихся для достижения желаемой длины текста):</i>
                     <ul>
-                        <li>На 100 000+ итераций шифрования (с использованием <b>одной и той же</b> соли и ключа) не выявлено ни одной коллизии.</li>
+                        <li>На 100 000+ итераций шифрования с использованием <b>одной и той же</b> соли и ключа (подробнее про <span class="attention_text">соль</span> и <span class="attention_text">ключ</span> шифра читай в соседней вкладке <b>Как пользоваться сервисом</b>). не выявлено ни одной коллизии шифров.</li>
                         <li>На 100 000+ итераций дешифрования с различными вариациями соли (отличающейся от переданной при шифровании) ни одной успешной. Что указывает на стойкость соли к коллизиям.</li>
                         <li>На 100 000+ итераций попыток подобрать коллизию к сгенерированному ключу для успешного дешифрования не выявлено ни одной</li>
                         <li><a href="https://wiki.loginom.ru/articles/correlation-coefficient.html" target="_blank">Коэффициент корреляции</a>: 0.079199</li>
@@ -98,7 +95,7 @@
                 <div class="navigation__content__section">
                     <div class="navigation__content__section__step-num">3</div>
                     <div class="navigation__content__section__step-description">
-                        Соль для шифра предназначена для обеспечения стойкости шифров к взлому. Она гарантирует, что даже в случае заполучения потенциальным злоумышленником зашифрованных сообщений, их не получится дешифровать, не зная соли (вероятность подобрать соль менее 0.00000000001%).
+                        <span class="attention_text">Соль</span> для шифра предназначена для обеспечения стойкости шифров к взлому. Она гарантирует, что даже в случае заполучения потенциальным злоумышленником зашифрованных сообщений, их не получится дешифровать, не зная соли (вероятность подобрать соль менее 0.00000000001%).
                         <br>Для генерации соли используй endpoint <span class="attention_text">api/getCipherSalt</span> (подробнее в разделе навигации API), нажми на иконку <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="25" height="25" viewBox="0,0,256,256"><g fill="#ffffff" fill-rule="nonzero" stroke="none" stroke-width="1" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10" stroke-dasharray="" stroke-dashoffset="0" font-family="none" font-weight="none" font-size="none" text-anchor="none" style="mix-blend-mode: normal"><g transform="scale(10.66667,10.66667)"><path d="M7,5c-3.84545,0 -7,3.15455 -7,7c0,3.84545 3.15455,7 7,7c2.77499,0 5.08941,-1.6853 6.27148,-4h2.72852v3h6v-3h2v-6h-1h-9.71289c-1.11451,-2.32444 -3.44795,-4 -6.28711,-4zM7,7c2.28025,0 4.09251,1.421 4.75586,3.32813l0.23242,0.67188h10.01172v2h-2v3h-2v-3h-5.98242l-0.24805,0.63477c-0.75942,1.94073 -2.60543,3.36523 -4.76953,3.36523c-2.75455,0 -5,-2.24545 -5,-5c0,-2.75455 2.24545,-5 5,-5zM7,9c-1.64501,0 -3,1.35499 -3,3c0,1.64501 1.35499,3 3,3c1.64501,0 3,-1.35499 3,-3c0,-1.64501 -1.35499,-3 -3,-3zM7,11c0.56413,0 1,0.43587 1,1c0,0.56413 -0.43587,1 -1,1c-0.56413,0 -1,-0.43587 -1,-1c0,-0.56413 0.43587,-1 1,-1z"></path></g></g></svg> напротив поля <span class="attention_text">Ключ для шифра</span> формы в блоке Шифрование или на кнопку ниже <span class="attention_text">Получить соль</span>.
                         <div class="section-private-data" id="section-private-data--salt-block">
                             <button type="button" id="getSalt">Получить соль</button>
@@ -131,8 +128,8 @@
                 <div class="navigation__content__section">
                     <div class="navigation__content__section__step-num">4</div>
                     <div class="navigation__content__section__step-description">
-                        Ключ является необязательным параметром, который имеет схожее значение с солью и еще на несколько порядков усиливает стойкость шифра к взлому. Если соль - это сейф, который защищает твой зашифрованный текст, ключ - это еще один сейф внутри.
-                        <br>К ключу применяются те же условия, которые описаны в подразделе <i>Несколько важных уточнений</i> для Соли выше, кроме того, что ключ необязательно формировать и передавать при работе с api
+                        <span class="attention_text">Ключ</span> является необязательным параметром, который имеет схожее значение с солью и еще на несколько порядков усиливает стойкость шифра к взлому. Если соль - это сейф, который защищает твой зашифрованный текст, ключ - это еще один сейф внутри.
+                        <br>К ключу применяются те же условия, которые описаны в подпункте <i>Несколько важных уточнений</i> для <span class="attention_text">Соли</span> выше, кроме того, что ключ необязательно формировать и передавать при работе с api
                         <br>Для генерации ключа воспользуйся api ендпоинтом <span class="attention_text">api/getCipherKey</span> (подробнее в разделе навигации API), нажми на иконку <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="25" height="25" viewBox="0,0,256,256"><g fill="#ffffff" fill-rule="nonzero" stroke="none" stroke-width="1" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10" stroke-dasharray="" stroke-dashoffset="0" font-family="none" font-weight="none" font-size="none" text-anchor="none" style="mix-blend-mode: normal"><g transform="scale(10.66667,10.66667)"><path d="M7,5c-3.84545,0 -7,3.15455 -7,7c0,3.84545 3.15455,7 7,7c2.77499,0 5.08941,-1.6853 6.27148,-4h2.72852v3h6v-3h2v-6h-1h-9.71289c-1.11451,-2.32444 -3.44795,-4 -6.28711,-4zM7,7c2.28025,0 4.09251,1.421 4.75586,3.32813l0.23242,0.67188h10.01172v2h-2v3h-2v-3h-5.98242l-0.24805,0.63477c-0.75942,1.94073 -2.60543,3.36523 -4.76953,3.36523c-2.75455,0 -5,-2.24545 -5,-5c0,-2.75455 2.24545,-5 5,-5zM7,9c-1.64501,0 -3,1.35499 -3,3c0,1.64501 1.35499,3 3,3c1.64501,0 3,-1.35499 3,-3c0,-1.64501 -1.35499,-3 -3,-3zM7,11c0.56413,0 1,0.43587 1,1c0,0.56413 -0.43587,1 -1,1c-0.56413,0 -1,-0.43587 -1,-1c0,-0.56413 0.43587,-1 1,-1z"></path></g></g></svg> напротив поля <span class="attention_text">Соль для шифрования</span> формы основной страницы или на кнопку ниже <span class="attention_text">Получить ключ</span>
                         <div class="section-private-data" id="section-private-data--key-block">
                             <button type="button" id="getKey">Получить ключ</button>
@@ -155,7 +152,7 @@
                 <div id="api_description">
                     <div class="api_description__block">
                         <h3>Общая информация</h3>
-                        Все ендпоинты доступны по базовому URL: <span class="attention_text">https://cipphire/api</span> (ГАВРИЛОВ ПРОВЕРЬ АДРЕС ПОСЛЕ ХОСТИНГА)
+                        Все ендпоинты доступны по базовому URL: <span class="attention_text">https://cipphire/api</span>
                         <ul>
                             <li>Передача персонального api ключа или заголовка авторизации: не требуется</li>
                             <li>Ограничение на отправку запросов в минуту?</li>
@@ -421,17 +418,15 @@
             <div class="navigation__block__title">Обратная связь</div>
             <div class="navigation__block__content" id="navigation__block__content__feedback">
                 <div class="navigation__content__section">
-                    Любые вопросы и предложения пишите на почту CIPPHER.GMAIL.COM (ПОПРАВЬ ПОЧТУ), на страницу проекта (ССЫЛКА НА публичную страницу GITHUB) или заполните форму ниже
-                    <br>Буду рад увидеть вашу оценку сервиса и предложения по его улучшению!
+                    Любые вопросы и предложения пишите на почту cipphireproject@gmail.com или заполните форму ниже
+                    <br>Буду рад увидеть вашу оценку сервиса или предложения по его улучшению!
                 </div>
                 <div class="navigation__content__section" id="feedback-fields-block">
                     <div class="input-block__field-row">
-                        <!-- ГАВРИЛОВ. ОГРАНИЧЕНИЯ НА ОТПРАВКУ ЗАПРОСОВ ФИДБЕКА КОЛИЧЕСТВО ЗАПРОСОВ В МИНУТУ МИНИМАЛЬНОЕ (10) -->
                         <label for="feedback-text">Вопрос/предложение</label>
                         <textarea class="feedback-fields-block__field" type="text" placeholder="Макс. 500 символов" id="feedback-text" required="required"></textarea>
                     </div>
                     <div class="input-block__field-row">
-                        <!-- ГАВРИЛОВ. ОГРАНИЧЕНИЯ НА ОТПРАВКУ ЗАПРОСОВ ФИДБЕКА КОЛИЧЕСТВО ЗАПРОСОВ В МИНУТУ МИНИМАЛЬНОЕ (10) -->
                         <label for="feedback-sender-contact">Контакт для обратной связи (не обязательно)</label>
                         <input class="feedback-fields-block__field" type="text" id="feedback-sender-contact">
                     </div>
@@ -440,10 +435,6 @@
             </div>
         </div>            
     </nav>
-    <!-- ГАВРИЛОВ
-     ДОБАВЬ В БЛОК КАК ПОЛЬЗОВАТЬСЯ СЕРВИСОМ, ЧТО АЛГОРИТМ АСИНХРОННЫЙ И ПРЕДСТАВЛЯЕТ ВОЗОМЖНОСТЬ ДВУСТОРОННЕГО ШИФРОВАНИЯ (СПРОСИ УТОЧНЕНИЯ У НЕЙРОСЕТИ) -->
-    <!--Добавь при подключении css и js ver=?-->
-    <!--Нужен ли тег форм, если запрос отправляется ajax?-->
     <div id="page-title">
         <div id="app-name">
             <div id="app-name--cipher" class="page-title__app-name">
@@ -474,9 +465,6 @@
                         </div>
                         <div class="input-block__field-row field-row--two-fields">
                             <label for="cipherLength">Желамая длина шифра</label>
-                            <!--подсказка: если шифруемый текст меньше длины шифра - фейковая длина не будет достигнута-->
-                            <!-- гаврилов
-                            не работает параметр required -->
                             <input type="number" placeholder="мин. 50 макс. 899" id="cipherLength" min="50" max="100" required="required" value="50">
                             <label for="cipherCount">Кол-во шифров</label>
                             <input type="numberа" placeholder="мин. 1 макс. 20" id="cipherCount" min="0" max="100" value="1" required>
@@ -571,21 +559,18 @@
     </div>
     <footer>
         <div id="footer-content">
-                <svg width="1.5em" height="1.5em" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M8 1L15 14H1L8 1Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
-                    <path d="M8 6V9M8 11V11.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-                </svg>
-            <!-- ГАВРИЛОВ. ПРОВЕРЬ ТЕКСТ НИЖЕ -->
-            <div id="footer-content__notification">Приложение разработано в академических целях. Любое использование для нарушения закона (МОЖЕТ С ПРОТИВОЗАКОННЫМИ ЦЕЛЯМИ?) запрещено</div>
-           
-                <svg width="1.5em" height="1.5em" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M8 1L15 14H1L8 1Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
-                    <path d="M8 6V9M8 11V11.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-                </svg>
-            
+            <svg width="1.5em" height="1.5em" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M8 1L15 14H1L8 1Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+                <path d="M8 6V9M8 11V11.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
+        <div id="footer-content__notification">Приложение разработано в академических целях. Использование с целью нарушить закон запрещено</div>
+            <svg width="1.5em" height="1.5em" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M8 1L15 14H1L8 1Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+                <path d="M8 6V9M8 11V11.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
         </div>
     </footer>
     <script src="./index.js" type="module"></script>
-    <script type="module" src="./preloader.js"></script>
+    <script type="module" src="./preloader.js?ver=137"></script>
 </body>
 </html>

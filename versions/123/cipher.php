@@ -105,7 +105,7 @@ class SimpleCipher
 	/**
 	 * @var string путь до файлов с ключами шифра
 	 */
-	private static $keyFilesPath = __DIR__ . "./cipherKeys/";
+	private static $keyFilesPath = __DIR__ . "/cipherKeys/";
 	/**
 	 * @var array массив с набором символов кирилического и латинского алфавита в верхнем и нижнем регистрах
 	 */
@@ -116,7 +116,8 @@ class SimpleCipher
 		require_once (__DIR__ . "./../../CipherVersion.php");
 		#Гаврилов
 		//ПЕРЕНЕСИ ДВА СВОЙСТВА НИЖЕ В МЕТОДА ШИФРОВАНИЯ, ДЕШИФРОВКИ, НЕ ОСТАВЛЯЙ В КОНТРОЛЛЕРЕ, ТАК КА КЕСТЬ СТАТИЧЕСКИЕ МЕТОДЫ КЛАССА, НЕ НАДО ПРИ КАЖДОМ ОБРАШЩЕНИИ К НИМ ЛАЗИТЬ ПО ФАЙЛОВОЙ СИСТЕМЕ, ЧТОБЫ ПОЛУЧАТЬ ФЕЙКОВЫЕ КЛЮЧИ
-		$this->version = array_reverse(explode('\\', __DIR__))[0];
+		$this->version = array_reverse(preg_split('#[/\\\\]#', __DIR__))[0];
+		
 		$this->matrixDepth = sqrt(mb_strlen(self::getFakeCipherKey()));
 	}
 
@@ -202,7 +203,7 @@ class SimpleCipher
 	 * @param string $userCipherKey пользовательский ключ шифрования
 	 * @return string
 	 */
-	public function encryptText(string $openText, int $resultCipherLength = 50, ?string $userSalt, ?string $userCipherKey = null): string
+	public function encryptText(string $openText, int $resultCipherLength = 50, ?string $userSalt = null, ?string $userCipherKey = null): string
 	{
 		//В зависимости от того, откуда запускается скрипт, разные пути к файлу конфига
 		if (count(debug_backtrace()) > 1) {
@@ -674,7 +675,8 @@ class SimpleCipher
 	 */
 	private function getSaltNumbersArr(): array
 	{
-		$cipherSaltArr = str_split($this->salt);
+		//YWI33k44$39>2y1i57ц2362qπёmн?A6nZ>I=O(O$03|GE69в7ю
+		$cipherSaltArr = $this->salt ? str_split($this->salt) : [];
 		//Массив с латинскими буквами в верхнем регистре, который мы ниже объединим с массивом латинских букв в нижнем регистре и на его основе [n => 2, H => 3, s => 4 ...] будем считать сумму ключей символов в соли
 		$upperLatinLetters = array_map(function($el){return strtoupper($el);}, array_flip($this->latinLetters));
 		$cipherSaltArr = array_map(function($el) use($upperLatinLetters) {return preg_match('/[^0-9]/', $el) ? array_flip(array_flip($this->latinLetters) + array_merge($upperLatinLetters, []))[$el] : (int)$el;}, $cipherSaltArr);

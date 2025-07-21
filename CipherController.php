@@ -217,10 +217,10 @@ class CipherController
             } else if (!empty($this->routes[$routeName]['methodParams'])) {
                 foreach ($this->routes[$routeName]['methodParams'] as $paramName => $paramData){
                     //Если параметр обязательный
-                    if ($paramData['important'] === true && (array_key_exists($paramName, $this->rqstParams) === false || !mb_strlen($this->rqstParams[$paramName]))) {
+                    if ($paramData['important'] === true && (array_key_exists($paramName, $this->rqstParams) === false || $this->rqstParams[$paramName] === null || !mb_strlen($this->rqstParams[$paramName]))) {
                         //Если обязательный параметр отсутствует в запросе
                         //Если отсутствующее обязательное поле - соль для шифра, она может отсутствовать, если запрос пришел с того же сервера (с демонстрационной страницы)
-                        if ($paramName == 'cipherSalt' && $_SERVER['REMOTE_ADDR'] === $_SERVER['SERVER_ADDR']) {
+                        if ($paramName == 'cipherSalt' && ($_SERVER['REMOTE_ADDR'] === $_SERVER['SERVER_ADDR']) || $_SERVER['HTTP_HOST'] = "cipphire.ru") {
                             continue;
                         } else {
                             $checkRouteArr['result'] = false;
@@ -396,6 +396,7 @@ class CipherController
         $this->decryptText = $decryptText;
         $this->cipherVer = CipherVersion::getVersion($this->decryptText);
         if (!file_exists("./versions/" . $this->cipherVer . "/cipher.php")) {
+            // var_dump("./versions/" . $this->cipherVer . "/cipher.php");
             $this->returnResponse([
                 'decryptText' => $this->getRandomText($this->rqstParams['text'])
             ], 200);
@@ -452,9 +453,10 @@ class CipherController
             512 => 'E_USER_WARNING',
             1024 => 'E_USER_NOTICE',
             2048 => 'E_STRICT',
+            8192 => 'E_DEPRECATED',
         ];
         $errorLogMsg = $errArr[$errno] . " $errstr в файле $errfile на $errline";
-        //Если ошибка возникает при дешифровке текста - возвращаем рандомный запутанный текст будто все прошло "по плану", но алгоритм не расшифровал кривое сообщение
+        //Если ошибка возникает при дешифровке текста - возвращаем рандомный запутанный текст будто все прошло "по плану", но алгоритм не расшифровал кривое сообщение  
         if ($this->action == 'getDecryptText') {
             $this->returnResponse([
                 'decryptText' => $this->getRandomText($this->rqstParams['text'])

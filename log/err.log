@@ -218,3 +218,14 @@
 2025-07-17 08:54:39 E_WARNING Cannot modify header information - headers already sent by (output started at C:\upload_files\OSPanel\domains\cipher\CipherController.php:405) в файле C:\upload_files\OSPanel\domains\cipher\CipherController.php на 501 
 2025-07-19 09:36:42 E_NOTICE Undefined offset: 0 в файле C:\upload_files\OSPanel\domains\cipher\CipherVersion.php на 34 
 2025-07-20 06:49:12 E_NOTICE Undefined variable: opa в файле C:\upload_files\OSPanel\domains\cipher\versions\123\cipher.php на 229 
+2025-07-21 04:59:04 E_WARNING Cannot modify header information - headers already sent by (output started at C:\upload_files\OSPanel\domains\cipher\CipherVersion.php:33) в файле C:\upload_files\OSPanel\domains\cipher\CipherController.php на 489 
+2025-07-21 04:59:13 E_WARNING Cannot modify header information - headers already sent by (output started at C:\upload_files\OSPanel\domains\cipher\CipherVersion.php:33) в файле C:\upload_files\OSPanel\domains\cipher\CipherController.php на 489 
+2025-07-21 05:00:47 E_WARNING Cannot modify header information - headers already sent by (output started at C:\upload_files\OSPanel\domains\cipher\CipherVersion.php:33) в файле C:\upload_files\OSPanel\domains\cipher\CipherController.php на 489 
+2025-07-21 05:09:31 E_WARNING Cannot modify header information - headers already sent by (output started at C:\upload_files\OSPanel\domains\cipher\versions\123\cipher.php:1148) в файле C:\upload_files\OSPanel\domains\cipher\CipherController.php на 488 
+2025-07-21 05:10:37 E_WARNING Cannot modify header information - headers already sent by (output started at C:\upload_files\OSPanel\domains\cipher\versions\123\cipher.php:119) в файле C:\upload_files\OSPanel\domains\cipher\CipherController.php на 488 
+2025-07-21 05:15:34 E_WARNING preg_split(): Unknown modifier '\' в файле C:\upload_files\OSPanel\domains\cipher\versions\123\cipher.php на 120 
+2025-07-21 05:16:07 E_WARNING preg_split(): Unknown modifier '\' в файле C:\upload_files\OSPanel\domains\cipher\versions\123\cipher.php на 120 
+2025-07-21 05:16:43 E_WARNING preg_split(): Unknown modifier '\' в файле C:\upload_files\OSPanel\domains\cipher\versions\123\cipher.php на 119 
+2025-07-21 05:17:18 E_WARNING preg_split(): Compilation failed: missing terminating ] for character class at offset 4 в файле C:\upload_files\OSPanel\domains\cipher\versions\123\cipher.php на 119 
+2025-07-21 05:18:24 E_WARNING preg_split(): Unknown modifier '\' в файле C:\upload_files\OSPanel\domains\cipher\versions\123\cipher.php на 122 
+2025-07-21 05:19:00 E_WARNING Cannot modify header information - headers already sent by (output started at C:\upload_files\OSPanel\domains\cipher\versions\123\cipher.php:1149) в файле C:\upload_files\OSPanel\domains\cipher\CipherController.php на 488 
