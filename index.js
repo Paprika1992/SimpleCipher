@@ -75,6 +75,38 @@ PageElem__appName.addEventListener('mouseout', () => {
     PageElem__appName_cipphie.children[0].classList.add('hide')
 })
 
+/**
+ * Обработчик закрытия всплывающего окна
+ */
+const closePopup = (event) =>{
+    event.currentTarget.closest('.popup-container__block').remove()
+}
+
+
+/**
+ * Метод генерации всплывающего окна
+ * @param {string} popupText текст для отображения во всплывающем окне 
+ */
+function addPopup (popupText)
+{
+    let popupBlock = document.createElement('div'),
+        popupTextBlock = document.createElement('div'),
+        popupBtn = document.createElement('button')
+    popupBlock.classList.add('popup-container__block')
+    popupTextBlock.classList.add('popup-container__block__text')
+    popupTextBlock.textContent = popupText
+    popupBtn.textContent = 'ОК'
+    popupBtn.addEventListener('click', closePopup)
+    popupBlock.appendChild(popupTextBlock);
+    popupBlock.appendChild(popupBtn);
+
+    document.getElementById('popup-container').appendChild(popupBlock)
+    setTimeout( () => {
+        popupBlock.classList.add('animate')
+    }, 100)
+    document.getElementById('popup-container').classList.add('visible')
+}
+
 
 /**
  * Очищение рандомных символов в описании приложения и замена их на буквы оригинального сообщения
@@ -121,7 +153,7 @@ document.getElementById('feedback-submit').addEventListener('click', () => {
     let feedbackText = document.getElementById('feedback-text').value.trim(),
         feedbackSender = document.getElementById('feedback-sender-contact').value.trim()
     if (!feedbackText.length) {
-        alert('Пустое сообщение');
+        addPopup('Пустое сообщение');
 
         return;
     }
@@ -137,8 +169,8 @@ document.getElementById('feedback-submit').addEventListener('click', () => {
     Array.from(document.querySelectorAll('#feedback-fields-block .feedback-fields-block__field')).forEach( el => {
         el.value = '';  
     })
-    PageElem__background.click()
-    alert('Спасибо за обратную связь!');
+    PageElem__background.click();
+    addPopup('Спасибо за обратную связь!');
 })
 
 
@@ -146,6 +178,7 @@ document.getElementById('feedback-submit').addEventListener('click', () => {
 PageElem__background.addEventListener('click', function() {
     this.classList.remove('visible')
     document.querySelector('.navigation__block.visible').classList.remove('visible')
+    document.querySelector('body').classList.remove('overflow-hide')
 })
 
 
@@ -190,9 +223,15 @@ function clearDecryptText()
  */
 function checkInputValueDiff (collection)
 {
+    if (!collection[0].value.length && !collection[1].value.length) {
+        collection[1].classList.remove('input-value-diff')
+         
+        return;
+    }
     if (collection[0].value !== collection[1].value) {
         collection[1].classList.add('input-value-diff')
     } else {
+        
         collection[1].classList.remove('input-value-diff')
     }
 }
@@ -243,6 +282,9 @@ function slideBlock(index)
                 return;
             } 
             if (siblingSliderField.value.length) {
+                siblingSliderField.scrollIntoView({
+                    behavior: 'smooth'
+                });
                 siblingSliderField.classList.add('shake')
                 setTimeout( () => {
                     siblingSliderField.classList.remove('shake')
@@ -262,6 +304,16 @@ function slideBlock(index)
 }
 
 
+//Очищаем поля формы и запускаем проверку значения в инпутах для их подсветки или снятия подсветки
+document.querySelectorAll('.content__encrypt-block__encrypt-clear').forEach( (elem, index) => {
+    elem.addEventListener('click', () => {
+        document.querySelectorAll('.cipher-content__block')[index].children[0].reset();
+        checkInputValueDiff(PageElem__cipherKeyCollection)
+        checkInputValueDiff(PageElem__cipherSaltCollection)
+    })
+})
+
+
 /**
  * Метод получения приватных данных для шифрования: ключ/соль 
  * @param {string} privateData название генерируемого значения соль/ключ
@@ -277,7 +329,7 @@ function getPrivateData (privateData)
             privateDataRqst = (privateDataAction == 'cipherSalt' ? await getPrivateData_rqst('salt') : await getPrivateData_rqst('key')),
             userPrivateData
         if (privateDataRqst.err) {
-            alert(privateDataRqst.err)
+            addPopup(privateDataRqst.err);
             
             return;
         }
@@ -317,7 +369,7 @@ document.getElementById('api-get-cipher-salt').addEventListener('click', async (
     let cipherSaltRqst = await getPrivateData_rqst('salt'),
         cipherSalt
     if (cipherSaltRqst.err) {
-        alert(cipherSaltRqst.err)
+        addPopup(cipherSaltRqst.err);
         
         return;
     }
@@ -332,7 +384,7 @@ document.getElementById('api-get-cipher-key').addEventListener('click', async ()
     let cipherKeyRqst = await getPrivateData_rqst('key'),
         cipherKey
     if (cipherKeyRqst.err) {
-        alert(cipherKeyRqst.err)
+        addPopup(cipherKeyRqst.err);
         
         return;
     }
@@ -357,12 +409,12 @@ document.getElementById('content__decrypt-block__decrypt-btn').addEventListener(
         decryptSalt = document.getElementById('cipherSalt_decrypt').value ?? null,
         cipherKey = document.getElementById('cipher-key--decrypt').value
     if (!decryptText.length) {
-        alert('Дешифруемый текст пустой');
+        addPopup('Дешифруемый текст пустой')
 
         return;
     }
     if (cipherKey && !decryptSalt) {
-        alert('При передаче ключа обязательно передавать соль');
+        addPopup('При передаче ключа обязательно передавать соль');
 
         return;
     }
@@ -375,7 +427,8 @@ document.getElementById('content__decrypt-block__decrypt-btn').addEventListener(
         body: JSON.stringify({
             text: decryptText,
             cipherSalt: decryptSalt,
-            cipherKey: cipherKey
+            cipherKey: cipherKey,
+            demoPage: 1
         }),
         headers: {
             'content-type': 'application/json'
@@ -410,7 +463,7 @@ document.getElementById('content__decrypt-block__decrypt-btn').addEventListener(
             } 
         }
     } catch (err) {
-        alert('Error: ' + err.message);
+        addPopup('Error: ' + err.message);
         preloader__hide();
 
         return;
@@ -431,7 +484,6 @@ document.getElementById('content__decrypt-block__decrypt-btn').addEventListener(
 })
 
 
-
 //Получение соли и ключа к шифру
 document.getElementById('getSalt').addEventListener('click', getPrivateData('cipherSalt'))
 document.getElementById('getKey').addEventListener('click', getPrivateData('cipheKey'))
@@ -450,13 +502,13 @@ document.addEventListener('click', event => {
 
 
 //Шифрование текста
-document.getElementById('content__encrypt-block__encrypt-submit').addEventListener('click', async  () => {
+document.getElementById('content__encrypt-block__encrypt-submit').addEventListener('click', async () => {
         //Очищенное от пробелов значение для шифрования
     let encryptText = document.getElementById('encryptText').value.trim(),
         //Желаемая длина итоговвых шифров
         encryptFakeLength = document.getElementById('cipherLength').value,
         //Итоговое количество шифров
-        resultCipherCount = document.getElementById('cipherCount').value || 1,
+        resultCipherCount = document.getElementById('cipherCount').value,
         //Пользовательская соль для шифрования
         encryptSalt = document.getElementById('cipherSalt').value || null,
         //Коллекция элементов с предыдущими результатами шифрования
@@ -465,7 +517,18 @@ document.getElementById('content__encrypt-block__encrypt-submit').addEventListen
         cipherKey = document.getElementById('cipherKey').value || null
 
     try {
-       if (encryptFakeLength > 899) {
+        if (!encryptText.length) {
+            throw new Error('Обязательное поле "Текст для шифрования" не заполнено');
+        }
+        if (!encryptFakeLength) {
+            throw new Error('Обязательное поле "Желаемая длина шифра" не заполнено');
+        }
+        if (!resultCipherCount) {
+            throw new Error('Обязательное поле "Кол-во шифров" не заполнено');
+        }
+        //#Гаврилов
+        //ВЫНЕСИ 899 В КОНСТАНТУ
+        if (encryptFakeLength > 899) {
             throw new Error('Максимальная желаемая длина шифра 899 символов');
         }
         if (resultCipherCount > 20) {
@@ -480,7 +543,7 @@ document.getElementById('content__encrypt-block__encrypt-submit').addEventListen
             throw new Error('Превышена максимальная длина текста (899 символов)');
         }
     } catch (err) {
-        alert(err.message)
+        addPopup(err.message);
 
         return;
     }
@@ -499,7 +562,8 @@ document.getElementById('content__encrypt-block__encrypt-submit').addEventListen
                 text: encryptText,
                 fakeLength: encryptFakeLength,
                 cipherSalt: encryptSalt,
-                cipherKey: cipherKey
+                cipherKey: cipherKey,
+                demoPage: 1
             }),
             headers: {
                 'content-type': 'application/json'
@@ -543,7 +607,7 @@ document.getElementById('content__encrypt-block__encrypt-submit').addEventListen
             }, 500)
         })
     } catch (err) {
-        alert('Error: ' + err.message)
+        addPopup('Error: ' + err.message);
 
         return;
     }
@@ -567,10 +631,10 @@ document.getElementById('content__encrypt-block__encrypt-submit').addEventListen
                 encryptResultBlock.appendChild(childEncryptBlock)
             }, 100 * index);
         });
-        document.getElementById('content__encrypt-block__result').scrollIntoView({
-            behavior: 'smooth'
-        });
     }, 500);
+    document.getElementById('content__encrypt-block__result').scrollIntoView({
+        behavior: 'smooth'
+    });
 })
 
 
@@ -578,15 +642,19 @@ const PageElem__navigationBlock = document.querySelectorAll('.navigation__block_
 //Обработчик клика по элементу навигации
 PageElem__navigationBlock.forEach( navBlock => {
     navBlock.addEventListener('click', () => {
-        let navBlock_visible = navBlock.parentElement.classList.contains('visible');
+        let navBlock_visible = navBlock.parentElement.classList.contains('visible'),
+            pageBody = document.querySelector('body');
         PageElem__navigationBlock.forEach( siblingsNav => {
             siblingsNav.parentElement.classList.remove('visible')
+            pageBody.classList.remove('overflow-hide')
         })
         if (!navBlock_visible) {
             navBlock.parentElement.classList.add('visible')
             PageElem__background.classList.add('visible')
+            pageBody.classList.add('overflow-hide')
         } else {
             PageElem__background.classList.remove('visible')
+            pageBody.classList.remove('overflow-hide')
         }
     })
 })

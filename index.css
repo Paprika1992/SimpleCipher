@@ -15,10 +15,14 @@ body{
   overflow-y: scroll;
   font-family: system-ui;
   background: var(--color_background);
-  overflow-x: auto;
+  overflow-x: hidden;
   display: flex;
     flex-direction: column;
   height: 100vh;
+
+  &.overflow-hide{
+    overflow: hidden;
+  }
 }
 
 button{
@@ -40,9 +44,7 @@ button{
 }
 
 footer{
-  /* position: fixed;
-  bottom: 0; */
-  width: 100vw;
+  width: 95vw;
   display: flex;
     justify-content: center;
   z-index: -1;
@@ -69,6 +71,53 @@ textarea{
   border-radius: 0.25rem;
   transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
   resize: vertical;
+}
+
+#popup-container{
+  position: fixed;
+  margin: auto;
+  width: 30vw;
+  z-index: 101;
+  justify-self: anchor-center;
+  top: 50px;
+  display: none;
+
+  @media (max-width: 1000px) {
+    width: 90vw;
+  }
+
+  &.visible{
+    display: block;
+  }
+
+  &>.popup-container__block{
+    padding: 10px;
+    box-shadow: 0px 2px 6px 3px #848484;
+    border-radius: 10px;
+    background: #eac18a;
+    display: flex;
+    flex-direction: column;
+    transition: 0.5s;
+    visibility: hidden;
+
+    &.animate{
+      visibility: visible;
+      transform: translateY(10px);
+    }
+
+    &>.popup-container__block__text{
+      padding: 10px;
+      font-size: 1.2rem;
+      text-align: center;
+    }
+
+    &>button{
+      width: 60px;
+      align-self: center;
+      font-size: 1.3rem;
+    }
+  }
+
 }
 
 #feedback-fields-block{
@@ -132,6 +181,10 @@ textarea{
 
   &>svg{
     color: orange;
+
+    @media (max-width: 1000px) {
+      font-size: 2rem;
+    }
   }
 
   &>#footer-content__notification{
@@ -168,6 +221,11 @@ textarea{
     @media (max-width: 1000px) {
       width: auto;
       font-size: 1.2rem;
+    }
+
+    @media (max-width: 800px) {
+      width: auto;
+      font-size: 1rem;
     }
 
     &.shift{
@@ -483,7 +541,6 @@ textarea{
         border-radius: 10px;
         margin: 10px;
         box-shadow: 0 0 5px 3px grey;
-        /* padding-bottom: 50px; */
         background: #fffdeb;
         position: relative;
 
@@ -495,16 +552,24 @@ textarea{
           z-index: -1;
           position: absolute;
           top: -45px;
-          left: 50px;
+          left: 30px;
           font-size: 1.2rem;
-          /* border: 2px solid #c6c6c6; */
           color: black;
           padding: 10px;
           border-radius: 5px;
         }
 
+        @media (max-width: 1000px) {
+          &:last-child {
+
+            &:before{
+              left: auto;
+              right: 30px;
+            }
+          }
+        }
+
         &>form{
-          /* position: relative; */
           height: 100%;
           display: flex;
             flex-direction: column;
@@ -593,13 +658,6 @@ textarea{
                 opacity: 0.3;
                 transition: 0.2s;
 
-                &:hover{
-                  opacity: 1;
-                  /* &>.input-block__block-slide__icon-arrow{
-                    transform: translateY(6px);
-                  } */
-                }  
-
                 &>.input-block__block-slide__icon-arrow{
                   transition: 0.3s;
                   transform: translateY(3px);
@@ -611,7 +669,6 @@ textarea{
 
                 &>.cipher-salt-input{
                   height: 80px;
-
                 }
 
                 &>.fa-refresh{
@@ -643,11 +700,19 @@ textarea{
               grid-template-columns: 1fr 5fr;
               gap: 5px;
 
-             &.field-row--two-fields{
-                grid-template-columns: repeat(2, 1fr 2fr);
-             } 
+            @media (max-width: 1000px) {
+              grid-template-columns: 1fr 2fr;
+            }
 
-             &>textarea{
+            &.field-row--two-fields{
+              grid-template-columns: repeat(2, 1fr 2fr);
+
+              @media (max-width: 1000px) {
+                grid-template-columns: 1fr 2fr;
+              }
+            } 
+
+            &>textarea{
               transition: 0.5s;
 
               &.shake{
@@ -656,7 +721,7 @@ textarea{
                 animation-iteration-count: 1;
                 animation-timing-function: ease-in-out;
               }
-             }
+            }
           }  
         }
 
@@ -714,32 +779,12 @@ textarea{
             background: var(--color_blue_minor);
             background: #7474ab;
             transform: translateY(-10px);
-
-            /* &>.input-block__field-row{
-              height: 0;
-              overflow: hidden;
-              transition: 0.3s;
-            } */
           }
           & #content__encrypt-block__key{
             z-index: 8;
-            /* transform: translateY(-100%); */
             background: #a9a9d5;
             transform: translateY(-20px);
-            /* background: var(--color_blue_minor); */
-
-             &>.input-block__field-row{
-              /* height: 0;
-              overflow: hidden; */
-              /* transition: 0.3s; */
-
-              /* &.visible{
-                height: 100px;
-              } */
-            }
-
           }
-
       }
 
       & #cipher-content__decrypt-block{
@@ -797,6 +842,12 @@ textarea{
         align-items: flex-start;
         gap: 5px;
         margin-bottom: 30px;
+      }
+
+      &>button{
+        background: #fff6ea;
+        color: black;
+        border: 1px solid #eac18a;
       }
     }
   }

@@ -137,6 +137,10 @@ class CipherController
                 $checkEndpoint['errorMsg']
             );
         } else {
+            //Проверка с демостраницы идет запрос или чисто к api ендпоинту 
+            $rqstSource = array_key_exists('demoPage', $this->rqstParams) !== false ? 'demoPage' : 'api';
+            $endPointStat = (new DateTime())->format('Y-m-d h:i:s') . "|$rqstSource|$this->action \n";
+            file_put_contents("./log/api_stat.log", $endPointStat, FILE_APPEND);
             require_once ("./CipherVersion.php");
             switch ($this->action) {
                 case 'getEncryptText':
@@ -219,8 +223,9 @@ class CipherController
                     //Если параметр обязательный
                     if ($paramData['important'] === true && (array_key_exists($paramName, $this->rqstParams) === false || $this->rqstParams[$paramName] === null || !mb_strlen($this->rqstParams[$paramName]))) {
                         //Если обязательный параметр отсутствует в запросе
-                        //Если отсутствующее обязательное поле - соль для шифра, она может отсутствовать, если запрос пришел с того же сервера (с демонстрационной страницы)
-                        if ($paramName == 'cipherSalt' && ($_SERVER['REMOTE_ADDR'] === $_SERVER['SERVER_ADDR']) || $_SERVER['HTTP_HOST'] = "cipphire.ru") {
+                        //Если отсутствующее обязательное поле - соль для шифра, она может отсутствовать, если запрос пришел с демонстрационной страницы
+                        if ($paramName == 'cipherSalt' && array_key_exists('demoPage', $this->rqstParams) !== false) {
+
                             continue;
                         } else {
                             $checkRouteArr['result'] = false;
@@ -396,7 +401,6 @@ class CipherController
         $this->decryptText = $decryptText;
         $this->cipherVer = CipherVersion::getVersion($this->decryptText);
         if (!file_exists("./versions/" . $this->cipherVer . "/cipher.php")) {
-            // var_dump("./versions/" . $this->cipherVer . "/cipher.php");
             $this->returnResponse([
                 'decryptText' => $this->getRandomText($this->rqstParams['text'])
             ], 200);

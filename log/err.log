@@ -229,3 +229,12 @@
 2025-07-21 05:17:18 E_WARNING preg_split(): Compilation failed: missing terminating ] for character class at offset 4 в файле C:\upload_files\OSPanel\domains\cipher\versions\123\cipher.php на 119 
 2025-07-21 05:18:24 E_WARNING preg_split(): Unknown modifier '\' в файле C:\upload_files\OSPanel\domains\cipher\versions\123\cipher.php на 122 
 2025-07-21 05:19:00 E_WARNING Cannot modify header information - headers already sent by (output started at C:\upload_files\OSPanel\domains\cipher\versions\123\cipher.php:1149) в файле C:\upload_files\OSPanel\domains\cipher\CipherController.php на 488 
+2025-07-22 01:49:50 E_NOTICE Undefined index: text в файле C:\upload_files\OSPanel\domains\cipher\CipherController.php на 223 
+2025-07-22 01:50:20 E_NOTICE Undefined index: text в файле C:\upload_files\OSPanel\domains\cipher\CipherController.php на 144 
+2025-07-22 01:51:16 E_NOTICE Undefined index: text в файле C:\upload_files\OSPanel\domains\cipher\CipherController.php на 144 
+2025-07-22 01:52:32 E_NOTICE Undefined index: text в файле C:\upload_files\OSPanel\domains\cipher\CipherController.php на 145 
+2025-07-22 01:53:05 E_NOTICE Undefined index: text в файле C:\upload_files\OSPanel\domains\cipher\CipherController.php на 145 
+2025-07-22 01:53:59 E_NOTICE Undefined index: text в файле C:\upload_files\OSPanel\domains\cipher\CipherController.php на 145 
+2025-07-22 01:54:16 E_NOTICE Undefined index: text в файле C:\upload_files\OSPanel\domains\cipher\CipherController.php на 145 
+2025-07-22 01:55:09 E_WARNING Cannot modify header information - headers already sent by (output started at C:\upload_files\OSPanel\domains\cipher\CipherController.php:220) в файле C:\upload_files\OSPanel\domains\cipher\CipherController.php на 498 
+2025-07-22 01:58:54 E_WARNING Cannot modify header information - headers already sent by (output started at C:\upload_files\OSPanel\domains\cipher\CipherController.php:224) в файле C:\upload_files\OSPanel\domains\cipher\CipherController.php на 491 
