@@ -143,7 +143,7 @@ class CipherController
             );
         } else {
             //Источник запроса определяется серверным маршрутом, а не данными клиента
-            $rqstSource = $this->isDemoRequest ? 'demoPage' : 'api';
+            $rqstSource = $this->isDemoRequest ? 'demo' : 'api';
             $endPointStat = (new DateTime())->format('Y-m-d h:i:s') . "|$rqstSource|$this->action \n";
             file_put_contents("./log/api_stat.log", $endPointStat, FILE_APPEND);
             require_once ("./CipherVersion.php");
