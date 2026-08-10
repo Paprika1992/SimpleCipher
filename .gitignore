@@ -1,2 +1,6 @@
-log/*
-ent/*
+/log/*
+!/log/.gitkeep
+/ent/*
+/test.txt
+/test_bcp.txt
+/хранилище шифров.ini
