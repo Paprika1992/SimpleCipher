@@ -5,4 +5,4 @@ RewriteBase /
 RewriteRule ^api/(.*)$ CipherController.php?endpoint=$1 [L]
 
 # Демонстрационная страница: разрешен режим без пользовательской соли
-RewriteRule ^demo/(.*)$ CipherDemoController.php?endpoint=$1 [L]
+RewriteRule ^demo/(getEncryptText|getDecryptText)$ CipherDemoController.php?endpoint=$1 [L]
