@@ -1,5 +1,8 @@
 RewriteEngine On
 RewriteBase /
 
-# Перенаправляем все запросы /api/* на ControllerMain.php
+# Публичный API: соль обязательна для шифрования и дешифрования
 RewriteRule ^api/(.*)$ CipherController.php?endpoint=$1 [L]
+
+# Демонстрационная страница: разрешен режим без пользовательской соли
+RewriteRule ^demo/(getEncryptText|getDecryptText)$ CipherDemoController.php?endpoint=$1 [L]

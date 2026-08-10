@@ -11,6 +11,10 @@ class CipherController
      */
     private $action;
     /**
+     * @var bool запрос выполняется через публичный демонстрационный маршрут
+     */
+    private $isDemoRequest;
+    /**
      * @var string текст для дешифрования
      */
     private $decryptText;
@@ -124,10 +128,11 @@ class CipherController
      *
      * @param string $action выполняемое действие
      */
-    public function __construct(string $action)
+    public function __construct(string $action, bool $isDemoRequest = false)
     {
         set_error_handler([$this, "myErrorHandler"]);
         $this->action = $action;
+        $this->isDemoRequest = $isDemoRequest;
         $this->rqstParams = json_decode(file_get_contents('php://input'), true) ?? [];
         $checkEndpoint = $this->checkRoute($this->action);
         if (!$checkEndpoint['result']) {
@@ -137,8 +142,8 @@ class CipherController
                 $checkEndpoint['errorMsg']
             );
         } else {
-            //Проверка с демостраницы идет запрос или чисто к api ендпоинту 
-            $rqstSource = array_key_exists('demoPage', $this->rqstParams) !== false ? 'demoPage' : 'api';
+            //Источник запроса определяется серверным маршрутом, а не данными клиента
+            $rqstSource = $this->isDemoRequest ? 'demo' : 'api';
             $endPointStat = (new DateTime())->format('Y-m-d h:i:s') . "|$rqstSource|$this->action \n";
             file_put_contents("./log/api_stat.log", $endPointStat, FILE_APPEND);
             require_once ("./CipherVersion.php");
@@ -224,7 +229,7 @@ class CipherController
                     if ($paramData['important'] === true && (array_key_exists($paramName, $this->rqstParams) === false || $this->rqstParams[$paramName] === null || !mb_strlen($this->rqstParams[$paramName]))) {
                         //Если обязательный параметр отсутствует в запросе
                         //Если отсутствующее обязательное поле - соль для шифра, она может отсутствовать, если запрос пришел с демонстрационной страницы
-                        if ($paramName == 'cipherSalt' && array_key_exists('demoPage', $this->rqstParams) !== false) {
+                        if ($paramName == 'cipherSalt' && $this->isDemoRequest) {
 
                             continue;
                         } else {
@@ -529,4 +534,5 @@ class CipherController
 	}
 }
 
-new CipherController($_GET['endpoint']);
+$isDemoRequest = defined('CIPHER_DEMO_MODE') && CIPHER_DEMO_MODE === true;
+new CipherController($_GET['endpoint'] ?? '', $isDemoRequest);

@@ -422,13 +422,12 @@ document.getElementById('content__decrypt-block__decrypt-btn').addEventListener(
     preloader__show();
     //Блок с результатом дешифрования
     let decryptResultBlock = document.getElementById('content__decrypt-block__result')
-    let getDecryptText_rqst = await fetch('./api/getDecryptText', {
+    let getDecryptText_rqst = await fetch('./demo/getDecryptText', {
         method: "POST",
         body: JSON.stringify({
             text: decryptText,
             cipherSalt: decryptSalt,
-            cipherKey: cipherKey,
-            demoPage: 1
+            cipherKey: cipherKey
         }),
         headers: {
             'content-type': 'application/json'
@@ -556,14 +555,13 @@ document.getElementById('content__encrypt-block__encrypt-submit').addEventListen
     preloader__show();
     let encryptResponseArr = [];    //Результаты шифрования
     for (let index = 1; index <= resultCipherCount; index++) {
-        encryptResponseArr.push(fetch('./api/getEncryptText', {
+        encryptResponseArr.push(fetch('./demo/getEncryptText', {
             method: "POST",
             body: JSON.stringify({
                 text: encryptText,
                 fakeLength: encryptFakeLength,
                 cipherSalt: encryptSalt,
-                cipherKey: cipherKey,
-                demoPage: 1
+                cipherKey: cipherKey
             }),
             headers: {
                 'content-type': 'application/json'
